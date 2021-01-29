@@ -89,7 +89,7 @@ public class KdFindClosest : MonoBehaviour
            // _ClosestObject.transform.position = nearestObj.transform.localPosition;
             nearobpostion = nearestObj.transform.localPosition;
             nearobrot = nearestObj.transform.rotation;
-            Debug.Log("From Kd Found next " + nearestObj.transform.localPosition.ToString("F3")); // This is the final location to send.
+            //Debug.Log("From Kd Found next " + nearestObj.transform.localPosition.ToString("F3")); // This is the final location to send.
 
 
             //ClosestObject.transform.position = nearestObj.transform.position;

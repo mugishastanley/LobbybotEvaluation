@@ -51,6 +51,7 @@ public class VelUDP : MonoBehaviour
 
     Matrix4x4 Home;
     Vector3 rotation = new Vector3(0, 180, 0);
+    float velfactor;
 
 
     // call it from shell (as program)
@@ -82,16 +83,16 @@ public class VelUDP : MonoBehaviour
         
 
 
-        string pos = Unity2Ros(Tosend.transform.localPosition).ToString("F4");
+        Vector3 pos = Unity2Ros(Tosend.transform.localPosition);
+        string velocity = Velscaler(pos).ToString("F4");
         //string pos = Unity2Ros(Tosend.transform.localPosition).ToString("F5");
         //string rot = Tosend.transform.localrotation.ToString("F5");
         //string rot = Rot(Tosend.transform.localEulerAngles).ToString("F4");
         string rot = Rot(rotation).ToString("F4");
-        string velocity = Velscaler(pos);
+        string posstr = pos.ToString("F4");
         //Debug.Log("Recieved" + Tosend.transform.localPosition +"Rotation"+rot);
-        string datasent = pos + ',' + rot + 'vel '+velocity;
-
-        Debug.Log($"To send pos{datasent} Vel{velocity}");
+        string datasent = posstr + ',' + rot + ','+ velocity;
+        Debug.Log($"To send pos{datasent}");
         //Debug.Log("To send pos" + pos + "Orient" + rot);
         //string datasent = (Calculate_Transform() * Test.transform.localToWorldMatrix).ToString("F8");
         //Testmat = Test.transform.localToWorldMatrix; //End effector WRT world
@@ -299,11 +300,18 @@ public class VelUDP : MonoBehaviour
         return pos;
     }
 
-    public Vector3 Unity2Ros(Vector3 vector3)
+    public Vector3 Unity2Rosold(Vector3 vector3)
     {
         Vector3 pos = new Vector3(-vector3.y, -1*(vector3.x + 0.15f), vector3.z);
         return pos;
     }
+
+    public Vector3 Unity2Ros(Vector3 vector3)
+    {
+        Vector3 pos = new Vector3(-vector3.y, -1 * (vector3.x + 0.15f), vector3.z);
+        return pos;
+    }
+
 
     public Vector3 Rot(Vector3 vector3) 
     {
@@ -313,24 +321,16 @@ public class VelUDP : MonoBehaviour
     
     }
 
-    public Matrix4x4 Ros2unity() {
-        Matrix4x4 R2U = new Matrix4x4(); 
-        Home[0, 0] = 1f; Home[0, 1] = 0f; Home[0, 2] = 0f; Home[0, 3] = 1f;
-        Home[1, 0] = 0; Home[1, 1] = 1.0f; Home[1, 2] = 0f; Home[1, 3] = 1f;
-        Home[2, 0] = 0f; Home[2, 1] = 0f; Home[2, 2] = 1f; Home[2, 3] = 1f;
-        Home[3, 0] = 0f; Home[3, 1] = 0f; Home[3, 2] = 0f; Home[3, 3] = 1f;
-        return Home;
-
-
-    }
-
-    public void Velscaler(out float velfactor, Vector3 pos) {
-        if (pos.x >= -0.554f)
+    public float Velscaler(Vector3 pos) {
+        float velfactor;
+        if (pos.y >= 0.5f)
         { //we are in the ouside zone 
             velfactor = 3.0f;
         }
         else
             velfactor = 0.2f;
+
+        return velfactor;
     }
 
 }
