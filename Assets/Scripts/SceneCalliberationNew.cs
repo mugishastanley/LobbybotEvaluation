@@ -23,14 +23,11 @@ public class SceneCalliberationNew : MonoBehaviour
     public Transform Car;
     public Button InitialiseButton;
 
-    [Header("Tracker offset from Robot")]
-    [SerializeField]
-    private float x;
-    [SerializeField]
-    private float y;
-    [SerializeField]
-    [Range(0.5f, 1.0f)]
-    private float Table_Height_meters;
+    //[Header("Tracker offset from Robot")]
+    //[SerializeField]
+    //private float x;
+    //[SerializeField]
+    //private float y;
     //Space between variables 
     //[Space(10)]
     //Attribute used to make a float or int variable in a script be restricted to a specific range.
@@ -54,9 +51,9 @@ public class SceneCalliberationNew : MonoBehaviour
     void calibrate()
     {
 
-        float offset_x = x;
-        float offset_y = y;
-        float offset_z = Table_Height_meters;
+       // float offset_x = x;
+       // float offset_y = y;
+       // float offset_z = Table_Height_meters;
 
         // We unparent the virtual object reference from the robot
         RobotTracker.transform.parent = null;

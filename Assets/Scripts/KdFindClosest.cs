@@ -50,11 +50,11 @@ public class KdFindClosest : MonoBehaviour
             //Debug.Log("After tracker parent: Point :" + i + "Posiotn:" + points[i].transform.position.ToString("F3"));
 
             points[i].transform.parent = CalTracker.transform; //only for visuals but no effect
-            Debug.Log("After tracker parent: Point :" + i + "Posiotn:" + points[i].transform.position.ToString("F3"));
+            //Debug.Log("After tracker parent: Point :" + i + "Posiotn:" + points[i].transform.position.ToString("F3"));
             GameObject point = (Instantiate(BlackPrefab, points[i].transform.position, points[i].transform.localRotation));
-            Debug.Log("Spawn at Point" + i + "Posiotn:" + point.transform.position.ToString("F3"));
+            //Debug.Log("Spawn at Point" + i + "Posiotn:" + point.transform.position.ToString("F3"));
             point.transform.parent = CalTracker.transform;
-            Debug.Log("After parent Point" + i + "Posiotn:" + point.transform.position.ToString("F3"));
+            //Debug.Log("After parent Point" + i + "Posiotn:" + point.transform.position.ToString("F3"));
            // Debug.Log("Spawn at Point" + i + "Posiotn:" + points[i].transform.position.ToString("F3"));
             //point.transform.parent = CalTracker.transform;
             //Debug.Log("after Parent at Point" + i + "Posiotn:" + point.transform.position.ToString("F3"));

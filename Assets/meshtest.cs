@@ -8,6 +8,7 @@ public class meshtest : MonoBehaviour
     // Distorts the mesh vertically.
     void Update()
     {
+        /**
         // Get instantiated mesh
         Mesh mesh = GetComponent<MeshFilter>().mesh;
         // Randomly change vertices
@@ -27,5 +28,7 @@ public class meshtest : MonoBehaviour
         mesh.vertices = vertices;
         mesh.normals = normals;
         mesh.RecalculateNormals();
+
+        **/
     }
 }
