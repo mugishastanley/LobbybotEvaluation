@@ -19,15 +19,15 @@ public class VelUDP : MonoBehaviour
 {
     [SerializeField]
     private GameObject RobotURDF;
-    [SerializeField]
-    private float TableOffsetx=0.0f;
-    [SerializeField]
-    private float TableOffsety=0.744f;
-    [SerializeField]
-    private float TableOffsetz=0.0f;
 
     [SerializeField]
     private GameObject Tosend;
+
+    [SerializeField]
+    private GameObject Workspaceplane;
+    [SerializeField]
+    private GameObject UserHand;
+
     private static int localPort;
     private float PI = 3.1416f;
     // prefs
@@ -52,6 +52,9 @@ public class VelUDP : MonoBehaviour
     Matrix4x4 Home;
     Vector3 rotation = new Vector3(0, 180, 0);
     float velfactor;
+    float wspace = 0f;
+    Vector3 Interpoint = new Vector3(0, 180, 0);
+
 
 
     // call it from shell (as program)
@@ -80,18 +83,19 @@ public class VelUDP : MonoBehaviour
         Tosend.transform.position = FindObjectOfType<KdFindClosest>().getclosestobjectposition();
         //To be fixed later when mind is fresh
         //Tosend.transform.rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
-        
 
 
+        string velocity = workspace(Tosend.transform.localPosition).ToString("F4");
         Vector3 pos = Unity2Ros(Tosend.transform.localPosition);
-        string velocity = Velscaler(pos).ToString("F4");
+        //string velocity = Velscaler(pos).ToString("F4");
+
         //string pos = Unity2Ros(Tosend.transform.localPosition).ToString("F5");
         //string rot = Tosend.transform.localrotation.ToString("F5");
         //string rot = Rot(Tosend.transform.localEulerAngles).ToString("F4");
         string rot = Rot(rotation).ToString("F4");
         string posstr = pos.ToString("F4");
         //Debug.Log("Recieved" + Tosend.transform.localPosition +"Rotation"+rot);
-        string datasent = posstr + ',' + rot + ','+ velocity;
+        string datasent = posstr + ',' + rot + ',' + velocity;
         Debug.Log($"To send pos{datasent}");
         //Debug.Log("To send pos" + pos + "Orient" + rot);
         //string datasent = (Calculate_Transform() * Test.transform.localToWorldMatrix).ToString("F8");
@@ -118,12 +122,12 @@ public class VelUDP : MonoBehaviour
         // ------------------------
 
         strMessage = GUI.TextField(new Rect(40, 420, 140, 20), datasent);
-        
+
         // if (GUI.Button(new Rect(190, 420, 40, 20), "send"))
         // {
         sendString(strMessage + "\n");
-        
-       // print("Testing: nc -lu " + IP + " : " + pos);
+
+        // print("Testing: nc -lu " + IP + " : " + pos);
 
         // }
     }
@@ -133,7 +137,7 @@ public class VelUDP : MonoBehaviour
     {
         // Endpunkt definieren, von dem die Nachrichten gesendet werden.
         print("UDPSend.init()");
-  
+
         // define
 
         //IP = "127.0.0.1";
@@ -145,9 +149,9 @@ public class VelUDP : MonoBehaviour
         // ----------------------------
         remoteEndPoint = new IPEndPoint(IPAddress.Parse(IP), port);
         client = new UdpClient();
-       // mat_to_vec();
+        // mat_to_vec();
         // status
-         print("Sending to " + IP + " : " + port);
+        print("Sending to " + IP + " : " + port);
         //print("Testing: nc -lu " + IP + " : " + pos);
 
 
@@ -220,7 +224,7 @@ public class VelUDP : MonoBehaviour
         // get position from the last column
         //var position = new Vector3(matrix[0, 3], matrix[1, 3], matrix[2, 3]);
         //Debug.Log("Transform position from matrix is: " + position);
-       //Debug.Log("Mat " + p.ToString("F8"));
+        //Debug.Log("Mat " + p.ToString("F8"));
 
         /**
     this function returns a string representation of a matrix
@@ -264,8 +268,8 @@ public class VelUDP : MonoBehaviour
 
         //Data got from the robot 
 
-        TrackedPointWRTRobot[0, 0] = -0.08960f; TrackedPointWRTRobot[0, 1] = -0.94254f; TrackedPointWRTRobot[0, 2] = 0.312184f; TrackedPointWRTRobot[0, 3] = 0.78926f ;
-        TrackedPointWRTRobot[1, 0] = -0.99594f; TrackedPointWRTRobot[1, 1] = 0.08186f; TrackedPointWRTRobot[1, 2] = -0.03754f; TrackedPointWRTRobot[1, 3] = -0.06808f ;
+        TrackedPointWRTRobot[0, 0] = -0.08960f; TrackedPointWRTRobot[0, 1] = -0.94254f; TrackedPointWRTRobot[0, 2] = 0.312184f; TrackedPointWRTRobot[0, 3] = 0.78926f;
+        TrackedPointWRTRobot[1, 0] = -0.99594f; TrackedPointWRTRobot[1, 1] = 0.08186f; TrackedPointWRTRobot[1, 2] = -0.03754f; TrackedPointWRTRobot[1, 3] = -0.06808f;
         TrackedPointWRTRobot[2, 0] = 0.00903f; TrackedPointWRTRobot[2, 1] = -0.32390f; TrackedPointWRTRobot[2, 2] = -0.94605f; TrackedPointWRTRobot[2, 3] = 0.28854f;
         TrackedPointWRTRobot[3, 0] = 0.0f; TrackedPointWRTRobot[3, 1] = 0f; TrackedPointWRTRobot[3, 2] = 0f; TrackedPointWRTRobot[3, 3] = 1f;
         /**
@@ -275,7 +279,7 @@ public class VelUDP : MonoBehaviour
 
         //subtract the table offsets from the final transform
         //VRWRTRobot[0, 3] = VRWRTRobot[0, 3] - TableOffsetx;
-       //VRWRTRobot[1, 3] = VRWRTRobot[0, 3] - TableOffsety;
+        //VRWRTRobot[1, 3] = VRWRTRobot[0, 3] - TableOffsety;
         //VRWRTRobot[2, 3] = VRWRTRobot[0, 3] - TableOffsetz;
 
         //VRWRTRobot = TrackedPointWRTVR.inverse * TrackedPointWRTRobot;
@@ -284,7 +288,8 @@ public class VelUDP : MonoBehaviour
         return VRWRTRobot;
     }
 
-    Matrix4x4 HomePos() {
+    Matrix4x4 HomePos()
+    {
         Home[0, 0] = 0.98208f; Home[0, 1] = -0.18160f; Home[0, 2] = 0.05046f; Home[0, 3] = -0.03152f;
         Home[1, 0] = 0.12616f; Home[1, 1] = 0.43447f; Home[1, 2] = -0.89181f; Home[1, 3] = 0.69367f;
         Home[2, 0] = 0.14002f; Home[2, 1] = 0.88219f; Home[2, 2] = 0.44960f; Home[2, 3] = -0.51877f;
@@ -302,7 +307,7 @@ public class VelUDP : MonoBehaviour
 
     public Vector3 Unity2Rosold(Vector3 vector3)
     {
-        Vector3 pos = new Vector3(-vector3.y, -1*(vector3.x + 0.15f), vector3.z);
+        Vector3 pos = new Vector3(-vector3.y, -1 * (vector3.x + 0.15f), vector3.z);
         return pos;
     }
 
@@ -313,15 +318,16 @@ public class VelUDP : MonoBehaviour
     }
 
 
-    public Vector3 Rot(Vector3 vector3) 
+    public Vector3 Rot(Vector3 vector3)
     {
         /*Returns Vector3 rotation in radians*/
-        Vector3 rot = new Vector3(vector3.x * PI / 180, vector3.y * PI / 180, vector3.z * PI / 180 );
+        Vector3 rot = new Vector3(vector3.x * PI / 180, vector3.y * PI / 180, vector3.z * PI / 180);
         return rot;
-    
+
     }
 
-    public float Velscaler(Vector3 pos) {
+    public float Velscaler(Vector3 pos)
+    {
         float velfactor;
         if (pos.y >= 0.5f)
         { //we are in the ouside zone 
@@ -333,4 +339,46 @@ public class VelUDP : MonoBehaviour
         return velfactor;
     }
 
+    public float workspace(Vector3 p)
+    {
+
+        //workspace computation variables
+        float xcenter = UserHand.transform.position.x;
+        float ycenter = UserHand.transform.position.y;
+        float xplanedivider = Workspaceplane.transform.position.x;
+        float xoffset = 1.0f;
+        float yoffset = 0.7f;
+        float xu = xcenter + xoffset;
+        float xl = xcenter - xoffset;
+        float yu = ycenter + yoffset;
+        float yl = ycenter - yoffset;
+        float space = 0.0f;
+        //
+
+        /** In put: Vector 3 point, user hand, Inside car/outside car separating place plane pn
+         * Output: Vector3 point and a workspace value
+         **/
+        if (p.x >= xplanedivider)
+        {
+            wspace = 0.6f;
+            if (((xl <= p.x) && (p.x <= xu)) && ((yl <= p.y) && (p.y <= yu)))
+            {
+                wspace = 0.2f;
+            }
+        }
+        else wspace = 0.8f;
+        return wspace;
+    }
+
+    //intermediate point algorithm.
+    public void workspaceintermediate(Vector3 p, out float wspace, out Vector3 Interpoint)
+    {
+        Interpoint = new Vector3(0, 0, 0);
+        float xplanedivider = Workspaceplane.transform.position.x;
+        if (p.x >= xplanedivider)
+        {
+            wspace = 0.6f;
+        }
+        else wspace = 0.8f;
+    }
 }

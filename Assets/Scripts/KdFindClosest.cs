@@ -83,6 +83,7 @@ public class KdFindClosest : MonoBehaviour
         foreach (var whiteball in WhiteballsList)
         {
             FallingBlackObj nearestObj = BlackballsList.FindClosest(whiteball.transform.position);
+
             _isnearestfound = true;
 
             Debug.DrawLine(whiteball.transform.position, nearestObj.transform.position, Color.red);
@@ -95,13 +96,16 @@ public class KdFindClosest : MonoBehaviour
             //ClosestObject.transform.position = nearestObj.transform.position;
             //change to a certain color        
 
-            var cubeRenderer = nearestObj.GetComponent<Renderer>();
+            //var cubeRenderer = nearestObj.GetComponent<Renderer>();
             if (_isnearestfound)
             {
+                //var cubeRenderer = nearestObj.GetComponent<Renderer>();
                 cubeRenderer.material.color = Color.red;
+                //Call SetColor using the shader property name "_Color" and setting the color to red
+                cubeRenderer.material.SetColor("_Color", Color.red);
                 _isnearestfound = false;
             }
-            _isnearestfound = false;
+           // _isnearestfound = false;
         }
     }
 
