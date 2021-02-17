@@ -85,9 +85,10 @@ public class VelUDP : MonoBehaviour
         //Tosend.transform.rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
 
 
-        string velocity = workspace(Tosend.transform.localPosition).ToString("F4");
+        //string velocity = workspace(Tosend.transform.localPosition).ToString("F4");
         Vector3 pos = Unity2Ros(Tosend.transform.localPosition);
-        //string velocity = Velscaler(pos).ToString("F4");
+        //string velocity = workspace(pos).ToString("F4");
+        string velocity = Velscaler(pos).ToString("F4");
 
         //string pos = Unity2Ros(Tosend.transform.localPosition).ToString("F5");
         //string rot = Tosend.transform.localrotation.ToString("F5");
@@ -328,14 +329,17 @@ public class VelUDP : MonoBehaviour
 
     public float Velscaler(Vector3 pos)
     {
+        Vector3 pos2 = Workspaceplane.transform.position;
+        float yplanedivider = pos2.y;
         float velfactor;
-        if (pos.y >= 0.5f)
+        if (pos.y >= yplanedivider)
         { //we are in the ouside zone 
-            velfactor = 3.0f;
+            velfactor = 0.15f;
         }
         else
-            velfactor = 0.2f;
-
+            velfactor = 0.55f;
+        Debug.Log("yplane coord"+ yplanedivider);
+        Debug.Log("object y coord" + pos.y);
         return velfactor;
     }
 
@@ -360,13 +364,13 @@ public class VelUDP : MonoBehaviour
          **/
         if (p.x >= xplanedivider)
         {
-            wspace = 0.6f;
+            wspace = 0.3f;
             if (((xl <= p.x) && (p.x <= xu)) && ((yl <= p.y) && (p.y <= yu)))
             {
                 wspace = 0.2f;
             }
         }
-        else wspace = 0.8f;
+        else wspace = 0.7f;
         return wspace;
     }
 

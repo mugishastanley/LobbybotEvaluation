@@ -99,7 +99,7 @@ public class KdFindClosest : MonoBehaviour
             //var cubeRenderer = nearestObj.GetComponent<Renderer>();
             if (_isnearestfound)
             {
-                //var cubeRenderer = nearestObj.GetComponent<Renderer>();
+                var cubeRenderer = nearestObj.GetComponent<Renderer>();
                 cubeRenderer.material.color = Color.red;
                 //Call SetColor using the shader property name "_Color" and setting the color to red
                 cubeRenderer.material.SetColor("_Color", Color.red);
