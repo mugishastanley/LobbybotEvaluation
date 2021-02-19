@@ -15,18 +15,18 @@ using System.Linq;
     -----------------------
 */
 
-public class VelUDP : MonoBehaviour
+public class VelUDP2 : MonoBehaviour
 {
     [SerializeField]
     private GameObject RobotURDF;
-
     [SerializeField]
     private GameObject Tosend;
-
     [SerializeField]
     private GameObject Workspaceplane;
     [SerializeField]
     private GameObject UserHand;
+
+    private Transform Tooltip;
 
     private static int localPort;
     private float PI = 3.1416f;
@@ -47,20 +47,24 @@ public class VelUDP : MonoBehaviour
     Matrix4x4 VRWRTRobot;
     Matrix4x4 RobotWRTWorld;
     Matrix4x4 Testmat;
-    Matrix4x4 EEWRTRobot;
+    Matrix4x4 T1;
+    Matrix4x4 T2;
+    Matrix4x4 T3;
+    Matrix4x4 T4;
 
     Matrix4x4 Home;
     Vector3 rotation = new Vector3(0, 180, 0);
     float velfactor;
     float wspace = 0f;
-    Vector3 Interpoint = new Vector3(0, 180, 0);
+
+    //Vector3 Interpoint = new Vector3(0, 180, 0);
 
 
 
     // call it from shell (as program)
     private static void Main()
     {
-        VelUDP sendObj = new VelUDP();
+        VelUDP2 sendObj = new VelUDP2();
         sendObj.init();
 
         // testing via console
@@ -81,26 +85,51 @@ public class VelUDP : MonoBehaviour
     {
         //Location of closest object
         Tosend.transform.position = FindObjectOfType<KdFindClosest>().getclosestobjectposition();
-        //To be fixed later when mind is fresh
-        //Tosend.transform.rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
+        Tosend.transform.rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
 
+      
+        //Matrix4x4 m = Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1, 1, 1));
+
+        //Debug.Log("pos is " + Tosend.transform.position.ToString("F4"));
+        //Debug.Log("Rotation is " + rotation2.ToString("F4"));
+
+        //Rotate the point to send by a matrix
+        // Matrix4x4 t = Transform4(64.0f) * Tosend.LocaltoWorld;
+
+
+        //Tool tip offset
+        //Tooltip.transform ( Transform4(64.0f, Tosend));
         Vector3 posbe4 = Tosend.transform.position;
-        //string velocity = workspace(Tosend.transform.localPosition).ToString("F4");
-        Vector3 pos = Unity2Ros(Tosend.transform.localPosition);
+        Vector3 pos = Unity2Ros(Tosend.transform.position); /**No difference between position and Localposition*/
+        Tosend.transform.position = Unity2Ros(Tosend.transform.position);
+
+        //Matrix transformations
+        Matrix4x4 t = Tosend.transform.localToWorldMatrix;
+        Matrix4x4 m = Transform4(63.0f) * t;
+        //Tosend.transform.position = m.transform.position;
+        Tosend.transform.position = new Vector3(m[0, 3], m[1, 3], m[2, 3]);
+        Tosend.transform.rotation = GetRotation(m);
+        Vector3 rotation2 = (Tosend.transform.rotation).eulerAngles;
+
+
+
+
+        //Debug.Log("posbe4:"+posbe4+"pos After Ros2 Unity"+pos);
         //string velocity = workspace(pos).ToString("F4");
-        string velocity = Velscaler(posbe4).ToString("F4");
-        string velocity2 = Velscaler(pos).ToString("F4");
+        //string velocity = Velscaler(posbe4).ToString("F4");
+        string velocity = Velscaler(pos).ToString("F4");
         //string velocity2 = Velscaler(posbe4).ToString("F4");
         //string velocity = Velscaler(pos).ToString("F4");
         //string pos = Unity2Ros(Tosend.transform.localPosition).ToString("F5");
         //string rot = Tosend.transform.localrotation.ToString("F5");
         //string rot = Rot(Tosend.transform.localEulerAngles).ToString("F4");
-        string rot = Rot(rotation).ToString("F4");
-        string posstr = pos.ToString("F4");
+        string rot = Rot(rotation2).ToString("F4");
+        //string posstr = pos.ToString("F4");
+        string posstr = Tosend.transform.position.ToString("F4");
         //Debug.Log("Recieved" + Tosend.transform.localPosition +"Rotation"+rot);
         string datasent = posstr + ',' + rot + ',' + velocity;
         //string datasent = posstr + ',' + velocity2 ;
-        //Debug.Log($"To send pos{datasent}");
+        Debug.Log($"To send pos{datasent}");
         //Debug.Log("To send pos" + pos + "Orient" + rot);
         //string datasent = (Calculate_Transform() * Test.transform.localToWorldMatrix).ToString("F8");
         //Testmat = Test.transform.localToWorldMatrix; //End effector WRT world
@@ -132,7 +161,6 @@ public class VelUDP : MonoBehaviour
         sendString(strMessage + "\n");
 
         // print("Testing: nc -lu " + IP + " : " + pos);
-
         // }
     }
 
@@ -340,7 +368,7 @@ public class VelUDP : MonoBehaviour
             velfactor = 0.15f;
         }
         else
-            velfactor = 0.55f;
+        velfactor = 0.55f;
         Debug.Log("yplane coord"+ yplanedivider);
         Debug.Log("object y coord" + pos.y);
         return velfactor;
@@ -350,12 +378,12 @@ public class VelUDP : MonoBehaviour
         //Vector3 pos2 = Workspaceplane.transform.position;
         //float yplanedivider = pos2.y;
         float velfactor;
-        if (pos.y >= 0.55f)
+        if (pos.y >= 0.5f)
         { //we are in the ouside zone 
-            velfactor = 0.15f;
+            velfactor = 0.4f;
         }
         else
-            velfactor = 0.55f;
+            velfactor = 0.2f;
         //Debug.Log("yplane coord" + yplanedivider);
         //Debug.Log("object y coord" + pos.y);
         return velfactor;
@@ -405,4 +433,74 @@ public class VelUDP : MonoBehaviour
         }
         else wspace = 0.8f;
     }
+
+    //Matrix Transforms
+    Matrix4x4 Transform1(float Theta)
+    {
+        T1[0, 0] = 1; T1[0, 1] = 0; T1[0, 2] = 0; T1[0, 3] = 0f;
+        T1[1, 0] = 0; T1[1, 1] = 1.0f; T1[1, 2] = 0.0f; T1[1, 3] = 0;
+        T1[2, 0] = 0f; T1[2, 1] = 0f; T1[2, 2] = 1; T1[2, 3] = 0.15f;
+        T1[3, 0] = 0f; T1[3, 1] = 0f; T1[3, 2] = 0f; T1[3, 3] = 1.0f;
+        return T1;
+    }
+
+
+    Matrix4x4 Transforma2(float Theta)
+    {
+        T2[0, 0] = Mathf.Cos(Theta); T2[0, 1] = 0; T2[0, 2] = 0.0775f * Mathf.Sin(Theta); T2[0, 3] = 0f;
+        T2[1, 0] = 0; T2[1, 1] = 1.0f; T2[1, 2] = 0.0f; T2[1, 3] = 0;
+        T2[2, 0] = -0.0281f * Mathf.Sin(Theta); T2[2, 1] = 0f; T2[2, 2] = 0.00217775f * Mathf.Cos(Theta); T2[2, 3] = 0f;
+        T2[3, 0] = 0f; T2[3, 1] = 0f; T2[3, 2] = 0f; T2[3, 3] = 1.0f;
+        return T2;
+    }
+
+    Matrix4x4 Transform3(float Theta)
+    {/*Inverse of T1*/
+        T3[0, 0] = 1; T3[0, 1] = 0; T3[0, 2] = 0; T3[0, 3] = 0f;
+        T3[1, 0] = 0; T3[1, 1] = 1.0f; T3[1, 2] = 0.0f; T3[1, 3] = 0;
+        T3[2, 0] = 0f; T3[2, 1] = 0f; T3[2, 2] = 1; T3[2, 3] = -0.15f;
+        T3[3, 0] = 0f; T3[3, 1] = 0f; T3[3, 2] = 0f; T3[3, 3] = 1.0f;
+        return T3;
+    }
+
+
+    Matrix4x4 Transform4(float Theta)
+    {/*Inverse of T2*/
+        T4[0, 0] = Mathf.Cos(Theta); T4[0, 1] = 0; T4[0, 2] = -Mathf.Sin(Theta); T4[0, 3] = 0.0285f * Mathf.Sin(Theta);
+        T4[1, 0] = 0; T4[1, 1] = 1.0f; T4[1, 2] = 0.0f; T4[1, 3] = 0;
+        T4[2, 0] = Mathf.Sin(Theta); T4[2, 1] = 0f; T4[2, 2] = Mathf.Cos(Theta); T4[2, 3] = -0.0285f * Mathf.Cos(Theta) - 0.0775f;
+        T4[3, 0] = 0f; T4[3, 1] = 0f; T4[3, 2] = 0f; T4[3, 3] = 1.0f;    
+        return T4;
+
+    }
+
+    /*Matrix utils*/
+
+    public Quaternion GetRotation(Matrix4x4 matrix4X4)
+    {
+        float qw = Mathf.Sqrt(1f + matrix4X4.m00 + matrix4X4.m11 + matrix4X4.m22) / 2;
+        float w = 4 * qw;
+        float qx = (matrix4X4.m21 - matrix4X4.m12) / w;
+        float qy = (matrix4X4.m02 - matrix4X4.m20) / w;
+        float qz = (matrix4X4.m10 - matrix4X4.m01) / w;
+        return new Quaternion(qx, qy, qz, qw);
+    }
+
+    public Vector3 GetPostion(Matrix4x4 matrix4X4)
+    {
+        var x = matrix4X4.m03;
+        var y = matrix4X4.m13;
+        var z = matrix4X4.m23;
+        return new Vector3(x, y, z);
+    }
+
+    public Vector3 GetScale(Matrix4x4 m)
+    {
+        var x = Mathf.Sqrt(m.m00 * m.m00 + m.m01 * m.m01 + m.m02 * m.m02);
+        var y = Mathf.Sqrt(m.m10 * m.m10 + m.m11 * m.m11 + m.m12 * m.m12);
+        var z = Mathf.Sqrt(m.m20 * m.m20 + m.m21 * m.m21 + m.m22 * m.m22);
+        return new Vector3(x, y, z);
+    }
+
+
 }

@@ -51,7 +51,7 @@ public class KdFindClosest : MonoBehaviour
 
             points[i].transform.parent = CalTracker.transform; //only for visuals but no effect
             //Debug.Log("After tracker parent: Point :" + i + "Posiotn:" + points[i].transform.position.ToString("F3"));
-            GameObject point = (Instantiate(BlackPrefab, points[i].transform.position, points[i].transform.localRotation));
+            GameObject point = (Instantiate(BlackPrefab, points[i].transform.position, points[i].transform.rotation));
             //Debug.Log("Spawn at Point" + i + "Posiotn:" + point.transform.position.ToString("F3"));
             point.transform.parent = CalTracker.transform;
             //Debug.Log("After parent Point" + i + "Posiotn:" + point.transform.position.ToString("F3"));
@@ -89,7 +89,7 @@ public class KdFindClosest : MonoBehaviour
             Debug.DrawLine(whiteball.transform.position, nearestObj.transform.position, Color.red);
            // _ClosestObject.transform.position = nearestObj.transform.localPosition;
             nearobpostion = nearestObj.transform.localPosition;
-            nearobrot = nearestObj.transform.rotation;
+            nearobrot = nearestObj.transform.localRotation;
             //Debug.Log("From Kd Found next " + nearestObj.transform.localPosition.ToString("F3")); // This is the final location to send.
 
 
