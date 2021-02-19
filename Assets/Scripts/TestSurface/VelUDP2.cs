@@ -105,7 +105,7 @@ public class VelUDP2 : MonoBehaviour
 
         //Matrix transformations
         Matrix4x4 t = Tosend.transform.localToWorldMatrix;
-        Matrix4x4 m = Transform4(63.0f) * t;
+        Matrix4x4 m = Transform4(63.4f) * t;
         //Tosend.transform.position = m.transform.position;
         Tosend.transform.position = new Vector3(m[0, 3], m[1, 3], m[2, 3]);
         Tosend.transform.rotation = GetRotation(m);
@@ -445,7 +445,7 @@ public class VelUDP2 : MonoBehaviour
     }
 
 
-    Matrix4x4 Transforma2(float Theta)
+    Matrix4x4 Transform2(float Theta)
     {
         T2[0, 0] = Mathf.Cos(Theta); T2[0, 1] = 0; T2[0, 2] = 0.0775f * Mathf.Sin(Theta); T2[0, 3] = 0f;
         T2[1, 0] = 0; T2[1, 1] = 1.0f; T2[1, 2] = 0.0f; T2[1, 3] = 0;
@@ -457,7 +457,7 @@ public class VelUDP2 : MonoBehaviour
     Matrix4x4 Transform3(float Theta)
     {/*Inverse of T1*/
         T3[0, 0] = 1; T3[0, 1] = 0; T3[0, 2] = 0; T3[0, 3] = 0f;
-        T3[1, 0] = 0; T3[1, 1] = 1.0f; T3[1, 2] = 0.0f; T3[1, 3] = 0;
+        T3[1, 0] = 0; T3[1, 1] = 1.0f; T3[1, 2] = 0.0f; T3[1, 3] = 0f;
         T3[2, 0] = 0f; T3[2, 1] = 0f; T3[2, 2] = 1; T3[2, 3] = -0.15f;
         T3[3, 0] = 0f; T3[3, 1] = 0f; T3[3, 2] = 0f; T3[3, 3] = 1.0f;
         return T3;
