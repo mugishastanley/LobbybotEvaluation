@@ -22,7 +22,7 @@ public class TransformMatrix : MonoBehaviour
         var matrix = transform.localToWorldMatrix;
         // get position from the last column
         var position = new Vector3(matrix[0, 3], matrix[1, 3], matrix[2, 3]);
-        Debug.Log("Transform position from matrix is: " + position);
-        Debug.Log("Transform matrix string is: " + matrix.ToString());
+        //Debug.Log("Transform position from matrix is: " + position);
+        //Debug.Log("Transform matrix string is: " + matrix.ToString());
     }
 }
