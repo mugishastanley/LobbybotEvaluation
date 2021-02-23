@@ -15,6 +15,7 @@ public class KdFindClosestMesh : MonoBehaviour
     public int CountWhite;
     public int CountBlack;
     public GameObject[] points;
+    public GameObject TouchableObjects;
     //private GameObject _closestobjectpose;
     private GameObject _ClosestObject;
     private bool _isnearestfound = false;
@@ -26,9 +27,12 @@ public class KdFindClosestMesh : MonoBehaviour
     protected KdTree<FallingBlackObj> BlackballsList = new KdTree<FallingBlackObj>();
     protected KdTree<FallingBlackObj> WhiteballsList = new KdTree<FallingBlackObj>();
 
-    
+
     // protected List<RandomMove> BlackballsList = new List<RandomMove>();
 
+    private MeshFilter mf;
+    private Vector3[] origVerts;
+    private Vector3[] newVerts;
 
     // Spawn out balls at start of the game
     void Start()
@@ -37,9 +41,45 @@ public class KdFindClosestMesh : MonoBehaviour
         init();
     }
 
+  
+
     public void init() {
 
-        for (int i = 0; i < points.Length; i++)
+        mf = TouchableObjects.GetComponent<MeshFilter>();
+        origVerts = mf.mesh.vertices;
+        newVerts = new Vector3[origVerts.Length];
+
+        for (int i = 0; i < origVerts.Length; i++)
+        {
+            //newVertices [i]= mf.mesh.vertices[i];
+            Debug.Log("Before " + origVerts[i]);
+            //newVerts[i] = localToWorldMatrix.MultiplyPoint3x4(origVerts[i]);
+            newVerts[i] = transform.TransformPoint(origVerts[i]);
+            Debug.Log("After " + newVerts[i] );
+        }
+
+        //Extract Mesh Information.
+
+        /****
+        TouchableObjects = GameObject.FindGameObjectsWithTag("Touchable");
+        //TouchableObjects[i].transform.TransformPoint(mesh.vertices[vert]);
+        foreach (GameObject go in TouchableObjects)
+        {
+            //transform.TransformPoint(mesh.vertices[vert]);
+            //transform vertices position into world space
+            Mesh mesh = go.GetComponent<MeshFilter>().mesh;
+            testing = new Vector3[mesh.vertices.Length];
+            for (int test = 0; test < mesh.vertices.Length; test++)
+            {
+                go.transform.TransformPoint(mesh.vertices[test]);
+                Debug.Log("Testing Vertex info" + mesh.vertices[test]);
+            }
+        }
+        ***/
+
+
+
+            for (int i = 0; i < points.Length; i++)
         //foreach (var point in points)
         {
             //Quaternion spawnRotation = Quaternion.identity;
