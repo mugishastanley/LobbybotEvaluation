@@ -83,6 +83,7 @@ public class UR5 : MonoBehaviour
 		joints[5] = transform.Find("Fix/Base/Shoulder/Elbow/Wrist1/Wrist2/Wrist3");
 
 		tcp = transform.Find("tcp");
+		tcp = transform.Find("Prop");
 
 		target = transform.Find("target");
 

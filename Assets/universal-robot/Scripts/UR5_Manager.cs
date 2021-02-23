@@ -29,7 +29,8 @@ public class UR5_Manager : MonoBehaviour {
 		joints[3] = transform.Find( "Fix/Base/Shoulder/Elbow/Wrist1" );
 		joints[4] = transform.Find( "Fix/Base/Shoulder/Elbow/Wrist1/Wrist2" );
 		joints[5] = transform.Find( "Fix/Base/Shoulder/Elbow/Wrist1/Wrist2/Wrist3" );
-		tcp = transform.Find( "tcp" );
+		//tcp = transform.Find( "tcp" );
+		tcp = transform.Find("Prop");
 		follower = transform.Find( "follower" );
 		for (int i = 0; i < 6; i++)
 			joints_init[i] = joints[i].transform.localRotation;
