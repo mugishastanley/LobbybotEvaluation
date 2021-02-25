@@ -95,6 +95,7 @@ public class UR5 : MonoBehaviour
 
 		ur = new UR_Manager();
 
+
 		ur.Connect(ip);
 
 		StartCoroutine(Initialize());
