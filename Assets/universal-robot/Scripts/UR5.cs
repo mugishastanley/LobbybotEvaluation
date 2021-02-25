@@ -27,6 +27,7 @@ public class UR5 : MonoBehaviour
 
 	public float max_rot_vel = 50.0f;
 
+
 	Transform[] joints;
 
 	Quaternion[] joints_init;
@@ -118,8 +119,8 @@ public class UR5 : MonoBehaviour
 
 		target.localPosition = tcp.localPosition;
 
-		target.localRotation = tcp.localRotation;
-
+		//target.localRotation = tcp.localRotation;
+		target.localRotation = Quaternion.identity;
 		isInitialized = true;
 
 		Debug.Log("UR5 initialized");
@@ -164,6 +165,7 @@ public class UR5 : MonoBehaviour
 			tcp.localPosition = ur.PoseTToVector3(new Vector3((float)ur.GetTCPPosition()[0], (float)ur.GetTCPPosition()[1], (float)ur.GetTCPPosition()[2]));
 
 			tcp.localRotation = ur.PoseRToQuaternion(new Vector3((float)ur.GetTCPPosition()[3], (float)ur.GetTCPPosition()[4], (float)ur.GetTCPPosition()[5]));
+			Debug.Log("TCP position " + tcp.localPosition+"TCP Rotation " +tcp.localRotation.eulerAngles);
 		}
 	}
 

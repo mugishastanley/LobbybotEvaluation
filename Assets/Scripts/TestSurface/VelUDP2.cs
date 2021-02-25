@@ -129,7 +129,7 @@ public class VelUDP2 : MonoBehaviour
         //Debug.Log("Recieved" + Tosend.transform.localPosition +"Rotation"+rot);
         string datasent = posstr + ',' + rot + ',' + velocity;
         //string datasent = posstr + ',' + velocity2 ;
-        Debug.Log($"To send pos{datasent}");
+        //Debug.Log($"To send pos{datasent}");
         //Debug.Log("To send pos" + pos + "Orient" + rot);
         //string datasent = (Calculate_Transform() * Test.transform.localToWorldMatrix).ToString("F8");
         //Testmat = Test.transform.localToWorldMatrix; //End effector WRT world
