@@ -166,7 +166,7 @@ public class UR5 : MonoBehaviour
 			tcp.localPosition = ur.PoseTToVector3(new Vector3((float)ur.GetTCPPosition()[0], (float)ur.GetTCPPosition()[1], (float)ur.GetTCPPosition()[2]));
 
 			tcp.localRotation = ur.PoseRToQuaternion(new Vector3((float)ur.GetTCPPosition()[3], (float)ur.GetTCPPosition()[4], (float)ur.GetTCPPosition()[5]));
-			Debug.Log("TCP position " + tcp.localPosition+"TCP Rotation " +tcp.localRotation.eulerAngles);
+			//Debug.Log("TCP position " + tcp.localPosition+"TCP Rotation " +tcp.localRotation.eulerAngles);
 		}
 	}
 

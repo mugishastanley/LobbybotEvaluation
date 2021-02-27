@@ -104,12 +104,13 @@ public class VelUDP2 : MonoBehaviour
         Tosend.transform.position = Unity2Ros(Tosend.transform.position);
 
         //Matrix transformations
-        Matrix4x4 t = Tosend.transform.localToWorldMatrix;
-        Matrix4x4 m = Transform4(63.4f) * t;
+        //Matrix4x4 t = Tosend.transform.localToWorldMatrix;
+        //Matrix4x4 m = Transform3(63.4f) * t;
+        //Matrix4x4 m = Transform3(63.4f) * t;
         //Tosend.transform.position = m.transform.position;
-        Tosend.transform.position = new Vector3(m[0, 3], m[1, 3], m[2, 3]);
-        Tosend.transform.rotation = GetRotation(m);
-        Vector3 rotation2 = (Tosend.transform.rotation).eulerAngles;
+        //Tosend.transform.position = new Vector3(m[0, 3], m[1, 3], m[2, 3]);
+        //Tosend.transform.rotation = GetRotation(m);
+        //Vector3 rotation2 = (Tosend.transform.rotation).eulerAngles;
 
 
 
@@ -122,14 +123,14 @@ public class VelUDP2 : MonoBehaviour
         //string velocity = Velscaler(pos).ToString("F4");
         //string pos = Unity2Ros(Tosend.transform.localPosition).ToString("F5");
         //string rot = Tosend.transform.localrotation.ToString("F5");
-        //string rot = Rot(Tosend.transform.localEulerAngles).ToString("F4");
-        string rot = Rot(rotation2).ToString("F4");
+        string rot = Rot(Tosend.transform.localEulerAngles).ToString("F4");
+        //string rot = Rot(rotation2).ToString("F4");
         //string posstr = pos.ToString("F4");
         string posstr = Tosend.transform.position.ToString("F4");
         //Debug.Log("Recieved" + Tosend.transform.localPosition +"Rotation"+rot);
         string datasent = posstr + ',' + rot + ',' + velocity;
         //string datasent = posstr + ',' + velocity2 ;
-        //Debug.Log($"To send pos{datasent}");
+        Debug.Log($"To send pos{datasent}");
         //Debug.Log("To send pos" + pos + "Orient" + rot);
         //string datasent = (Calculate_Transform() * Test.transform.localToWorldMatrix).ToString("F8");
         //Testmat = Test.transform.localToWorldMatrix; //End effector WRT world
@@ -378,12 +379,12 @@ public class VelUDP2 : MonoBehaviour
         //Vector3 pos2 = Workspaceplane.transform.position;
         //float yplanedivider = pos2.y;
         float velfactor;
-        if (pos.y >= 0.5f)
+        //if (pos.y >= 0.5f)
         { //we are in the ouside zone 
-            velfactor = 0.4f;
+            velfactor = 0.3f;
         }
-        else
-            velfactor = 0.2f;
+        //else
+        //    velfactor = 0.2f;
         //Debug.Log("yplane coord" + yplanedivider);
         //Debug.Log("object y coord" + pos.y);
         return velfactor;

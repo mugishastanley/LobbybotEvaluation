@@ -350,12 +350,13 @@ public class VelUDP : MonoBehaviour
         //Vector3 pos2 = Workspaceplane.transform.position;
         //float yplanedivider = pos2.y;
         float velfactor;
-        if (pos.y >= 0.55f)
-        { //we are in the ouside zone 
+        velfactor = 0.15f;
+        //if (pos.y >= 0.55f)
+       // { //we are in the ouside zone 
             velfactor = 0.15f;
-        }
-        else
-            velfactor = 0.55f;
+      //  }
+       // else
+          //  velfactor = 0.55f;
         //Debug.Log("yplane coord" + yplanedivider);
         //Debug.Log("object y coord" + pos.y);
         return velfactor;
