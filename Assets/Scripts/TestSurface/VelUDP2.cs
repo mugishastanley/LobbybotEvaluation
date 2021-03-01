@@ -130,7 +130,7 @@ public class VelUDP2 : MonoBehaviour
         //Debug.Log("Recieved" + Tosend.transform.localPosition +"Rotation"+rot);
         string datasent = posstr + ',' + rot + ',' + velocity;
         //string datasent = posstr + ',' + velocity2 ;
-        Debug.Log($"To send pos{datasent}");
+        //Debug.Log($"To send pos{datasent}");
         //Debug.Log("To send pos" + pos + "Orient" + rot);
         //string datasent = (Calculate_Transform() * Test.transform.localToWorldMatrix).ToString("F8");
         //Testmat = Test.transform.localToWorldMatrix; //End effector WRT world
@@ -379,12 +379,12 @@ public class VelUDP2 : MonoBehaviour
         //Vector3 pos2 = Workspaceplane.transform.position;
         //float yplanedivider = pos2.y;
         float velfactor;
-        //if (pos.y >= 0.5f)
+        if (pos.y <= 0.503f)
         { //we are in the ouside zone 
-            velfactor = 0.3f;
+            velfactor = 0.6f;
         }
-        //else
-        //    velfactor = 0.2f;
+        else
+            velfactor = 0.25f;
         //Debug.Log("yplane coord" + yplanedivider);
         //Debug.Log("object y coord" + pos.y);
         return velfactor;
@@ -502,6 +502,5 @@ public class VelUDP2 : MonoBehaviour
         var z = Mathf.Sqrt(m.m20 * m.m20 + m.m21 * m.m21 + m.m22 * m.m22);
         return new Vector3(x, y, z);
     }
-
 
 }
