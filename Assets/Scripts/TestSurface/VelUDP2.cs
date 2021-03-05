@@ -54,7 +54,8 @@ public class VelUDP2 : MonoBehaviour
 
     Matrix4x4 Home;
     Vector3 rotation = new Vector3(0, 180, 0);
-    float velfactor;
+    Vector3 previous = new Vector3(0.0f, 0.0f, 0.0f);
+    float velfactor=0.0f;
     float wspace = 0f;
 
     //Vector3 Interpoint = new Vector3(0, 180, 0);
@@ -87,7 +88,7 @@ public class VelUDP2 : MonoBehaviour
         Tosend.transform.position = FindObjectOfType<KdFindClosest>().getclosestobjectposition();
         Tosend.transform.rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
 
-      
+
         //Matrix4x4 m = Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1, 1, 1));
 
         //Debug.Log("pos is " + Tosend.transform.position.ToString("F4"));
@@ -99,18 +100,16 @@ public class VelUDP2 : MonoBehaviour
 
         //Tool tip offset
         //Tooltip.transform ( Transform4(64.0f, Tosend));
+        
+
+
         Vector3 posbe4 = Tosend.transform.position;
-        Vector3 pos = Unity2Ros(Tosend.transform.position); /**No difference between position and Localposition*/
+        string velocity = Velscaler(posbe4).ToString("F4");
+       // Vector3 pos = Unity2Ros(Tosend.transform.position); /**No difference between position and Localposition*/
         Tosend.transform.position = Unity2Ros(Tosend.transform.position);
 
-        //Matrix transformations
-        //Matrix4x4 t = Tosend.transform.localToWorldMatrix;
-        //Matrix4x4 m = Transform3(63.4f) * t;
-        //Matrix4x4 m = Transform3(63.4f) * t;
-        //Tosend.transform.position = m.transform.position;
-        //Tosend.transform.position = new Vector3(m[0, 3], m[1, 3], m[2, 3]);
-        //Tosend.transform.rotation = GetRotation(m);
-        //Vector3 rotation2 = (Tosend.transform.rotation).eulerAngles;
+
+        //Vector3 rotation2 = (Tosend.transform.rotation).eulerAngles;s
 
 
 
@@ -118,11 +117,10 @@ public class VelUDP2 : MonoBehaviour
         //Debug.Log("posbe4:"+posbe4+"pos After Ros2 Unity"+pos);
         //string velocity = workspace(pos).ToString("F4");
         //string velocity = Velscaler(posbe4).ToString("F4");
-        string velocity = Velscaler(pos).ToString("F4");
+        //string velocity = Velscaler(pos).ToString("F4");
         //string velocity2 = Velscaler(posbe4).ToString("F4");
         //string velocity = Velscaler(pos).ToString("F4");
-        //string pos = Unity2Ros(Tosend.transform.localPosition).ToString("F5");
-        //string rot = Tosend.transform.localrotation.ToString("F5");
+        string pos = Unity2Ros(Tosend.transform.localPosition).ToString("F5");
         string rot = Rot(Tosend.transform.localEulerAngles).ToString("F4");
         //string rot = Rot(rotation2).ToString("F4");
         //string posstr = pos.ToString("F4");
@@ -130,7 +128,7 @@ public class VelUDP2 : MonoBehaviour
         //Debug.Log("Recieved" + Tosend.transform.localPosition +"Rotation"+rot);
         string datasent = posstr + ',' + rot + ',' + velocity;
         //string datasent = posstr + ',' + velocity2 ;
-        //Debug.Log($"To send pos{datasent}");
+        Debug.Log($"To send pos{datasent}");
         //Debug.Log("To send pos" + pos + "Orient" + rot);
         //string datasent = (Calculate_Transform() * Test.transform.localToWorldMatrix).ToString("F8");
         //Testmat = Test.transform.localToWorldMatrix; //End effector WRT world
@@ -374,22 +372,35 @@ public class VelUDP2 : MonoBehaviour
         Debug.Log("object y coord" + pos.y);
         return velfactor;
     }
-    public float Velscaler(Vector3 pos)
-    {
-        //Vector3 pos2 = Workspaceplane.transform.position;
-        //float yplanedivider = pos2.y;
-        float velfactor;
-        if (pos.y <= 0.503f)
-        { //we are in the ouside zone 
-            velfactor = 0.6f;
+ 
+    public float Velscaler(Vector3 point)
+    {    
+        Vector3 plane = Workspaceplane.transform.localPosition;
+
+        if (previous != point)
+        {
+            if (point.x <= plane.x)
+            { //we are inside the car
+               // if (previous.x <= plane.x)//previous point outside
+                {
+               //     velfactor = 0.6f;
+                }
+               // else
+                    velfactor = 0.25f;
+            }
+            else
+            {
+                if (previous.x <= plane.x)//previous point outside
+                {
+                    velfactor = 0.25f;
+                }
+                else
+                    velfactor = 0.6f; 
+            }
+            previous = point;
         }
-        else
-            velfactor = 0.25f;
-        //Debug.Log("yplane coord" + yplanedivider);
-        //Debug.Log("object y coord" + pos.y);
         return velfactor;
     }
-
 
 
     public float workspace(Vector3 p)

@@ -24,7 +24,7 @@ public class LinePlaneIntersection : MonoBehaviour
 		Vector3 Interpoint = Intersection(start.transform.localPosition, End.transform.localPosition, Plane.transform.localPosition);
 		result.transform.localPosition = Interpoint;
 		string output = Interpoint.ToString("F4");
-		Debug.Log("Intersection"+ output );
+		//Debug.Log("Intersection"+ output );
 
 
 
