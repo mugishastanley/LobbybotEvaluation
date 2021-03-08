@@ -24,11 +24,11 @@ public class KdFindClosestMesh : MonoBehaviour
     private Quaternion nearobrot;
 
 
-    protected KdTree<FallingBlackObj> BlackballsList = new KdTree<FallingBlackObj>();
-    protected KdTree<FallingBlackObj> WhiteballsList = new KdTree<FallingBlackObj>();
+    protected KdTree<SpawnedPoint> PointsInCar = new KdTree<SpawnedPoint>();
+    protected KdTree<SpawnedPoint> Hands = new KdTree<SpawnedPoint>();
 
 
-    // protected List<RandomMove> BlackballsList = new List<RandomMove>();
+    // protected List<RandomMove> PointsInCar = new List<RandomMove>();
 
     private MeshFilter mf;
     private Vector3[] origVerts;
@@ -101,14 +101,14 @@ public class KdFindClosestMesh : MonoBehaviour
             //point.transform.position = points[i].transform.position;
             //Debug.Log("Position based on Point transform" + i + "Posiotn:" + point.transform.position.ToString("F3"));
             //point.transform.localRotation = points[i].transform.localRotation;
-            BlackballsList.Add((point).GetComponent<FallingBlackObj>());
+            PointsInCar.Add((point).GetComponent<SpawnedPoint>());
 
             // StartCoroutine(SpawnRoutine());
         }
 
         for (int i = 0; i < CountWhite; i++)
         {
-            WhiteballsList.Add(Instantiate(WhitePrefab).GetComponent<FallingBlackObj>());
+            Hands.Add(Instantiate(WhitePrefab).GetComponent<SpawnedPoint>());
         }
 
 
@@ -119,10 +119,10 @@ public class KdFindClosestMesh : MonoBehaviour
 
     void Update()
     { 
-        BlackballsList.UpdatePositions();
-        foreach (var whiteball in WhiteballsList)
+        PointsInCar.UpdatePositions();
+        foreach (var whiteball in Hands)
         {
-            FallingBlackObj nearestObj = BlackballsList.FindClosest(whiteball.transform.position);
+            SpawnedPoint nearestObj = PointsInCar.FindClosest(whiteball.transform.position);
 
             _isnearestfound = true;
 

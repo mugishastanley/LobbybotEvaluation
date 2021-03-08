@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FallingBlackObj : MonoBehaviour
+public class SpawnedPoint : MonoBehaviour
 {
     public int id = 0;
     // Start is called before the first frame update

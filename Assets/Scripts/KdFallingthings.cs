@@ -6,13 +6,13 @@ public class KdFallingthings : MonoBehaviour
 {
     public GameObject Hand;
     public GameObject BlackPrefab;
-    public int Hands;
+    public int NumHands;
     public int CountBlack;
     private bool _isnearestfound = false;
 
-    protected KdTree<FallingBlackObj> BlackballsList = new KdTree<FallingBlackObj>();
-    protected KdTree<FallingBlackObj> WhiteballsList = new KdTree<FallingBlackObj>();
-    // protected List<RandomMove> BlackballsList = new List<RandomMove>();
+    protected KdTree<SpawnedPoint> PointsInCar = new KdTree<SpawnedPoint>();
+    protected KdTree<SpawnedPoint> Hands = new KdTree<SpawnedPoint>();
+    // protected List<RandomMove> PointsInCar = new List<RandomMove>();
 
     // Spawn out balls at start of the game
     void Start()
@@ -21,9 +21,9 @@ public class KdFallingthings : MonoBehaviour
             StartCoroutine(SpawnRoutine());
         //}
 
-        for (int i = 0; i < Hands; i++)
+        for (int i = 0; i < NumHands; i++)
         {
-            WhiteballsList.Add(Instantiate(Hand).GetComponent<FallingBlackObj>());
+            Hands.Add(Instantiate(Hand).GetComponent<SpawnedPoint>());
 
         }
     }
@@ -33,15 +33,15 @@ public class KdFallingthings : MonoBehaviour
 
     void Update()
     {
-        BlackballsList.UpdatePositions();
-        foreach (var whiteball in WhiteballsList)
+        PointsInCar.UpdatePositions();
+        foreach (var whiteball in Hands)
         {
-            FallingBlackObj nearestObj = BlackballsList.FindClosest(whiteball.transform.position);
+            SpawnedPoint nearestObj = PointsInCar.FindClosest(whiteball.transform.position);
             _isnearestfound = true;
             float dist = Vector3.Distance(whiteball.transform.position, nearestObj.transform.position);
 
            
-           Debug.Log(nearestObj.gameObject.GetComponent<FallingBlackObj>().getId());
+           Debug.Log(nearestObj.gameObject.GetComponent<SpawnedPoint>().getId());
            Debug.DrawLine(whiteball.transform.position, nearestObj.transform.position, Color.red);
             //change to a certain color
                 var cubeRenderer = nearestObj.GetComponent<Renderer>();
@@ -55,7 +55,7 @@ public class KdFallingthings : MonoBehaviour
             if (dist < 1.0)
             {
                 //delete the game object
-                BlackballsList.RemoveAt(GetComponent<FallingBlackObj>().getId());
+                PointsInCar.RemoveAt(GetComponent<SpawnedPoint>().getId());
                 //remove it form the tree
             }
         }
@@ -68,10 +68,10 @@ public class KdFallingthings : MonoBehaviour
         while (CountBlack > 0)
         {
             Vector3 posToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
-            BlackballsList.Add(Instantiate(BlackPrefab, posToSpawn, Quaternion.identity).GetComponent<FallingBlackObj>());
+            PointsInCar.Add(Instantiate(BlackPrefab, posToSpawn, Quaternion.identity).GetComponent<SpawnedPoint>());
             // newEnemy.transform.parent = _ObjectContainer.transform;
-            BlackPrefab.GetComponent<FallingBlackObj>().setId(CountBlack);
-           // BlackballsList[CountBlack].GetComponent<FallingBlackObj>().setId(CountBlack);
+            BlackPrefab.GetComponent<SpawnedPoint>().setId(CountBlack);
+           // PointsInCar[CountBlack].GetComponent<SpawnedPoint>().setId(CountBlack);
             CountBlack--;
             yield return new WaitForSeconds(5.0f);
 

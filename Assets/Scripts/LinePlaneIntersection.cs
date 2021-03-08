@@ -75,7 +75,6 @@ public class LinePlaneIntersection : MonoBehaviour
 		return vectorNormalized *= size;
 	}
 
-
 	public Vector3 Intersection(Vector3 start, Vector3 end, Vector3 planeOrgin) {
 		Vector3 point;
 		Vector3 diff = end - start;
