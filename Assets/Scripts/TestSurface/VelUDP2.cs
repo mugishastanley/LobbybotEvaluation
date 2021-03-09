@@ -105,7 +105,7 @@ public class VelUDP2 : MonoBehaviour
 
 
         Vector3 posbe4 = Tosend.transform.position;
-        string velocity = Velscaler2(posbe4).ToString("F4");
+        string velocity = Velscaler(posbe4).ToString("F4");
        // Vector3 pos = Unity2Ros(Tosend.transform.position); /**No difference between position and Localposition*/
         Tosend.transform.position = Unity2Ros(Tosend.transform.position);
 

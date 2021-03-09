@@ -78,8 +78,8 @@ public class KdFindClosest : MonoBehaviour
     void Update()
     { 
         PointsInCar.UpdatePositions();
-        withHead();
-        //withoutHead();
+        //withHead();
+        withoutHead();
 
     }
 
