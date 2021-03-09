@@ -15,8 +15,8 @@ GameObject:
   - component: {fileID: 354577030845961595}
   - component: {fileID: 7861153346952997517}
   m_Layer: 0
-  m_Name: BlackObj2
-  m_TagString: FallingSpheres
+  m_Name: SpawnedPoint
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

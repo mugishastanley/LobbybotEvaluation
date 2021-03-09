@@ -20,12 +20,14 @@ public class KdFindClosest : MonoBehaviour
     private bool _isnearestfound = false;
 
     private Vector3 nearobpostion;
+    private Vector3 nearoblocalpose;
     private Quaternion nearobrot;
 
     Camera cam;
     Collider objCollider;
     Plane[] planes;
     Renderer[] renderers;
+    GameObject pts;
 
 
     protected KdTree<SpawnedPoint> PointsInCar = new KdTree<SpawnedPoint>();
@@ -44,10 +46,9 @@ public class KdFindClosest : MonoBehaviour
 
     public void init() {
         cam = Camera.main;
-        planes = GeometryUtility.CalculateFrustumPlanes(cam);
-        objCollider = GetComponent<Collider>();
-        second = PointsInCar[0];
-        second.tag = "nearestpoint";
+       // planes = GeometryUtility.CalculateFrustumPlanes(cam);
+       // objCollider = GetComponent<Collider>();
+        
 
         for (int i = 0; i < points.Length; i++)
         //foreach (var point in points)
@@ -60,6 +61,7 @@ public class KdFindClosest : MonoBehaviour
             point.transform.parent = CalTracker.transform;
 
             PointsInCar.Add((point).GetComponent<SpawnedPoint>());
+            
             // StartCoroutine(SpawnRoutine());
         }
 
@@ -67,12 +69,7 @@ public class KdFindClosest : MonoBehaviour
         {
             Hands.Add(Instantiate(WhitePrefab).GetComponent<SpawnedPoint>());
         }
-
-        GameObject walls = GameObject.FindGameObjectWithTag("nearestpoints");
-        //renderers = walls.GetComponentsInChildren<Renderer>();
-        renderers = walls.GetComponents<Renderer>();
-
-
+        second = PointsInCar[0];
 
     }
 
@@ -81,25 +78,54 @@ public class KdFindClosest : MonoBehaviour
     void Update()
     { 
         PointsInCar.UpdatePositions();
+        withHead();
+        //withoutHead();
+
+    }
+
+    public void withoutHead() {
         foreach (var whiteball in Hands)
         {
             SpawnedPoint nearestObj = PointsInCar.FindClosest(whiteball.transform.position);
-            nearestObj.tag = "nearestpoint";         
-            /**
-            var nearobjs2 = new List<SpawnedPoint>();
-            var nearobjs = PointsInCar.FindClose(whiteball.transform.position);
-            //var knearestobjs = PointsInCar.FindKClosest(whiteball.transform.position, 3);
-            foreach (var xr in nearobjs)
-            {
-                Debug.Log("nearobjs " + xr.GetComponent<SpawnedPoint>().getId().ToString());
-            }
-            **/
+            nearestObj.tag = "nearestpoint";
+            second.tag = "nearestpoint";
+            pts = GameObject.FindGameObjectWithTag("nearestpoint");
+            renderers = pts.GetComponents<Renderer>();
             _isnearestfound = true;
 
             Debug.DrawLine(whiteball.transform.position, nearestObj.transform.position, Color.red);
-           // _ClosestObject.transform.position = nearestObj.transform.localPosition;
-           // nearobpostion = nearestObj.transform.localPosition;
-           // nearobrot = nearestObj.transform.localRotation;
+
+
+            if (_isnearestfound)
+            {
+                var cubeRenderer = nearestObj.GetComponent<Renderer>();
+                cubeRenderer.material.color = Color.red;
+                //Call SetColor using the shader property name "_Color" and setting the color to red
+                cubeRenderer.material.SetColor("_Color", Color.red);
+                _isnearestfound = false;
+            }
+          //  nearestObj = best(nearestObj, second, Testraycast());
+            nearobpostion = nearestObj.transform.localPosition;
+            nearobrot = nearestObj.transform.localRotation;
+          //  Debug.Log("Nearest is at " + nearestObj.transform.position);
+        }
+
+
+    }
+
+
+    public void withHead() {
+        foreach (var whiteball in Hands)
+        {
+            SpawnedPoint nearestObj = PointsInCar.FindClosest(whiteball.transform.position);
+            nearestObj.tag = "nearestpoint";
+            second.tag = "nearestpoint";
+            pts = GameObject.FindGameObjectWithTag("nearestpoint");
+            renderers = pts.GetComponents<Renderer>();
+            _isnearestfound = true;
+
+            Debug.DrawLine(whiteball.transform.position, nearestObj.transform.position, Color.red);
+
 
             if (_isnearestfound)
             {
@@ -111,11 +137,15 @@ public class KdFindClosest : MonoBehaviour
             }
             nearestObj = best(nearestObj, second, Testraycast());
             nearobpostion = nearestObj.transform.localPosition;
+            nearoblocalpose = nearestObj.transform.position;
             nearobrot = nearestObj.transform.localRotation;
 
             if (second != nearestObj)
-                second = nearestObj;   
+                second = nearestObj;
+          //  Debug.Log("Nearest is at " + nearestObj.transform.position);
         }
+
+
     }
 
     public Vector3 getclosestobjectposition()
@@ -127,7 +157,10 @@ public class KdFindClosest : MonoBehaviour
     {
         return nearobrot;
     }
-
+    public Vector3 getclosestobjectlocalposition()
+    {
+        return nearoblocalpose;
+    }
     //get the positio of the game object stored in a varaibale
     public Vector3 getclosestobjectpose(){        
         return _ClosestObject.transform.localPosition;
@@ -135,6 +168,7 @@ public class KdFindClosest : MonoBehaviour
     public Quaternion getclosestobjectrot() { 
     return _ClosestObject.transform.rotation;
     }
+
 
     public Vector3 Testraycast()
     {
@@ -148,17 +182,13 @@ public class KdFindClosest : MonoBehaviour
                 Physics.DefaultRaycastLayers))
         {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hitInfo.distance, Color.black);
-            // Debug.Log("Did Hit " + hitInfo.point);
-            // If the Raycast has succeeded and hit a hologram
-            // hitInfo's point represents the position being gazed at
-            // hitInfo's collider GameObject represents the hologram being gazed at
             return hitInfo.point;
         }
         else
         {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
             return hitInfo.point;
-            //  Debug.Log("Did not Hit");
+            Debug.Log("Did not Hit");
         }
 
     }

@@ -49,7 +49,7 @@ public class HeadGaze : MonoBehaviour
                 Physics.DefaultRaycastLayers))
         {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hitInfo.distance, Color.black);
-            Debug.Log("Did Hit " +hitInfo.point);
+            //Debug.Log("Did Hit " +hitInfo.point);
             // If the Raycast has succeeded and hit a hologram
             // hitInfo's point represents the position being gazed at
             // hitInfo's collider GameObject represents the hologram being gazed at
@@ -57,7 +57,7 @@ public class HeadGaze : MonoBehaviour
         else
         {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
-            Debug.Log("Did not Hit");
+            //Debug.Log("Did not Hit");
         }
 
     }

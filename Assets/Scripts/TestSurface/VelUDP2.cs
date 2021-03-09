@@ -87,6 +87,7 @@ public class VelUDP2 : MonoBehaviour
         //Location of closest object
         Tosend.transform.position = FindObjectOfType<KdFindClosest>().getclosestobjectposition();
         Tosend.transform.rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
+        //Tosend.transform.position = FindObjectOfType<KdFindClosest>().getclosestobjectlocalposition();
 
 
         //Matrix4x4 m = Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1, 1, 1));
@@ -100,19 +101,16 @@ public class VelUDP2 : MonoBehaviour
 
         //Tool tip offset
         //Tooltip.transform ( Transform4(64.0f, Tosend));
-        
+
 
 
         Vector3 posbe4 = Tosend.transform.position;
-        string velocity = Velscaler(posbe4).ToString("F4");
+        string velocity = Velscaler2(posbe4).ToString("F4");
        // Vector3 pos = Unity2Ros(Tosend.transform.position); /**No difference between position and Localposition*/
         Tosend.transform.position = Unity2Ros(Tosend.transform.position);
 
 
         //Vector3 rotation2 = (Tosend.transform.rotation).eulerAngles;s
-
-
-
 
         //Debug.Log("posbe4:"+posbe4+"pos After Ros2 Unity"+pos);
         //string velocity = workspace(pos).ToString("F4");
@@ -128,7 +126,7 @@ public class VelUDP2 : MonoBehaviour
         //Debug.Log("Recieved" + Tosend.transform.localPosition +"Rotation"+rot);
         string datasent = posstr + ',' + rot + ',' + velocity;
         //string datasent = posstr + ',' + velocity2 ;
-        Debug.Log($"To send pos{datasent}");
+       Debug.Log($"To send pos{datasent}");
         //Debug.Log("To send pos" + pos + "Orient" + rot);
         //string datasent = (Calculate_Transform() * Test.transform.localToWorldMatrix).ToString("F8");
         //Testmat = Test.transform.localToWorldMatrix; //End effector WRT world
@@ -399,6 +397,12 @@ public class VelUDP2 : MonoBehaviour
             }
             previous = point;
         }
+        return velfactor;
+    }
+
+    public float Velscaler2(Vector3 point)
+    {
+        float velfactor = 0.4f;
         return velfactor;
     }
 

@@ -11,14 +11,17 @@ public class TrackingdataLog : MonoBehaviour
     [Header("Data")]
     string serializedData;
     private string RightControllerPos = @"c:\temp\RightContPos.txt";
+    private string handPos = @"c:\temp\HandPos.txt";
     private string RightControllerRot = @"c:\temp\RightContRot.txt";
     private string RightControllerVel = @"c:\temp\RightContVel.txt";
     private string RightControllerAcc = @"c:\temp\RightContAcc.txt";
     private string HeadRotation = @"c:\temp\HeadRot.txt";
+    private string HeadRotationEuler = @"c:\temp\HeadRotEuler.txt";
     private string HeadPosition = @"c:\temp\HeadPos.txt";
     private string EETransform = @"c:\temp\EETransform.txt";
 
-    public Transform RobotEndEffector;
+    public GameObject RobotEndEffector;
+    public GameObject Hand;
 
     public void Start()
     {
@@ -101,6 +104,15 @@ public class TrackingdataLog : MonoBehaviour
                     }
                 }
 
+                if (nodestate.TryGetRotation(out Quaternion headroteuler))
+                {
+                    using (StreamWriter sw3 = File.AppendText(HeadRotationEuler))
+                    {
+                        sw3.WriteLine(System.DateTime.Now + "," + Time.time + "," + headroteuler.eulerAngles.ToString("F4"));
+                        //sw.WriteLine("Extra line");                      
+                    }
+                }
+
                 if (nodestate.TryGetPosition(out head_pos))
                 {
                     using (StreamWriter sw3 = File.AppendText(HeadPosition))
@@ -110,20 +122,24 @@ public class TrackingdataLog : MonoBehaviour
                     }
                 }
 
+                
+
             }
 
             //get transform matrix of End Effector
-            Tmat = RobotEndEffector.transform.localToWorldMatrix;
+            //Tmat = RobotEndEffector.transform.localToWorldMatrix;
             {
                 using (StreamWriter sw3 = File.AppendText(EETransform))
                 {
-                    sw3.WriteLine(System.DateTime.Now + "," + Time.time + "," + Tmat.ToString());
+                    sw3.WriteLine(System.DateTime.Now + "," + Time.time + "," + RobotEndEffector.transform.position.ToString("F4"));
                    // Debug.Log("Robot EE" + Tmat.ToString());
                 }
+                using (StreamWriter sw3 = File.AppendText(handPos))
+                {
+                    sw3.WriteLine(System.DateTime.Now + "," + Time.time + "," + Hand.transform.position.ToString("F4"));
+                    // Debug.Log("Robot EE" + Tmat.ToString());
+                }
             }
-
-
-
         }
 
         void Statsinfo()
@@ -145,6 +161,7 @@ public class TrackingdataLog : MonoBehaviour
          * because it will still get data when tracked is not ready or off **/
        Vector3 pos = InputTracking.GetLocalPosition(XRNode.RightHand);
        Quaternion rot = InputTracking.GetLocalRotation(XRNode.RightHand);
+       Vector3 headrot = InputTracking.GetLocalRotation(XRNode.Head).eulerAngles;
        Debug.Log("From trackingdata rght Position" + pos);
     }
 
