@@ -98,7 +98,7 @@ public class VelUDP : MonoBehaviour
         string rot = Rot(rotation).ToString("F4");
         string posstr = pos.ToString("F4");
         //Debug.Log("Recieved" + Tosend.transform.localPosition +"Rotation"+rot);
-        string datasent = posstr + ',' + rot + ',' + velocity;
+        string datasent = posstr + ',' + rot + velocity;
         //string datasent = posstr + ',' + velocity2 ;
         //Debug.Log($"To send pos{datasent}");
         //Debug.Log("To send pos" + pos + "Orient" + rot);

@@ -118,15 +118,15 @@ public class VelUDP2 : MonoBehaviour
         //string velocity = Velscaler(pos).ToString("F4");
         //string velocity2 = Velscaler(posbe4).ToString("F4");
         //string velocity = Velscaler(pos).ToString("F4");
-        string pos = Unity2Ros(Tosend.transform.localPosition).ToString("F5");
+        Vector3 pos = Unity2Ros(Tosend.transform.localPosition);
         string rot = Rot(Tosend.transform.localEulerAngles).ToString("F4");
         //string rot = Rot(rotation2).ToString("F4");
         //string posstr = pos.ToString("F4");
-        string posstr = Tosend.transform.position.ToString("F4");
-        //Debug.Log("Recieved" + Tosend.transform.localPosition +"Rotation"+rot);
+        string posstr = pos.ToString("F4");
+        //Matrix4x4 tosend = Matrix4x4.TRS(pos, Tosend.transform.rotation, new Vector3(1,1,1)); 
         string datasent = posstr + ',' + rot + ',' + velocity;
-        //string datasent = posstr + ',' + velocity2 ;
-       Debug.Log($"To send pos{datasent}");
+        //string datasent = tosend.ToString("F4") + ' ' + velocity ;
+        //Debug.Log($"To send pos{datasent}");
         //Debug.Log("To send pos" + pos + "Orient" + rot);
         //string datasent = (Calculate_Transform() * Test.transform.localToWorldMatrix).ToString("F8");
         //Testmat = Test.transform.localToWorldMatrix; //End effector WRT world
@@ -400,7 +400,45 @@ public class VelUDP2 : MonoBehaviour
         return velfactor;
     }
 
-    public float Velscaler2(Vector3 point)
+    public float Velscaler3(Vector3 point, Transform torso) // with 3 worksapces
+    {
+        Vector3 plane = Workspaceplane.transform.localPosition;
+        float xcenter = torso.transform.position.x;
+        float ycenter = torso.transform.position.y;
+        float xoffset = 0.4f;
+        float yoffset = 0.3f;
+        float xu = xcenter + xoffset;
+        float xl = xcenter - xoffset;
+        float yu = ycenter + yoffset;
+        float yl = ycenter - yoffset;
+
+        if (previous != point)
+        {
+            if (point.x <= plane.x)
+            { //we are inside the car
+              
+                if (((xl <= point.x) && (point.x <= xu)) && ((yl <= point.y) && (point.y <= yu)))//point inside WH space, hand approx as retangle.
+                {
+                    velfactor = 0.1f;
+                }
+                else
+                    velfactor = 0.25f;
+            }
+            else
+            {
+                if (previous.x <= plane.x)//previous point outside
+                {
+                    velfactor = 0.25f;
+                }
+                else
+                    velfactor = 0.6f;
+            }
+            previous = point;
+        }
+        return velfactor;
+    }
+
+    public float Velscaler2(Vector3 point) //constant vel through out.
     {
         float velfactor = 0.4f;
         return velfactor;
@@ -428,8 +466,8 @@ public class VelUDP2 : MonoBehaviour
          **/
         if (p.x >= xplanedivider)
         {
-            wspace = 0.3f;
-            if (((xl <= p.x) && (p.x <= xu)) && ((yl <= p.y) && (p.y <= yu)))
+            //wspace = 0.3f;
+            if (((xl <= p.x) && (p.x <= xu)) && ((yl <= p.y) && (p.y <= yu)))//point inside space
             {
                 wspace = 0.2f;
             }
@@ -516,6 +554,13 @@ public class VelUDP2 : MonoBehaviour
         var y = Mathf.Sqrt(m.m10 * m.m10 + m.m11 * m.m11 + m.m12 * m.m12);
         var z = Mathf.Sqrt(m.m20 * m.m20 + m.m21 * m.m21 + m.m22 * m.m22);
         return new Vector3(x, y, z);
+    }
+
+    public Matrix4x4 FromTRS(Vector3 pos, Quaternion rot) {// returns a transform matrix from rotation translatio and scale.
+        Vector3 scale = new Vector3(1, 1, 1);
+        Quaternion rotation = Quaternion.Euler(pos.x, pos.y, pos.z);
+        Matrix4x4 m = Matrix4x4.TRS(pos, rotation, scale);
+        return m;
     }
 
 }
