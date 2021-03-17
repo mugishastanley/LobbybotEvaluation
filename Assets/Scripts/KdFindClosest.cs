@@ -60,7 +60,7 @@ public class KdFindClosest : MonoBehaviour
             GameObject point = (Instantiate(BlackPrefab, points[i].transform.position, points[i].transform.rotation));
             Debug.Log("Spawn at Point" + i + "Posiotn:" + point.transform.position.ToString("F3"));
             Debug.Log("Spawn at Point" + i + "Rotation:" + point.transform.rotation.eulerAngles.ToString("F3"));
-            //point.transform.parent = CalTracker.transform;
+            point.transform.parent = CalTracker.transform;
 
             PointsInCar.Add((point).GetComponent<SpawnedPoint>());
 

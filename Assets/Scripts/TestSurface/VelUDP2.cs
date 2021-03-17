@@ -87,6 +87,7 @@ public class VelUDP2 : MonoBehaviour
         //Location of closest object
         Tosend.transform.position = FindObjectOfType<KdFindClosest>().getclosestobjectposition();
         Tosend.transform.rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
+        //Tosend.transform.rotation = 
         float SelectedSurface = FindObjectOfType<SelectFace>().ChangeSurface();
         //Vector3 rot = Tosend.transform.rotation.eulerAngles;
         //rot.x = SelectedSurface;
@@ -329,7 +330,6 @@ public class VelUDP2 : MonoBehaviour
 
 
 
-
     public Vector3 Rot(Vector3 vector3)
     {
         /*Returns Vector3 rotation in radians*/
@@ -366,14 +366,15 @@ public class VelUDP2 : MonoBehaviour
                 {
                //     velfactor = 0.6f;
                 }
-               // else
-                    velfactor = 0.25f;
+                // else
+                // velfactor = 0.25f;
+                velfactor = 0.5f;
             }
             else
             {
                 if (previous.x <= plane.x)//previous point outside
                 {
-                    velfactor = 0.25f;
+                    velfactor = 0.5f;
                 }
                 else
                     velfactor = 0.6f; 
