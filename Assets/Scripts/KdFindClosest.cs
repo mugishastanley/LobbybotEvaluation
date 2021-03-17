@@ -54,14 +54,17 @@ public class KdFindClosest : MonoBehaviour
         //foreach (var point in points)
         {
             //Quaternion spawnRotation = Quaternion.identity;
-            points[i].transform.parent = CalTracker.transform; //only for visuals but no effect
+            //points[i].transform.parent = CalTracker.transform; //only for visuals but no effect
+            points[i].transform.parent = null; //only for visuals but no effect
             //Debug.Log("After tracker parent: Point :" + i + "Posiotn:" + points[i].transform.position.ToString("F3"));
             GameObject point = (Instantiate(BlackPrefab, points[i].transform.position, points[i].transform.rotation));
-            //Debug.Log("Spawn at Point" + i + "Posiotn:" + point.transform.position.ToString("F3"));
-            point.transform.parent = CalTracker.transform;
+            Debug.Log("Spawn at Point" + i + "Posiotn:" + point.transform.position.ToString("F3"));
+            Debug.Log("Spawn at Point" + i + "Rotation:" + point.transform.rotation.eulerAngles.ToString("F3"));
+            //point.transform.parent = CalTracker.transform;
 
             PointsInCar.Add((point).GetComponent<SpawnedPoint>());
-            
+
+            points[i].transform.parent = CalTracker.transform;
             // StartCoroutine(SpawnRoutine());
         }
 
