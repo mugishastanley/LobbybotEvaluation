@@ -32,10 +32,11 @@ public class TestTransforms : MonoBehaviour
         CT = CalTracker.transform.localToWorldMatrix;
         
         Rb = Robot.transform.localToWorldMatrix;
+        var Rbw2l = Robot.transform.worldToLocalMatrix;
 
-       
-        
-        
+
+
+
         invRb[0, 0] = Rb[0, 0];
         invRb[0, 1] = Rb[1, 0];
         invRb[0, 2] = Rb[2, 0];
@@ -62,10 +63,20 @@ public class TestTransforms : MonoBehaviour
         Matrix4x4 RTC = invRb * CT;
 
 
+        //print("Rb  :" + Rb);
+        //print("Rbw  :" + Rb.inverse);
+        //print("Rbw2l  :" + Rbw2l);
+        //print("invRb Matrix" + invRb);
+
+
+        var calTrackerMat = Matrix4x4.TRS(CalTracker.transform.localPosition, CalTracker.transform.rotation, new Vector3(1, 1, 1));
+        print("calTrackerMat " + calTrackerMat);
         print("Rb  :" + Rb);
-        print("invRb Matrix" + invRb.ToString("F3"));
-        print("TR Matrix" + RTC.ToString("F3"));   
- 
+
+        //print("CT  :" + CT);
+
+        //print("TR Matrix" + RTC.ToString("F3"));   
+
         return  invRb * CT ;
 
 
