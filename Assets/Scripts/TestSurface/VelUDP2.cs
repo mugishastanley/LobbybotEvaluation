@@ -53,7 +53,7 @@ public class VelUDP2 : MonoBehaviour
     Matrix4x4 T4;
 
     Matrix4x4 Home;
-    Vector3 rotation = new Vector3(0, 180, 0);
+    Vector3 rotation = new Vector3(0, 90, 0);
     Vector3 previous = new Vector3(0.0f, 0.0f, 0.0f);
     float velfactor=0.0f;
     float wspace = 0f;
@@ -89,7 +89,7 @@ public class VelUDP2 : MonoBehaviour
         Tosend.transform.rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
         Matrix4x4 RobotToCalTracker = FindObjectOfType<TestTransforms>().RB2CT();
         //Tosend.transform.rotation = 
-        float SelectedSurface = FindObjectOfType<SelectFace>().ChangeSurface();
+        //float SelectedSurface = FindObjectOfType<SelectFace>().ChangeSurface();
         //Vector3 rot = Tosend.transform.rotation.eulerAngles;
         //rot.x = SelectedSurface;
         //Tool tip offset
@@ -101,10 +101,11 @@ public class VelUDP2 : MonoBehaviour
         Vector3 pos = Unity2Ur(Tosend.transform.localPosition);
         //Vector3 pos = Vector3ToPoseT(Tosend.transform.localPosition);
 
-        Vector3 rot = Unity2Rostra(Tosend.transform.rotation.eulerAngles);
+        Vector3 rot = Unity2UrRot(Tosend.transform.rotation.eulerAngles);
         //Vector3 rot = Rot(Tosend.transform.localEulerAngles);
-        //Matrix4x4 Matrixsent = Matrix4x4.TRS(pos, Tosend.transform.rotation, new Vector3(1,1,1));
-        Matrix4x4 Matrixsent = RobotToCalTracker * FromTRS(pos, rot);
+        //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(pos, Tosend.transform.rotation, new Vector3(1,1,1));
+        Matrix4x4 Matrixsent = RobotToCalTracker * FromTRS(pos, rotation);
+        // Matrix4x4 Matrixsent = RobotToCalTracker * FromTRS(pos, rotation);
         //string datasent = pos.ToString("F4") + ',' + rot.ToString("F4") + ',' + velocity;
 
         string datasent = Matrixsent.ToString("F4") + ' ' + velocity ;
@@ -318,6 +319,10 @@ public class VelUDP2 : MonoBehaviour
     {
         return new Vector3(-vector3.y, -(vector3.x + 0.15f), vector3.z);
     }
+    public Vector3 Unity2UrRot(Vector3 vector3)
+    {
+        return new Vector3(-vector3.y, -(vector3.x), vector3.z);
+    }
 
     public static Quaternion Unity2RosRotQuart(Quaternion quaternion)
     {
@@ -478,7 +483,7 @@ public class VelUDP2 : MonoBehaviour
     {
         T1[0, 0] = 1; T1[0, 1] = 0; T1[0, 2] = 0; T1[0, 3] = 0f;
         T1[1, 0] = 0; T1[1, 1] = 1.0f; T1[1, 2] = 0.0f; T1[1, 3] = 0;
-        T1[2, 0] = 0f; T1[2, 1] = 0f; T1[2, 2] = 1; T1[2, 3] = 0.15f;
+        T1[2, 0] = 0f; T1[2, 1] = 0f; T1[2, 2] = 1; T1[2, 3] = -0.15f;
         T1[3, 0] = 0f; T1[3, 1] = 0f; T1[3, 2] = 0f; T1[3, 3] = 1.0f;
         return T1;
     }
@@ -532,15 +537,6 @@ public class VelUDP2 : MonoBehaviour
         var z = matrix4X4.m23;
         return new Vector3(x, y, z);
     }
-
-    public Vector3 GetScale(Matrix4x4 m)
-    {
-        var x = Mathf.Sqrt(m.m00 * m.m00 + m.m01 * m.m01 + m.m02 * m.m02);
-        var y = Mathf.Sqrt(m.m10 * m.m10 + m.m11 * m.m11 + m.m12 * m.m12);
-        var z = Mathf.Sqrt(m.m20 * m.m20 + m.m21 * m.m21 + m.m22 * m.m22);
-        return new Vector3(x, y, z);
-    }
-
     public Matrix4x4 FromTRS(Vector3 pos, Vector3 rot) {// returns a transform matrix from rotation translatio and scale.
         Vector3 scale = new Vector3(1, 1, 1);
         Quaternion rotation = Quaternion.Euler(rot.x, rot.y, rot.z);

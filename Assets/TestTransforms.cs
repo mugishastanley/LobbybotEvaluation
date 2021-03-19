@@ -14,29 +14,13 @@ public class TestTransforms : MonoBehaviour
     Matrix4x4 RbLW;
     Vector3 CTpos,Rblocalpos,Rbworldpos;
     Vector3 CTposlocal;
-    Matrix4x4 T4;
+    
     Matrix4x4 invRb;
-
-
-    void Start()
-    {
-        CaltoRobot();
-    }
-
-    void Update()
-    {
-        CaltoRobot();
-    }
-
     public Matrix4x4 CaltoRobot() {
         CT = CalTracker.transform.localToWorldMatrix;
         
         Rb = Robot.transform.localToWorldMatrix;
         var Rbw2l = Robot.transform.worldToLocalMatrix;
-
-
-
-
         invRb[0, 0] = Rb[0, 0];
         invRb[0, 1] = Rb[1, 0];
         invRb[0, 2] = Rb[2, 0];
@@ -83,13 +67,24 @@ public class TestTransforms : MonoBehaviour
     }
 
 
+
+
     public Matrix4x4 RB2CT()
     {
+        Matrix4x4 T4 = new Matrix4x4();
         //rotation in z -45, translation in x -15cm
-        T4[0, 0] = 0.7071068f; T4[0, 1] = 0.7071068f; T4[0, 2] = 0;    T4[0, 3] = -0.15f;
-        T4[1, 0] = -0.7071068f; T4[1, 1] = 0.7071068f;  T4[1, 2] = 0.0f; T4[1, 3] = -0.02f;
-        T4[2, 0] = 0;          T4[2, 1] = 0f;          T4[2, 2] = 1;    T4[2, 3] = 0;
+        T4[0, 0] = 0.7071068f; T4[0, 1] = 0.7071068f; T4[0, 2] = 0;    T4[0, 3] = -0.00f;
+        T4[1, 0] = -0.7071068f; T4[1, 1] = 0.7071068f;  T4[1, 2] = 0.0f; T4[1, 3] = -0.00f;
+        T4[2, 0] = 0f;          T4[2, 1] = 0f;          T4[2, 2] = 1;    T4[2, 3] = -0.00f;
         T4[3, 0] = 0f;         T4[3, 1] = 0f;          T4[3, 2] = 0f;   T4[3, 3] = 1.0f;
+        
+   
+
+    Matrix4x4 Tp = new Matrix4x4(); 
+        Tp[0, 0] = 1.0f; Tp[0, 1] = 0.0f; Tp[0, 2] = 0.0f; Tp[0, 3] = -0.0f;
+        Tp[1, 0] = -0.0f; Tp[1, 1] = 1.0f; Tp[1, 2] = 0.0f; Tp[1, 3] = -0.15f;
+        Tp[2, 0] = 0f; Tp[2, 1] = 0f; Tp[2, 2] = 1; Tp[2, 3] = -0.0f;
+        Tp[3, 0] = 0f; Tp[3, 1] = 0f; Tp[3, 2] = 0f; Tp[3, 3] = 1.0f;
         return T4;
     }
 }
