@@ -105,8 +105,8 @@ public class VelUDP2 : MonoBehaviour
 
         Vector3 rot = Unity2UrRot(Tosend.transform.rotation.eulerAngles);
         //Vector3 rot = Rot(Tosend.transform.localEulerAngles);
-        //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(pos, Tosend.transform.rotation, new Vector3(1,1,1)) *Transform3(90);
-        Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(pos, Tosend.transform.rotation, new Vector3(1, 1, 1));
+        Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(pos, Tosend.transform.rotation, new Vector3(1,1,1)) * Transform3(90);
+        //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(pos, Tosend.transform.rotation, new Vector3(1, 1, 1));
 
         print("Cube orientation" + FindObjectOfType<KdFindClosest>().getclosestobjectrotation().eulerAngles);
 
@@ -508,7 +508,7 @@ public class VelUDP2 : MonoBehaviour
 
     Matrix4x4 Transform3(float Theta)
     {/*Inverse of T1*/
-        T3[0, 0] = 1; T3[0, 1] = 0; T3[0, 2] = 0; T3[0, 3] = -0.15f;
+        T3[0, 0] = 1; T3[0, 1] = 0; T3[0, 2] = 0; T3[0, 3] = -0.13f;
         T3[1, 0] = 0; T3[1, 1] = 1.0f; T3[1, 2] = 0.0f; T3[1, 3] = 0f;
         T3[2, 0] = 0f; T3[2, 1] = 0f; T3[2, 2] = 1; T3[2, 3] = 0f;
         T3[3, 0] = 0f; T3[3, 1] = 0f; T3[3, 2] = 0f; T3[3, 3] = 1.0f;
