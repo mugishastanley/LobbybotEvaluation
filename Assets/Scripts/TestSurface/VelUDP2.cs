@@ -53,7 +53,7 @@ public class VelUDP2 : MonoBehaviour
     Matrix4x4 T4;
 
     Matrix4x4 Home;
-    Vector3 rotation = new Vector3(0, 90, 0);
+    //Vector3 rotation = new Vector3(0, 90, 0);
     Vector3 previous = new Vector3(0.0f, 0.0f, 0.0f);
     float velfactor=0.0f;
     float wspace = 0f;
@@ -87,6 +87,8 @@ public class VelUDP2 : MonoBehaviour
         //Location of closest object
         Tosend.transform.position = FindObjectOfType<KdFindClosest>().getclosestobjectposition();
         Tosend.transform.rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
+
+
         Matrix4x4 RobotToCalTracker = FindObjectOfType<TestTransforms>().RB2CT();
         //Tosend.transform.rotation = 
         //float SelectedSurface = FindObjectOfType<SelectFace>().ChangeSurface();
@@ -103,8 +105,13 @@ public class VelUDP2 : MonoBehaviour
 
         Vector3 rot = Unity2UrRot(Tosend.transform.rotation.eulerAngles);
         //Vector3 rot = Rot(Tosend.transform.localEulerAngles);
-        //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(pos, Tosend.transform.rotation, new Vector3(1,1,1));
-        Matrix4x4 Matrixsent = RobotToCalTracker * FromTRS(pos, rotation);
+        //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(pos, Tosend.transform.rotation, new Vector3(1,1,1)) *Transform3(90);
+        Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(pos, Tosend.transform.rotation, new Vector3(1, 1, 1));
+
+        print("Cube orientation" + FindObjectOfType<KdFindClosest>().getclosestobjectrotation().eulerAngles);
+
+
+        //Matrix4x4 Matrixsent = RobotToCalTracker * FromTRS(pos, rotation);
         // Matrix4x4 Matrixsent = RobotToCalTracker * FromTRS(pos, rotation);
         //string datasent = pos.ToString("F4") + ',' + rot.ToString("F4") + ',' + velocity;
 
@@ -317,7 +324,7 @@ public class VelUDP2 : MonoBehaviour
 
     public Vector3 Unity2Ur(Vector3 vector3)
     {
-        return new Vector3(-vector3.y, -(vector3.x + 0.15f), vector3.z);
+        return new Vector3(-(vector3.y+0.01f), -(vector3.x + 0.17f), vector3.z-0.02f);
     }
     public Vector3 Unity2UrRot(Vector3 vector3)
     {
@@ -483,9 +490,10 @@ public class VelUDP2 : MonoBehaviour
     {
         T1[0, 0] = 1; T1[0, 1] = 0; T1[0, 2] = 0; T1[0, 3] = 0f;
         T1[1, 0] = 0; T1[1, 1] = 1.0f; T1[1, 2] = 0.0f; T1[1, 3] = 0;
-        T1[2, 0] = 0f; T1[2, 1] = 0f; T1[2, 2] = 1; T1[2, 3] = -0.15f;
+        T1[2, 0] = 0f; T1[2, 1] = 0f; T1[2, 2] = 1; T1[2, 3] = 0.15f;
         T1[3, 0] = 0f; T1[3, 1] = 0f; T1[3, 2] = 0f; T1[3, 3] = 1.0f;
         return T1;
+        //Matrix Transforms from tcp tp prop top surface
     }
 
 
@@ -500,9 +508,9 @@ public class VelUDP2 : MonoBehaviour
 
     Matrix4x4 Transform3(float Theta)
     {/*Inverse of T1*/
-        T3[0, 0] = 1; T3[0, 1] = 0; T3[0, 2] = 0; T3[0, 3] = 0f;
+        T3[0, 0] = 1; T3[0, 1] = 0; T3[0, 2] = 0; T3[0, 3] = -0.15f;
         T3[1, 0] = 0; T3[1, 1] = 1.0f; T3[1, 2] = 0.0f; T3[1, 3] = 0f;
-        T3[2, 0] = 0f; T3[2, 1] = 0f; T3[2, 2] = 1; T3[2, 3] = -0.15f;
+        T3[2, 0] = 0f; T3[2, 1] = 0f; T3[2, 2] = 1; T3[2, 3] = 0f;
         T3[3, 0] = 0f; T3[3, 1] = 0f; T3[3, 2] = 0f; T3[3, 3] = 1.0f;
         return T3;
     }
