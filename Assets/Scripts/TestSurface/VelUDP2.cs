@@ -97,7 +97,7 @@ public class VelUDP2 : MonoBehaviour
 
         // Vector3 pos = Unity2Ros(Tosend.transform.position); /**No difference between position and Localposition*/
 
-        Vector3 pos = Unity2Ur(Tosend.transform.localPosition);
+        //Vector3 pos = Unity2Ur(Tosend.transform.localPosition);
         //Vector3 pos = Vector3ToPoseT(Tosend.transform.localPosition);
 
         //Vector3 rot = Unity2UrRotQuar(Tosend.transform.rotation.eulerAngles);
@@ -107,9 +107,19 @@ public class VelUDP2 : MonoBehaviour
         //Vector3 rot = Rot(Tosend.transform.localEulerAngles);
 
         //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(pos, Tosend.transform.rotation, new Vector3(1, 1, 1));
-        Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(pos, Tosend.transform.rotation, new Vector3(1, 1, 1)) * Transform3(90);
-
+        //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(pos, Tosend.transform.rotation, new Vector3(1, 1, 1)) * Transform3(90);
         //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(pos, Tosend.transform.rotation, new Vector3(1,1,1)) * Transform4(63.44f);
+
+
+
+        // Changes 23
+        Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(Tosend.transform.localPosition, Tosend.transform.rotation, new Vector3(0.01f, 0.01f, 0.01f)) * Transform3(90);
+
+        Matrix4x4 Matrixsent2 = new Matrix4x4();
+
+        Matrixsent2[0, 0] = Matrixsent[0, 0]; Matrixsent2[0, 1] = Matrixsent[0, 1]; Matrixsent2[0, 2] = Matrixsent[0, 2]; Matrixsent2[0, 3] = Matrixsent[0, 3];
+        Matrixsent2[0, 0] = Matrixsent[0, 0]; Matrixsent2[0, 1] = Matrixsent[0, 1]; Matrixsent2[0, 2] = Matrixsent[0, 2]; Matrixsent2[0, 3] = Matrixsent[0, 3];
+        Matrixsent2[0, 0] = Matrixsent[0, 0]; Matrixsent2[0, 1] = Matrixsent[0, 1]; Matrixsent2[0, 2] = Matrixsent[0, 2]; Matrixsent2[0, 3] = Matrixsent[0, 3];
 
 
         print("Cube orientation" + FindObjectOfType<KdFindClosest>().getclosestobjectrotation().eulerAngles);
@@ -328,7 +338,8 @@ public class VelUDP2 : MonoBehaviour
 
     public Vector3 Unity2Ur(Vector3 vector3)
     {
-        return new Vector3(-(vector3.y+0.01f), -(vector3.x + 0.17f), vector3.z-0.02f);
+        return new Vector3(-(vector3.y), -(vector3.x), vector3.z);
+        //return new Vector3(-(vector3.y+0.01f), -(vector3.x + 0.17f), vector3.z-0.02f);
     }
 
 
