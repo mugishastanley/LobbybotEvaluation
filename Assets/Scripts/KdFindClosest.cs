@@ -29,6 +29,8 @@ public class KdFindClosest : MonoBehaviour
     Renderer[] renderers;
     GameObject pts;
 
+    Matrix4x4 nearestobjmat;
+
 
     protected KdTree<SpawnedPoint> PointsInCar = new KdTree<SpawnedPoint>();
     protected KdTree<SpawnedPoint> Hands = new KdTree<SpawnedPoint>();
@@ -44,6 +46,12 @@ public class KdFindClosest : MonoBehaviour
         init();
     }
 
+    public Matrix4x4 matnearestob
+    {
+        get { return nearestobjmat; }
+        set { nearestobjmat = value; }
+    }
+
     public void init() {
         cam = Camera.main;
           
@@ -51,25 +59,43 @@ public class KdFindClosest : MonoBehaviour
         //foreach (var point in points)
         {
             //Quaternion spawnRotation = Quaternion.identity;
-            //points[i].transform.parent = CalTracker.transform; //only for visuals but no effect
-            points[i].transform.parent = null; //only for visuals but no effect
+            Debug.Log("points " + i + " rotation before caltracker transform" + points[i].transform.rotation.eulerAngles.ToString("F3"));
+            Debug.Log("points " + i + " local rotation before caltracker transform" + points[i].transform.localRotation.eulerAngles.ToString("F3"));
+            Debug.Log("points " + i + " position before caltracker transform" + points[i].transform.position.ToString("F3"));
+            Debug.Log("points " + i + " localposition before caltracker transform" + points[i].transform.localPosition.ToString("F3"));
+
+            points[i].transform.parent = null;
+            points[i].transform.parent = CalTracker.transform;
             //Debug.Log("After tracker parent: Point :" + i + "Posiotn:" + points[i].transform.position.ToString("F3"));
+
+            //Debug.Log("points " + i + " rotation after caltracker transform" + points[i].transform.rotation.eulerAngles.ToString("F3"));
+            //Debug.Log("points " + i + " local rotation after caltracker transform" + points[i].transform.localRotation.eulerAngles.ToString("F3"));
+            //Debug.Log("points " + i + " position after caltracker transform" + points[i].transform.position.ToString("F3"));
+            //Debug.Log("points " + i + " localposition after caltracker transform" + points[i].transform.localPosition.ToString("F3"));
 
             GameObject point = (Instantiate(BlackPrefab, points[i].transform.position, points[i].transform.rotation));
 
-            Debug.Log("Spawn at Point" + i + "CaltrackerPos:" + CalTracker.transform.position.ToString("F3"));
-            Debug.Log("Spawn at Point" + i + "CaltrackerRot:" + CalTracker.transform.rotation.eulerAngles.ToString("F3"));
-            Debug.Log("Spawn at Point" + i + "Position:" + point.transform.position.ToString("F3"));
-            Debug.Log("Spawn at Point" + i + "Rotation:" + point.transform.rotation.eulerAngles.ToString("F3"));
-            Debug.Log("Spawn at Point" + i + "Local_Rotation:" + point.transform.localRotation.eulerAngles.ToString("F3"));
+           
+            //Debug.Log("point " + i + " rotation before intiate" + point.transform.rotation.eulerAngles.ToString("F3"));
+            //Debug.Log("point " + i + " local rotation before intiate" + point.transform.localRotation.eulerAngles.ToString("F3"));
+            //Debug.Log("point " + i + " position  before intiate" + point.transform.position.ToString("F3"));
+            //Debug.Log("point " + i + " localposition  before intiate" + point.transform.localPosition.ToString("F3"));
 
 
             point.transform.parent = CalTracker.transform;
 
+            //Debug.Log("point " + i + " rotation after intiate" + point.transform.rotation.eulerAngles.ToString("F3"));
+            //Debug.Log("point " + i + " local rotation after intiate" + point.transform.localRotation.eulerAngles.ToString("F3"));
+            //Debug.Log("point " + i + " position  after intiate" + point.transform.position.ToString("F3"));
+            //Debug.Log("point " + i + " localposition  after intiate" + point.transform.localPosition.ToString("F3"));
             PointsInCar.Add((point).GetComponent<SpawnedPoint>());
 
-            points[i].transform.parent = CalTracker.transform;
-            // StartCoroutine(SpawnRoutine());
+            //Debug.Log("Matrix transform point:"+ i + " " +T22T1(CalTracker, point.transform));
+            //Debug.Log("Matrix transform TRS point:" + i + " " + T22T12(point.transform));
+
+
+            //points[i].transform.parent = CalTracker.transform;
+            //StartCoroutine(SpawnRoutine());
         }
 
         for (int i = 0; i < CountWhite; i++)
@@ -80,6 +106,18 @@ public class KdFindClosest : MonoBehaviour
 
     }
 
+
+    public Matrix4x4 T22T1(Transform T1, Transform T2) // T2 wrt T1
+    {
+        return T1.worldToLocalMatrix * T2.localToWorldMatrix;
+    }
+
+    public Matrix4x4 T22T12(Transform T1) // T2 wrt parent
+    {
+        return Matrix4x4.TRS(T1.localPosition, T1.localRotation, T1.transform.localScale);
+    }
+
+
     // Update is called once per frame
 
     void Update()
@@ -89,6 +127,7 @@ public class KdFindClosest : MonoBehaviour
         withoutHead();
 
     }
+
 
     public void withoutHead() {
         foreach (var whiteball in Hands)
@@ -114,7 +153,7 @@ public class KdFindClosest : MonoBehaviour
           //  nearestObj = best(nearestObj, second, Testraycast());
             nearobpostion = nearestObj.transform.localPosition;
             nearobrot = nearestObj.transform.localRotation;
-          //  Debug.Log("Nearest is at " + nearestObj.transform.position);
+            Debug.Log("Nearest is at " + nearestObj.transform.position);
         }
 
 
