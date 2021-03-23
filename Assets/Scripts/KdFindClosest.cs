@@ -7,15 +7,15 @@ using UnityEngine.UI;
 public class KdFindClosest : MonoBehaviour
 {
     public Button InitialiseButton;
-    //public Transform car; 
     public GameObject WhitePrefab;
     public GameObject BlackPrefab;
 
     public Transform CalTracker;
+
     public int CountWhite;
     public int CountBlack;
+
     public GameObject[] points;
-    //private GameObject _closestobjectpose;
     private GameObject _ClosestObject;
     private bool _isnearestfound = false;
 
@@ -35,9 +35,9 @@ public class KdFindClosest : MonoBehaviour
 
     SpawnedPoint second;
     
-    // protected List<RandomMove> PointsInCar = new List<RandomMove>();
+   
 
-    // Spawn out balls at start of the game
+    // Spawn out Capsules at start of the game
     void Start()
     {
         //InitialiseButton.onClick.AddListener(delegate {init();});
@@ -46,10 +46,7 @@ public class KdFindClosest : MonoBehaviour
 
     public void init() {
         cam = Camera.main;
-       // planes = GeometryUtility.CalculateFrustumPlanes(cam);
-       // objCollider = GetComponent<Collider>();
-        
-
+          
         for (int i = 0; i < points.Length; i++)
         //foreach (var point in points)
         {
@@ -57,9 +54,16 @@ public class KdFindClosest : MonoBehaviour
             //points[i].transform.parent = CalTracker.transform; //only for visuals but no effect
             points[i].transform.parent = null; //only for visuals but no effect
             //Debug.Log("After tracker parent: Point :" + i + "Posiotn:" + points[i].transform.position.ToString("F3"));
+
             GameObject point = (Instantiate(BlackPrefab, points[i].transform.position, points[i].transform.rotation));
-            Debug.Log("Spawn at Point" + i + "Posiotn:" + point.transform.position.ToString("F3"));
+
+            Debug.Log("Spawn at Point" + i + "CaltrackerPos:" + CalTracker.transform.position.ToString("F3"));
+            Debug.Log("Spawn at Point" + i + "CaltrackerRot:" + CalTracker.transform.rotation.eulerAngles.ToString("F3"));
+            Debug.Log("Spawn at Point" + i + "Position:" + point.transform.position.ToString("F3"));
             Debug.Log("Spawn at Point" + i + "Rotation:" + point.transform.rotation.eulerAngles.ToString("F3"));
+            Debug.Log("Spawn at Point" + i + "Local_Rotation:" + point.transform.localRotation.eulerAngles.ToString("F3"));
+
+
             point.transform.parent = CalTracker.transform;
 
             PointsInCar.Add((point).GetComponent<SpawnedPoint>());

@@ -90,23 +90,27 @@ public class VelUDP2 : MonoBehaviour
 
 
         Matrix4x4 RobotToCalTracker = FindObjectOfType<TestTransforms>().RB2CT();
-        //Tosend.transform.rotation = 
-        //float SelectedSurface = FindObjectOfType<SelectFace>().ChangeSurface();
-        //Vector3 rot = Tosend.transform.rotation.eulerAngles;
-        //rot.x = SelectedSurface;
-        //Tool tip offset
-        //Tooltip.transform ( Transform4(64.0f, Tosend));
+        
 
         Vector3 posbe4 = Tosend.transform.position;
         string velocity = Velscaler(posbe4).ToString("F4");
-       // Vector3 pos = Unity2Ros(Tosend.transform.position); /**No difference between position and Localposition*/
+
+        // Vector3 pos = Unity2Ros(Tosend.transform.position); /**No difference between position and Localposition*/
+
         Vector3 pos = Unity2Ur(Tosend.transform.localPosition);
         //Vector3 pos = Vector3ToPoseT(Tosend.transform.localPosition);
 
-        Vector3 rot = Unity2UrRot(Tosend.transform.rotation.eulerAngles);
+        //Vector3 rot = Unity2UrRotQuar(Tosend.transform.rotation.eulerAngles);
+
+        Quaternion rotation = Unity2Urquart(Tosend.transform.rotation);
+
         //Vector3 rot = Rot(Tosend.transform.localEulerAngles);
-        Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(pos, Tosend.transform.rotation, new Vector3(1,1,1)) * Transform3(90);
+
         //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(pos, Tosend.transform.rotation, new Vector3(1, 1, 1));
+        Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(pos, Tosend.transform.rotation, new Vector3(1, 1, 1)) * Transform3(90);
+
+        //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(pos, Tosend.transform.rotation, new Vector3(1,1,1)) * Transform4(63.44f);
+
 
         print("Cube orientation" + FindObjectOfType<KdFindClosest>().getclosestobjectrotation().eulerAngles);
 
@@ -326,6 +330,13 @@ public class VelUDP2 : MonoBehaviour
     {
         return new Vector3(-(vector3.y+0.01f), -(vector3.x + 0.17f), vector3.z-0.02f);
     }
+
+
+    public Quaternion Unity2Urquart(Quaternion quaternion)
+    {
+        //return new Vector3(-(vector3.y + 0.01f), -(vector3.x + 0.17f), vector3.z - 0.02f);
+        return new Quaternion(-quaternion.y, quaternion.x, -quaternion.z, quaternion.w);
+    }
     public Vector3 Unity2UrRot(Vector3 vector3)
     {
         return new Vector3(-vector3.y, -(vector3.x), vector3.z);
@@ -499,10 +510,10 @@ public class VelUDP2 : MonoBehaviour
 
     Matrix4x4 Transform2(float Theta)
     {
-        T2[0, 0] = Mathf.Cos(Theta); T2[0, 1] = 0; T2[0, 2] = 0.0775f * Mathf.Sin(Theta); T2[0, 3] = 0f;
-        T2[1, 0] = 0; T2[1, 1] = 1.0f; T2[1, 2] = 0.0f; T2[1, 3] = 0;
-        T2[2, 0] = -0.0281f * Mathf.Sin(Theta); T2[2, 1] = 0f; T2[2, 2] = 0.00217775f * Mathf.Cos(Theta); T2[2, 3] = 0f;
-        T2[3, 0] = 0f; T2[3, 1] = 0f; T2[3, 2] = 0f; T2[3, 3] = 1.0f;
+        T2[0, 0] = Mathf.Cos(Theta);                T2[0, 1] = 0;           T2[0, 2] = 0.0775f * Mathf.Sin(Theta);      T2[0, 3] = 0f;
+        T2[1, 0] = 0;                               T2[1, 1] = 1.0f;        T2[1, 2] = 0.0f;                            T2[1, 3] = 0;
+        T2[2, 0] = -0.0281f * Mathf.Sin(Theta);     T2[2, 1] = 0f;          T2[2, 2] = 0.00217775f * Mathf.Cos(Theta);  T2[2, 3] = 0f;
+        T2[3, 0] = 0f;                              T2[3, 1] = 0f;          T2[3, 2] = 0f;                              T2[3, 3] = 1.0f;
         return T2;
     }
 
@@ -518,10 +529,26 @@ public class VelUDP2 : MonoBehaviour
 
     Matrix4x4 Transform4(float Theta)
     {/*Inverse of T2*/
-        T4[0, 0] = Mathf.Cos(Theta); T4[0, 1] = 0; T4[0, 2] = -Mathf.Sin(Theta); T4[0, 3] = 0.0285f * Mathf.Sin(Theta);
-        T4[1, 0] = 0; T4[1, 1] = 1.0f; T4[1, 2] = 0.0f; T4[1, 3] = 0;
-        T4[2, 0] = Mathf.Sin(Theta); T4[2, 1] = 0f; T4[2, 2] = Mathf.Cos(Theta); T4[2, 3] = -0.0285f * Mathf.Cos(Theta) - 0.0775f;
-        T4[3, 0] = 0f; T4[3, 1] = 0f; T4[3, 2] = 0f; T4[3, 3] = 1.0f;    
+     //T4[0, 0] = Mathf.Cos(Theta);    T4[0, 1] = 0;       T4[0, 2] = -Mathf.Sin(Theta);   T4[0, 3] = -0.0287f * Mathf.Cos(Theta) - 0.0775f;
+     //T4[1, 0] = 0;                   T4[1, 1] = 1.0f;    T4[1, 2] = 0.0f;                T4[1, 3] = 0;
+     //T4[2, 0] = Mathf.Sin(Theta);    T4[2, 1] = 0f;      T4[2, 2] = Mathf.Cos(Theta);    T4[2, 3] = -0.0287f * Mathf.Sin(Theta) ;
+     //T4[3, 0] = 0f;                  T4[3, 1] = 0f;      T4[3, 2] = 0f;                  T4[3, 3] = 1.0f;
+
+        T4[0, 0] = Mathf.Cos(Theta);    T4[0, 1] = -Mathf.Sin(Theta);       T4[0, 2] =0;               T4[0, 3] = -0.0285f * Mathf.Cos(Theta) - 0.0778f;
+        T4[1, 0] = Mathf.Sin(Theta);    T4[1, 1] = Mathf.Cos(Theta);        T4[1, 2] = 0.0f;           T4[1, 3] = -0.0285f * Mathf.Sin(Theta);
+        T4[2, 0] = 0;                   T4[2, 1] = 0f;                      T4[2, 2] =1.0f;            T4[2, 3] = 0;
+        T4[3, 0] = 0f;                  T4[3, 1] = 0f;                      T4[3, 2] = 0f;             T4[3, 3] = 1.0f;
+        return T4;
+
+    }
+
+    Matrix4x4 Transform4old(float Theta)
+    {/*Inverse of T2*/
+     T4[0, 0] = Mathf.Cos(Theta);    T4[0, 1] = 0;       T4[0, 2] = -Mathf.Sin(Theta);   T4[0, 3] = 0.0285f * Mathf.Sin(Theta);
+     T4[1, 0] = 0;                   T4[1, 1] = 1.0f;    T4[1, 2] = 0.0f;                T4[1, 3] = 0;
+     T4[2, 0] = Mathf.Sin(Theta);    T4[2, 1] = 0f;      T4[2, 2] = Mathf.Cos(Theta);    T4[2, 3] = -0.0285f * Mathf.Cos(Theta) - 0.0778f ;
+     T4[3, 0] = 0f;                  T4[3, 1] = 0f;      T4[3, 2] = 0f;                  T4[3, 3] = 1.0f;
+
         return T4;
 
     }

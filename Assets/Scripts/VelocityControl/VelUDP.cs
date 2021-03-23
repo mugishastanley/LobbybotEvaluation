@@ -50,7 +50,7 @@ public class VelUDP : MonoBehaviour
     Matrix4x4 EEWRTRobot;
 
     Matrix4x4 Home;
-    Vector3 rotation = new Vector3(0, 180, 0);
+    //Vector3 rotation = new Vector3(112.2997f, -26.31f,111.978f); // newline mar 22
     float velfactor;
     float wspace = 0f;
     Vector3 Interpoint = new Vector3(0, 180, 0);
@@ -94,11 +94,19 @@ public class VelUDP : MonoBehaviour
         //string velocity = Velscaler(pos).ToString("F4");
         //string pos = Unity2Ros(Tosend.transform.localPosition).ToString("F5");
         //string rot = Tosend.transform.localrotation.ToString("F5");
-        //string rot = Rot(Tosend.transform.localEulerAngles).ToString("F4");
-        string rot = Rot(rotation).ToString("F4");
+
+        string rot = Rot(Tosend.transform.localEulerAngles).ToString("F4");
+
+        //string rot = Rot(rotation).ToString("F4");. //newline 22
+        //string rot = Tosend.transform.rotation.ToString("F4");//newline 22
+
+
         string posstr = pos.ToString("F4");
         //Debug.Log("Recieved" + Tosend.transform.localPosition +"Rotation"+rot);
-        string datasent = posstr + ',' + rot + velocity;
+
+        string datasent = posstr + ',' + rot+ velocity;
+        //string datasent = posstr + ',' + rotation + velocity; // new line 22
+        
         //string datasent = posstr + ',' + velocity2 ;
         //Debug.Log($"To send pos{datasent}");
         //Debug.Log("To send pos" + pos + "Orient" + rot);
