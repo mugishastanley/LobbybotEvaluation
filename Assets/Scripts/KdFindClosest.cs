@@ -11,6 +11,7 @@ public class KdFindClosest : MonoBehaviour
     public GameObject BlackPrefab;
 
     public Transform CalTracker;
+    public Transform RobotUrdf;
 
     public int CountWhite;
     public int CountBlack;
@@ -59,13 +60,16 @@ public class KdFindClosest : MonoBehaviour
         //foreach (var point in points)
         {
             //Quaternion spawnRotation = Quaternion.identity;
-            Debug.Log("points " + i + " rotation before caltracker transform" + points[i].transform.rotation.eulerAngles.ToString("F3"));
-            Debug.Log("points " + i + " local rotation before caltracker transform" + points[i].transform.localRotation.eulerAngles.ToString("F3"));
-            Debug.Log("points " + i + " position before caltracker transform" + points[i].transform.position.ToString("F3"));
-            Debug.Log("points " + i + " localposition before caltracker transform" + points[i].transform.localPosition.ToString("F3"));
 
-            points[i].transform.parent = null;
-            points[i].transform.parent = CalTracker.transform;
+            //Debug.Log("points " + i + " rotation before caltracker transform" + points[i].transform.rotation.eulerAngles.ToString("F3"));
+            //Debug.Log("points " + i + " local rotation before caltracker transform" + points[i].transform.localRotation.eulerAngles.ToString("F3"));
+            //Debug.Log("points " + i + " position before caltracker transform" + points[i].transform.position.ToString("F3"));
+            //Debug.Log("points " + i + " localposition before caltracker transform" + points[i].transform.localPosition.ToString("F3"));
+
+            //points[i].transform.parent = null;
+            //points[i].transform.parent = CalTracker.transform;
+            //RobotUrdf.transform.parent = CalTracker.transform;
+
             //Debug.Log("After tracker parent: Point :" + i + "Posiotn:" + points[i].transform.position.ToString("F3"));
 
             //Debug.Log("points " + i + " rotation after caltracker transform" + points[i].transform.rotation.eulerAngles.ToString("F3"));
@@ -73,16 +77,21 @@ public class KdFindClosest : MonoBehaviour
             //Debug.Log("points " + i + " position after caltracker transform" + points[i].transform.position.ToString("F3"));
             //Debug.Log("points " + i + " localposition after caltracker transform" + points[i].transform.localPosition.ToString("F3"));
 
-            GameObject point = (Instantiate(BlackPrefab, points[i].transform.position, points[i].transform.rotation));
+            GameObject point = (Instantiate(BlackPrefab, points[i].transform.position, points[i].transform.rotation, CalTracker.transform));
+            //GameObject point2 = (Instantiate(BlackPrefab, points[i].transform.position, points[i].transform.rotation, RobotUrdf.transform));
 
-           
+
+            //print("point2 " + Matrix4x4.TRS(point2.transform.position, point2.transform.rotation, new Vector3(1,1,1)));
+            //print("point2 local "+ Matrix4x4.TRS(point2.transform.localPosition, point2.transform.localRotation, new Vector3(1, 1, 1)));
+
+
             //Debug.Log("point " + i + " rotation before intiate" + point.transform.rotation.eulerAngles.ToString("F3"));
             //Debug.Log("point " + i + " local rotation before intiate" + point.transform.localRotation.eulerAngles.ToString("F3"));
             //Debug.Log("point " + i + " position  before intiate" + point.transform.position.ToString("F3"));
             //Debug.Log("point " + i + " localposition  before intiate" + point.transform.localPosition.ToString("F3"));
 
 
-            point.transform.parent = CalTracker.transform;
+            //point.transform.parent = CalTracker.transform;
 
             //Debug.Log("point " + i + " rotation after intiate" + point.transform.rotation.eulerAngles.ToString("F3"));
             //Debug.Log("point " + i + " local rotation after intiate" + point.transform.localRotation.eulerAngles.ToString("F3"));

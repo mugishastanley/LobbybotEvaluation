@@ -51,8 +51,11 @@ public class VelUDP2 : MonoBehaviour
     Matrix4x4 T2;
     Matrix4x4 T3;
     Matrix4x4 T4;
-
+    Matrix4x4 T5;
+    Matrix4x4 b1_T_b;
+    Matrix4x4 tp1_T_tp;
     Matrix4x4 Home;
+
     //Vector3 rotation = new Vector3(0, 90, 0);
     Vector3 previous = new Vector3(0.0f, 0.0f, 0.0f);
     float velfactor=0.0f;
@@ -90,46 +93,66 @@ public class VelUDP2 : MonoBehaviour
 
 
         Matrix4x4 RobotToCalTracker = FindObjectOfType<TestTransforms>().RB2CT();
+       // var mat2 = FindObjectOfType<TestTransforms>().CaltoRobot();
         
+
 
         Vector3 posbe4 = Tosend.transform.position;
         string velocity = Velscaler(posbe4).ToString("F4");
 
-        // Vector3 pos = Unity2Ros(Tosend.transform.position); /**No difference between position and Localposition*/
-
-        //Vector3 pos = Unity2Ur(Tosend.transform.localPosition);
-        //Vector3 pos = Vector3ToPoseT(Tosend.transform.localPosition);
-
-        //Vector3 rot = Unity2UrRotQuar(Tosend.transform.rotation.eulerAngles);
-
-        Quaternion rotation = Unity2Urquart(Tosend.transform.rotation);
-
-        //Vector3 rot = Rot(Tosend.transform.localEulerAngles);
-
-        //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(pos, Tosend.transform.rotation, new Vector3(1, 1, 1));
-        //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(pos, Tosend.transform.rotation, new Vector3(1, 1, 1)) * Transform3(90);
-        //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(pos, Tosend.transform.rotation, new Vector3(1,1,1)) * Transform4(63.44f);
 
 
+        //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1,1,1));
+        //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1,1,1)) * Transform3(90);
+        //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1,1,1)) * Transform4(63.44f);
 
+        
         // Changes 23
-        Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(Tosend.transform.localPosition, Tosend.transform.rotation, new Vector3(0.01f, 0.01f, 0.01f)) * Transform3(90);
+        Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1, 1, 1));
+        //Before changing base
+       // print("base" + Matrixsent);
 
+       // Matrix4x4 Matrixsent_b1 = base1_T_base(90) * Matrixsent;
+        //Matrix4x4 Matrixsent_b1_tcp1 = Matrixsent_b1 * TCP_T_TCP1(90);
+       
+        //after changing base
+        //print("base1" + Matrixsent_b1);
+        //print("b1_TCP1" + Matrixsent_b1_tcp1);
+
+        //Matrix4x4 Matrixsent = RobotToCalTracker * base1_T_base(90) * Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1,1,1)) * TCP_T_TCP1(90);
+
+        ////Before
+        // print("Before" + Matrixsent);
+
+        //Matrixsent = Matrixsent_b1;
+        
+        //After conversion.
         Matrix4x4 Matrixsent2 = new Matrix4x4();
+        //rotx
+        Matrixsent2[0, 0] = Matrixsent[0, 0];
+        Matrixsent2[1, 0] = Matrixsent[2, 0];
+        Matrixsent2[2, 0] = Matrixsent[1, 0];
+        
+        //Rot y - swap with previous Z
+        Matrixsent2[0, 1] = Matrixsent[0, 2];
+        Matrixsent2[1, 1] = Matrixsent[2, 2];
+        Matrixsent2[2, 1] = Matrixsent[1, 2];
 
-        Matrixsent2[0, 0] = Matrixsent[0, 0]; Matrixsent2[0, 1] = Matrixsent[0, 1]; Matrixsent2[0, 2] = Matrixsent[0, 2]; Matrixsent2[0, 3] = Matrixsent[0, 3];
-        Matrixsent2[0, 0] = Matrixsent[0, 0]; Matrixsent2[0, 1] = Matrixsent[0, 1]; Matrixsent2[0, 2] = Matrixsent[0, 2]; Matrixsent2[0, 3] = Matrixsent[0, 3];
-        Matrixsent2[0, 0] = Matrixsent[0, 0]; Matrixsent2[0, 1] = Matrixsent[0, 1]; Matrixsent2[0, 2] = Matrixsent[0, 2]; Matrixsent2[0, 3] = Matrixsent[0, 3];
+        //translation
+        Matrixsent2[0, 3] = Matrixsent[0, 3];
+        Matrixsent2[1, 3] = Matrixsent[2, 3];
+        Matrixsent2[2, 3] = Matrixsent[1, 3];
 
+        //rot Z - swap with previous Y
+        Matrixsent2[0, 2] = Matrixsent[0, 1];
+        Matrixsent2[1, 2] = Matrixsent[2, 1];
+        Matrixsent2[2, 2] = Matrixsent[1, 1];
 
-        print("Cube orientation" + FindObjectOfType<KdFindClosest>().getclosestobjectrotation().eulerAngles);
+        Matrixsent2[3, 3] = 1.0f;
+        
+        //print("After" + Matrixsent2);
 
-
-        //Matrix4x4 Matrixsent = RobotToCalTracker * FromTRS(pos, rotation);
-        // Matrix4x4 Matrixsent = RobotToCalTracker * FromTRS(pos, rotation);
-        //string datasent = pos.ToString("F4") + ',' + rot.ToString("F4") + ',' + velocity;
-
-        string datasent = Matrixsent.ToString("F4") + ' ' + velocity ;
+        string datasent = Matrixsent2.ToString("F4") + ' ' + velocity ;
         //Debug.Log($"To send pos{datasent}");
         //Debug.Log("To send pos" + pos + "Orient" + rot);
 
@@ -164,8 +187,7 @@ public class VelUDP2 : MonoBehaviour
         print("UDPSend.init()");
 
         // define
-
-        //IP = "127.0.0.1";
+               
         IP = "192.168.0.101";
         port = 21000;
 
@@ -324,54 +346,8 @@ public class VelUDP2 : MonoBehaviour
         return Home;
     }
 
-    public Vector3 Ur2Unity(Vector3 vector3)
-    {
-        Vector3 pos = new Vector3(-vector3.y, vector3.z, vector3.x);
-        return pos;
-    }
+   
 
-    public Vector3 Unity2Rosold(Vector3 vector3)
-    {
-        Vector3 pos = new Vector3(-vector3.y, -1 * (vector3.x + 0.15f), vector3.z);
-        return pos;
-    }
-
-    public Vector3 Unity2Ur(Vector3 vector3)
-    {
-        return new Vector3(-(vector3.y), -(vector3.x), vector3.z);
-        //return new Vector3(-(vector3.y+0.01f), -(vector3.x + 0.17f), vector3.z-0.02f);
-    }
-
-
-    public Quaternion Unity2Urquart(Quaternion quaternion)
-    {
-        //return new Vector3(-(vector3.y + 0.01f), -(vector3.x + 0.17f), vector3.z - 0.02f);
-        return new Quaternion(-quaternion.y, quaternion.x, -quaternion.z, quaternion.w);
-    }
-    public Vector3 Unity2UrRot(Vector3 vector3)
-    {
-        return new Vector3(-vector3.y, -(vector3.x), vector3.z);
-    }
-
-    public static Quaternion Unity2RosRotQuart(Quaternion quaternion)
-    {
-        return new Quaternion(-quaternion.z, quaternion.x, -quaternion.y, quaternion.w);
-    }
-
-    public static Vector3 Unity2Rostra(Vector3 vector3)
-    {
-        return new Vector3(-vector3.y,  -vector3.x, vector3.z);
-    }
-
-
-
-    public Vector3 Rot(Vector3 vector3)
-    {
-        /*Returns Vector3 rotation in radians*/
-        Vector3 rot = new Vector3(vector3.x * PI / 180, vector3.y * PI / 180, vector3.z * PI / 180);
-        return rot;
-
-    }
 
     public float Velscalerold(Vector3 pos)
     {
@@ -508,59 +484,167 @@ public class VelUDP2 : MonoBehaviour
     }
 
     //Matrix Transforms
-    Matrix4x4 Transform1(float Theta)
-    {
-        T1[0, 0] = 1; T1[0, 1] = 0; T1[0, 2] = 0; T1[0, 3] = 0f;
-        T1[1, 0] = 0; T1[1, 1] = 1.0f; T1[1, 2] = 0.0f; T1[1, 3] = 0;
-        T1[2, 0] = 0f; T1[2, 1] = 0f; T1[2, 2] = 1; T1[2, 3] = 0.15f;
-        T1[3, 0] = 0f; T1[3, 1] = 0f; T1[3, 2] = 0f; T1[3, 3] = 1.0f;
-        return T1;
-        //Matrix Transforms from tcp tp prop top surface
-    }
+
+    //ROBOT REERENCE FRAME//
+    // Transform from TCP to prop top surface , In ROBOT Cordinate System.
+    // Translation in z by 0.116 m
+    //    T1 = [ 1  0   0   0
+    //           0  1   0   0
+    //           0  0   1   0.116
+    //           0  0   0   1     ]
+
+    // Transform from prop top surface To TCP, In ROBOT Cordinate System.
+    // Translation in z by -0.116 m
+    //    T1' = [ 1  0   0   0
+    //           0  1   0   0
+    //           0  0   1   -0.116
+    //           0  0   0   1     ]
+
+    // Transform from TCP to prop side surface , In ROBOT Cordinate System.
+    // Trans Z (0.0287) Rot x (-63.44) Trans Z(0.0775)
+    //    T2 = [ 1  0               0               0
+    //           0  cos(theta)     -sin(theta)     -0.0775*sin(theta)   
+    //           0  sin(theta)      cos(theta)      0.0775cos(theta) + 0.0287
+    //           0  0               0               1                            ]
+
+    // Transform from prop side surface to TCP , In ROBOT Cordinate System.
+    // Trans Z(-0.0775) Rot x (63.44) Trans Z (-0.0287)  
+    //    T2' = [   1   0               0               0
+    //              0   cos(theta)      sin(theta)     -0.0287*sin(theta)   
+    //              0  -sin(theta)      cos(theta)     -0.0775 - 0.0287*cos(theta)
+    //              0   0               0               1                            ]
 
 
-    Matrix4x4 Transform2(float Theta)
-    {
-        T2[0, 0] = Mathf.Cos(Theta);                T2[0, 1] = 0;           T2[0, 2] = 0.0775f * Mathf.Sin(Theta);      T2[0, 3] = 0f;
-        T2[1, 0] = 0;                               T2[1, 1] = 1.0f;        T2[1, 2] = 0.0f;                            T2[1, 3] = 0;
-        T2[2, 0] = -0.0281f * Mathf.Sin(Theta);     T2[2, 1] = 0f;          T2[2, 2] = 0.00217775f * Mathf.Cos(Theta);  T2[2, 3] = 0f;
-        T2[3, 0] = 0f;                              T2[3, 1] = 0f;          T2[3, 2] = 0f;                              T2[3, 3] = 1.0f;
-        return T2;
-    }
 
-    Matrix4x4 Transform3(float Theta)
+
+    //CAPSULE REFERENCE FRAME //
+    // Transform from tcp to prop top surface , In Capsule Reference. (X Y Z) is (Z Y X) in Robot System
+    // Translation in x by 0.116 m
+    //    T1 = [ 1  0   0   0.116
+    //           0  1   0   0
+    //           0  0   1   0
+    //           0  0   0   1     ]
+
+    // Transform from prop top surface To TCP, In Capsule Reference. (X Y Z) is (Z Y X) in Robot System.
+    // Translation in x by -0.116 m
+    //    T1' = [   1  0   0   -0.116
+    //              0  1   0    0
+    //              0  0   1    0
+    //              0  0   0    1     ]
+
+    // Transform from TCP to prop side surface ,In Capsule Reference. (X Y Z) is (Z Y X) in Robot System.
+    // Trans X (0.0287) Rot Z (-63.44) Trans X (0.0775)
+    //    T2 = [ cos(theta)   - sin(theta)      0     0.0775cos(theta) + 0.0287
+    //           sin(theta)     cos(theta)      0     0.0775*sin(theta)   
+    //           0              0               1     0
+    //           0              0               0     1                            ]
+
+    // Transform from prop side surface to TCP , In Capsule Reference. (X Y Z) is (Z Y X) in Robot System.
+    // Trans X(-0.0775) Rot Z (63.44) Trans X (-0.0287)  
+    //    T2' = [    cos(theta)     sin(theta)      0      -0.0775 - 0.0287*cos(theta)
+    //              -sin(theta)     cos(theta)      0       0.0287*sin(theta)   
+    //                  0           0               1       0
+    //                  0           0               0            1                ]
+
+    //UNITY REFERENCE FRAME//
+    // Transform from tcp to prop top surface , In Unity Reference. (X Y Z) is ( X Z Y) in Robot System.
+    // Translation in Y by 0.116 m
+    //    T1 = [ 1  0   0   0
+    //           0  1   0   0.116
+    //           0  0   1   0
+    //           0  0   0   1     ]
+
+    // Transform from prop top surface To TCP, In Unity Reference. (X Y Z) is ( X Z Y) in Robot System.
+    // Translation in Y by -0.116 m
+    //    T1' = [   1  0   0    0
+    //              0  1   0    -0.116
+    //              0  0   1    0
+    //              0  0   0    1     ]
+
+    // Transform from TCP to prop side surface ,In Unity Reference. (X Y Z) is ( X Z Y) in Robot System.
+    // Trans Y (0.0287) Rot X (63.44) Trans Y (0.0775)
+    //    T2 = [ 1  0            0             0 
+    //           0  cos(theta)  -sin(theta)    0.0775*cos(theta) + 0.0287
+    //           0  sin(theta)   cos(theta)    0.0775sin(theta)
+    //           0  0            0             1                                 ]
+
+
+    // Transform from prop side surface to TCP , In Unity Reference. (X Y Z) is ( X Z Y) in Robot System.
+    // Trans Y(-0.0775) Rot X (-63.44) Trans Y (-0.0287)  
+    //    T2' = [    1      0               0               0
+    //               0      cos(theta)      sin(theta)      -0.0287*cos(theta) - 0.0775   
+    //               0      -sin(theta)     cos(theta)      0.0287*sin(theta)
+    //               0      0               0               1                ]
+
+
+    // Transform from TCP to prop side surface ,In Unity Reference. (X Y Z) is ( X Z Y) in Robot System.
+    // Trans Y (0.0287)Rot Y(72.n) Rot X (63.44) Trans Y (0.0775)
+    //    T2 = [ cos(theta1)    sin(theta1)*sin(theta2)   cos(theta2)*sin(theta1)      0.0775*sin(theta1)*sin(theta2) 
+    //           0              cos(theta2)              -sin(theta2)                    0.0775*cos(theta2) + 0.0287
+    //          -sin(theta1)    cos(theta1)*sin(theta2)   cos(theta2)*cos(theta1)       0.0775sin(theta2)*cos(theta1)
+    //           0              0                         0                             1                                 ]
+
+
+    // Transform from prop side surface to TCP , In Unity Reference. (X Y Z) is ( X Z Y) in Robot System.
+    // Trans Y(-0.0775) Rot Y(-72.n) Rot X (-63.44) Trans Y (-0.0287)
+    // the input has to a positive angle.(sign has beeen taken into cosideration)
+    //    T2' = [   cos(theta1)                   0                   -sin(theta1)                   0
+    //              sin(theta1)*sin(theta2)       cos(theta2)          cos(theta1)*sin(theta2)       -0.0287*cos(theta2) - 0.0775 
+    //              cos(theta2)*sin(theta1)      -sin(theta2)          cos(theta2)*cos(theta1)       0.0287*sin(theta2)
+    //              0                             0                    0                             1                                 ]
+
+    Matrix4x4 Transform3(float theta)
     {/*Inverse of T1*/
-        T3[0, 0] = 1; T3[0, 1] = 0; T3[0, 2] = 0; T3[0, 3] = -0.13f;
-        T3[1, 0] = 0; T3[1, 1] = 1.0f; T3[1, 2] = 0.0f; T3[1, 3] = 0f;
-        T3[2, 0] = 0f; T3[2, 1] = 0f; T3[2, 2] = 1; T3[2, 3] = 0f;
-        T3[3, 0] = 0f; T3[3, 1] = 0f; T3[3, 2] = 0f; T3[3, 3] = 1.0f;
+        T3[0, 0] = 1.0f; T3[0, 1] = 0.0f;     T3[0, 2] = 0.0f;       T3[0, 3] = 0.0f;
+        T3[1, 0] = 0.0f; T3[1, 1] = 1.0f;     T3[1, 2] = 0.0f;       T3[1, 3] = -0.116f;
+        T3[2, 0] = 0.0f; T3[2, 1] = 0.0f;     T3[2, 2] = 1.0f;       T3[2, 3] = 0.0f;
+        T3[3, 0] = 0.0f; T3[3, 1] = 0.0f;     T3[3, 2] = 0.0f;       T3[3, 3] = 1.0f;
         return T3;
     }
 
+    Matrix4x4 base1_T_base(float theta)
+    {
+        b1_T_b[0, 0] = -1.0f;    b1_T_b[0, 1] = 0.0f;     b1_T_b[0, 2] = 0.0f;     b1_T_b[0, 3] = 0.0f;
+        b1_T_b[1, 0] = 0.0f;     b1_T_b[1, 1] = 1.0f;     b1_T_b[1, 2] = 0.0f;     b1_T_b[1, 3] = 0.0f;
+        b1_T_b[2, 0] = 0.0f;     b1_T_b[2, 1] = 0.0f;     b1_T_b[2, 2] = -1.0f;    b1_T_b[2, 3] = 0.0f;
+        b1_T_b[3, 0] = 0.0f;     b1_T_b[3, 1] = 0.0f;     b1_T_b[3, 2] = 0.0f;     b1_T_b[3, 3] = 1.0f;
+        return  b1_T_b;
+    }
+    Matrix4x4 TCP_T_TCP1(float theta)
+    {
+        tp1_T_tp[0, 0] = 1.0f;      tp1_T_tp[0, 1] = 0.0f;      tp1_T_tp[0, 2] = 0.0f;      tp1_T_tp[0, 3] = 0.0f;
+        tp1_T_tp[1, 0] = 0.0f;      tp1_T_tp[1, 1] = 0.0f;      tp1_T_tp[1, 2] = 1.0f;      tp1_T_tp[1, 3] = 0.0f;
+        tp1_T_tp[2, 0] = 0.0f;      tp1_T_tp[2, 1] = -1.0f;     tp1_T_tp[2, 2] = 0.0f;      tp1_T_tp[2, 3] = 0.0f;
+        tp1_T_tp[3, 0] = 0.0f;      tp1_T_tp[3, 1] = 0.0f;      tp1_T_tp[3, 2] = 0.0f;      tp1_T_tp[3, 3] = 1.0f;
+        return tp1_T_tp;
+    }
+  
 
     Matrix4x4 Transform4(float Theta)
-    {/*Inverse of T2*/
-     //T4[0, 0] = Mathf.Cos(Theta);    T4[0, 1] = 0;       T4[0, 2] = -Mathf.Sin(Theta);   T4[0, 3] = -0.0287f * Mathf.Cos(Theta) - 0.0775f;
-     //T4[1, 0] = 0;                   T4[1, 1] = 1.0f;    T4[1, 2] = 0.0f;                T4[1, 3] = 0;
-     //T4[2, 0] = Mathf.Sin(Theta);    T4[2, 1] = 0f;      T4[2, 2] = Mathf.Cos(Theta);    T4[2, 3] = -0.0287f * Mathf.Sin(Theta) ;
-     //T4[3, 0] = 0f;                  T4[3, 1] = 0f;      T4[3, 2] = 0f;                  T4[3, 3] = 1.0f;
+    {/*Inverse of T2*/ //to reach the side surfaces of the prop
+        Theta = Theta * Mathf.PI / 180;
+        T4[0, 0] = 1.0f;    T4[0, 1] =  0.0f;                   T4[0, 2] = 0.0f;                      T4[0, 3] = 0.0f;
+        T4[1, 0] = 0.0f;    T4[1, 1] = Mathf.Cos(Theta);        T4[1, 2] = Mathf.Sin(Theta);          T4[1, 3] = -0.0285f * Mathf.Cos(Theta) - 0.0775f;
+        T4[2, 0] = 0.0f;    T4[2, 1] = -Mathf.Sin(Theta);       T4[2, 2] = Mathf.Cos(Theta);          T4[2, 3] = 0.0285f * Mathf.Sin(Theta);
+        T4[3, 0] = 0.0f;    T4[3, 1] = 0.0f;                    T4[3, 2] = 0.0f;                      T4[3, 3] = 1.0f;
 
-        T4[0, 0] = Mathf.Cos(Theta);    T4[0, 1] = -Mathf.Sin(Theta);       T4[0, 2] =0;               T4[0, 3] = -0.0285f * Mathf.Cos(Theta) - 0.0778f;
-        T4[1, 0] = Mathf.Sin(Theta);    T4[1, 1] = Mathf.Cos(Theta);        T4[1, 2] = 0.0f;           T4[1, 3] = -0.0285f * Mathf.Sin(Theta);
-        T4[2, 0] = 0;                   T4[2, 1] = 0f;                      T4[2, 2] =1.0f;            T4[2, 3] = 0;
-        T4[3, 0] = 0f;                  T4[3, 1] = 0f;                      T4[3, 2] = 0f;             T4[3, 3] = 1.0f;
-        return T4;
+           return T4;
 
     }
 
-    Matrix4x4 Transform4old(float Theta)
-    {/*Inverse of T2*/
-     T4[0, 0] = Mathf.Cos(Theta);    T4[0, 1] = 0;       T4[0, 2] = -Mathf.Sin(Theta);   T4[0, 3] = 0.0285f * Mathf.Sin(Theta);
-     T4[1, 0] = 0;                   T4[1, 1] = 1.0f;    T4[1, 2] = 0.0f;                T4[1, 3] = 0;
-     T4[2, 0] = Mathf.Sin(Theta);    T4[2, 1] = 0f;      T4[2, 2] = Mathf.Cos(Theta);    T4[2, 3] = -0.0285f * Mathf.Cos(Theta) - 0.0778f ;
-     T4[3, 0] = 0f;                  T4[3, 1] = 0f;      T4[3, 2] = 0f;                  T4[3, 3] = 1.0f;
 
-        return T4;
+    Matrix4x4 Transform45(float Theta1, float Theta2)
+    {/*Inverse of T2*/ //to reach the side surfaces of the prop
+        Theta1 = Theta1 * Mathf.PI / 180;
+        Theta2 = Theta2 * Mathf.PI / 180;
+
+        T5[0, 0] = Mathf.Cos(Theta1);                            T5[0, 1] = 0.0f;                 T5[0, 2] = -Mathf.Sin(Theta1);                      T5[0, 3] = 0.0f;
+        T5[1, 0] = Mathf.Sin(Theta1) * Mathf.Sin(Theta2);        T5[1, 1] = Mathf.Cos(Theta2);    T5[1, 2] = Mathf.Cos(Theta1)*Mathf.Sin(Theta2);     T5[1, 3] = -0.0285f * Mathf.Cos(Theta2) - 0.0775f;
+        T5[2, 0] = Mathf.Cos(Theta2) * Mathf.Sin(Theta1);        T5[2, 1] = -Mathf.Sin(Theta2);   T5[2, 2] = Mathf.Cos(Theta1)*Mathf.Cos(Theta2);     T5[2, 3] = 0.0285f * Mathf.Sin(Theta2);
+        T5[3, 0] = 0.0f;                                         T5[3, 1] = 0.0f;                 T5[3, 2] = 0.0f;                                    T5[3, 3] = 1.0f;
+
+        return T5;                    
+
 
     }
 
@@ -591,54 +675,5 @@ public class VelUDP2 : MonoBehaviour
     }
 
 
-    #region Coordinate system transformation
-    /// <summary>
-    /// Transform a vector from robot to unity coordinate system
-    /// </summary>
-    /// <param name="poseT">vector from robot</param>
-    /// <returns></returns>
-    public Vector3 PoseTToVector3(Vector3 poseT)
-    {
-        Vector3 v = new Vector3(poseT.x, poseT.z, poseT.y);
-        return v;
-    }
-
-    /// <summary>
-    /// Transform a robot rotation vector from robot to unity quaternion coordinate system
-    /// </summary>
-    /// <param name="poseR">rotation vector</param>
-    /// <returns></returns>
-    public Quaternion PoseRToQuaternion(Vector3 poseR)
-    {
-        poseR = new Vector3(poseR.x, poseR.z, poseR.y);
-        Quaternion q = Quaternion.AngleAxis(poseR.magnitude * 180f / Mathf.PI, -poseR.normalized);
-        return q;
-    }
-
-    /// <summary>
-    /// Transform a unity vector to robot coordinate system
-    /// </summary>
-    /// <param name="v"></param>
-    /// <returns></returns>
-    public Vector3 Vector3ToPoseT(Vector3 v)
-    {
-        Vector3 poseT = new Vector3(v.x, v.z, v.y);
-        return poseT;
-    }
-
-    /// <summary>
-    /// Transform a quaternion  from unity to robot rotation vector
-    /// </summary>
-    /// <param name="q">unity quaternion</param>
-    /// <returns></returns>
-    public Vector3 QuaternionToPoseR(Quaternion q)
-    {
-        Vector3 poseR = Vector3.zero;
-        float angle = 0;
-        q.ToAngleAxis(out angle, out poseR);
-        poseR = -angle * Mathf.PI / 180f * new Vector3(poseR.x, poseR.z, poseR.y);
-        return poseR;
-    }
-    #endregion
 
 }
