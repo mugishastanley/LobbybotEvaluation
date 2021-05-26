@@ -11,6 +11,7 @@ public class LinePlaneIntersection : MonoBehaviour
 	public GameObject End;
 	public GameObject Plane;
 	public GameObject result;
+	public Plane plane2;
 	// Start is called before the first frame update
 	void Start()
     {
@@ -24,10 +25,11 @@ public class LinePlaneIntersection : MonoBehaviour
 		Vector3 Interpoint = Intersection(start.transform.localPosition, End.transform.localPosition, Plane.transform.localPosition);
 		result.transform.localPosition = Interpoint;
 		string output = Interpoint.ToString("F4");
-		//Debug.Log("Intersection"+ output );
 
-
-
+		Interpoint = PlaneProjection(start, Plane);
+		
+		//Debug.DrawLine(Interpoint,  start.transform.position,Color.green);
+		Debug.Log("Intersection"+ Interpoint );
 	}
 
 	//Get the intersection between a line and a plane. 
@@ -83,6 +85,16 @@ public class LinePlaneIntersection : MonoBehaviour
 		point.y = start.y + t * diff.y;
 		point.z = start.z + t * diff.z;
 		return point;
+	}
+
+
+	public Vector3 PlaneProjection(GameObject start, GameObject Plane)
+    {
+
+		Vector3 Interpoint = Vector3.ProjectOnPlane(start.transform.position, Plane.transform.up) + Vector3.Dot(Plane.transform.position, Plane.transform.up) * Plane.transform.up; ;
+		Gizmos.color = Color.green;
+		Gizmos.DrawLine(start.transform.position, Interpoint);
+		return Interpoint;
 	}
 
 

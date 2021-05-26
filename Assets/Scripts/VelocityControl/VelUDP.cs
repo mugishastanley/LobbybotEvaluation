@@ -29,7 +29,7 @@ public class VelUDP : MonoBehaviour
     private GameObject UserHand;
 
     private static int localPort;
-    private float PI = 3.1416f;
+    private readonly float  PI = 3.1416f;
     // prefs
     private string IP;  // define in init
     private int port;  // define in init

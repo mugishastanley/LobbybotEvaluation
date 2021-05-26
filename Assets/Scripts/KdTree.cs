@@ -231,6 +231,7 @@ public class KdTree<T> : IEnumerable<T>, IEnumerable where T : Component
             return (a.x - b.x) * (a.x - b.x) + (a.z - b.z) * (a.z - b.z);
         else
             return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z);
+            //return (a.x - b.x) * (a.x - b.x); //+ (a.y - b.y) * (a.y - b.y) ;
     }
     protected float _getSplitValue(int level, Vector3 position)
     {

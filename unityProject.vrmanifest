@@ -5,7 +5,7 @@
       "app_key": "application.generated.unity.dusterinte.exe",
       "launch_type": "url",
       "url": "steam://launch/",
-      "action_manifest_path": "G:\\PhD\\3rd Year\\Unity\\Lobbybot\\Assets\\StreamingAssets\\SteamVR\\actions.json",
+      "action_manifest_path": "C:\\Users\\leyns\\Documents\\ECN\\Unityprojects\\Lobbybot\\Assets\\StreamingAssets\\SteamVR\\actions.json",
       "strings": {
         "en_us": {
           "name": "duster inte [Testing]"
