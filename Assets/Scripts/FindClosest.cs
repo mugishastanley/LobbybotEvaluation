@@ -8,7 +8,7 @@ public class FindClosest : MonoBehaviour
     public GameObject BlackPrefab;
     //private int CountWhite;
     public int CollectableObjects;
-    protected List <GameObject> BlackballsList = new List<GameObject>();
+    protected List <GameObject> PointsInCar = new List<GameObject>();
 
     // Spawn out balls at start of the game
     void Start()
@@ -16,7 +16,7 @@ public class FindClosest : MonoBehaviour
         for (int i = 0; i < CollectableObjects; i++) {
             Vector3 spawnPosition = new Vector3(Random.Range(-5, 5), 1, Random.Range(-5, 5));
             Quaternion spawnRotation = Quaternion.identity;
-            BlackballsList.Add(Instantiate(BlackPrefab, spawnPosition, spawnRotation));
+            PointsInCar.Add(Instantiate(BlackPrefab, spawnPosition, spawnRotation));
         }
     }
 
@@ -25,7 +25,7 @@ public class FindClosest : MonoBehaviour
     {
         var nearestDist = float.MaxValue;
         GameObject nearestObj = null;
-        foreach (var blackball in BlackballsList)
+        foreach (var blackball in PointsInCar)
         {
             if (Vector3.Distance(WhitePrefab.transform.position, blackball.transform.position) < nearestDist)
             {
@@ -39,12 +39,12 @@ public class FindClosest : MonoBehaviour
 
     //Iterative algo
     void iterativeAlgo (){
-        //foreach (var whiteball in WhiteballsList)
+        //foreach (var whiteball in Hands)
         {
             var nearestDist = float.MaxValue;
             GameObject nearestObj = null;
 
-            foreach (var blackball in BlackballsList)
+            foreach (var blackball in PointsInCar)
             {
                 if (Vector3.Distance(WhitePrefab.transform.position, blackball.transform.position) < nearestDist)
                 {

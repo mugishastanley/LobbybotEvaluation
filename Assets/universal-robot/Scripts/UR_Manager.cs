@@ -28,7 +28,7 @@ public class UR_Manager
     {
         m_ip = ip;
         remoteClientRealTime = new TCPClientBuilder(m_ip, 30003, 1000, 1000, NetworkBuilder.NETWORK_MODE.READ_WRITE, ParseRealTime);
-        remoteClient = new TCPClientBuilder(m_ip, 30002, 1000, 1000, NetworkBuilder.NETWORK_MODE.READ_WRITE, Parse);
+        //remoteClient = new TCPClientBuilder(m_ip, 30002, 1000, 1000, NetworkBuilder.NETWORK_MODE.READ_WRITE, Parse);
         //Debug.Log( "Connecting to UR at " + m_ip );
     }
 
@@ -551,6 +551,9 @@ public class UR_Manager
 
             BinaryReaderBigEndian reader = new BinaryReaderBigEndian(new MemoryStream(message));
             uint size = (uint)reader.ReadInt32();
+
+            if (message.Length != size)
+                return;
 
             URFrameRealTime f = ParseFrameRealTime(reader.ReadBytes((int)size - 4));
             m_frame_RT = f;

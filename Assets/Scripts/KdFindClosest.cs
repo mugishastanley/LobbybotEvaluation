@@ -7,125 +7,437 @@ using UnityEngine.UI;
 public class KdFindClosest : MonoBehaviour
 {
     public Button InitialiseButton;
-    //public Transform car; 
     public GameObject WhitePrefab;
     public GameObject BlackPrefab;
-    
+    public GameObject Plane;
+    public bool ProjectiononPlane;
     public Transform CalTracker;
+    public Transform RobotUrdf;
+    public float velinside = 0.25f;
+    public float veloutside =0.6f;
     public int CountWhite;
     public int CountBlack;
+
     public GameObject[] points;
-    //private GameObject _closestobjectpose;
     private GameObject _ClosestObject;
     private bool _isnearestfound = false;
 
+
     private Vector3 nearobpostion;
+    private Vector3 nearoblocalpose;
     private Quaternion nearobrot;
+    private float d1, d2, d3, d4;
+    private float time_throughplane, time_inside;
+
+    Camera cam;
+    Collider objCollider;
+    Plane[] planes;
+    Renderer[] renderers;
+    GameObject pts;
+
+    Matrix4x4 nearestobjmat;
 
 
-    protected KdTree<FallingBlackObj> BlackballsList = new KdTree<FallingBlackObj>();
-    protected KdTree<FallingBlackObj> WhiteballsList = new KdTree<FallingBlackObj>();
 
-    
-    // protected List<RandomMove> BlackballsList = new List<RandomMove>();
+    protected KdTree<SpawnedPoint> PointsInCar = new KdTree<SpawnedPoint>();
+    protected KdTree<SpawnedPoint> Hands = new KdTree<SpawnedPoint>();
+
+    SpawnedPoint First;
+
+    public Vector3 Nearobpos { get; set; }
 
 
-    // Spawn out balls at start of the game
+
+    // Spawn out Capsules at start of the game
     void Start()
     {
         //InitialiseButton.onClick.AddListener(delegate {init();});
         init();
     }
 
-    public void init() {
+    public Matrix4x4 matnearestob
+    {
+        get { return nearestobjmat; }
+        set { nearestobjmat = value; }
+    }
 
+    public void init()
+    {
+        PointsInCar.UpdatePositions();
+        cam = Camera.main;
         for (int i = 0; i < points.Length; i++)
         //foreach (var point in points)
         {
-            //Quaternion spawnRotation = Quaternion.identity;
 
-            //GameObject point1 = (Instantiate(BlackPrefab, new Vector3(-0.846f, -0.1983f, 0.747f), spawnRotation));
-            //Debug.Log("Before tracker parent: point " + i + "Posiotn:" + points[i].transform.position.ToString("F3"));
-            //points[i].transform.parent = CalTracker.transform;          
-            //Debug.Log("After tracker parent: Point :" + i + "Posiotn:" + points[i].transform.position.ToString("F3"));
-
-            points[i].transform.parent = CalTracker.transform; //only for visuals but no effect
-            //Debug.Log("After tracker parent: Point :" + i + "Posiotn:" + points[i].transform.position.ToString("F3"));
-            GameObject point = (Instantiate(BlackPrefab, points[i].transform.position, points[i].transform.rotation));
-            //Debug.Log("Spawn at Point" + i + "Posiotn:" + point.transform.position.ToString("F3"));
-            point.transform.parent = CalTracker.transform;
-            //Debug.Log("After parent Point" + i + "Posiotn:" + point.transform.position.ToString("F3"));
-           // Debug.Log("Spawn at Point" + i + "Posiotn:" + points[i].transform.position.ToString("F3"));
-            //point.transform.parent = CalTracker.transform;
-            //Debug.Log("after Parent at Point" + i + "Posiotn:" + point.transform.position.ToString("F3"));
-            //point.transform.position = points[i].transform.position;
-            //Debug.Log("Position based on Point transform" + i + "Posiotn:" + point.transform.position.ToString("F3"));
-            //point.transform.localRotation = points[i].transform.localRotation;
-            BlackballsList.Add((point).GetComponent<FallingBlackObj>());
-
-            // StartCoroutine(SpawnRoutine());
+            GameObject point = (Instantiate(BlackPrefab, points[i].transform.position, points[i].transform.rotation, CalTracker.transform));
+            PointsInCar.Add((point).GetComponent<SpawnedPoint>());
         }
 
         for (int i = 0; i < CountWhite; i++)
         {
-            WhiteballsList.Add(Instantiate(WhitePrefab).GetComponent<FallingBlackObj>());
+            Hands.Add(Instantiate(WhitePrefab).GetComponent<SpawnedPoint>());
         }
+        First = PointsInCar[0];
+    }
 
+
+    // Update is called once per frame
+
+    void Update()
+    {
+        PointsInCar.UpdatePositions();
+        //withHead();
+        WithoutHeadPlane();
+        //WithoutHeadOld();
+        //AdaptiveselectionwithHead(Plane);
 
     }
 
-    // Update is called once per frame
+
+    public void WithoutHeadPlane()
+    {
+        foreach (var whiteball in Hands)
+        {
+
+            SpawnedPoint nearestObj = PointsInCar.FindClosest(whiteball.transform.position);
+            nearestObj.tag = "nearestpoint";
+            First.tag = "nearestpoint";
+            pts = GameObject.FindGameObjectWithTag("nearestpoint");
+            renderers = pts.GetComponents<Renderer>();
+            _isnearestfound = true;
+            //Debug.Log("First1 is at " + First.transform.localPosition);
+            Debug.DrawLine(whiteball.transform.position, nearestObj.transform.position, Color.red);
+            //  nearestObj = best(nearestObj, First, Testraycast());
+            Nearobpos = nearestObj.transform.localPosition;
+            //nearobrot = nearestObj.transform.localRotation;
+            nearobrot = nearestObj.transform.localRotation;
+            //Debug.Log("nearest is found is second is at " + nearobpostion);
+            //last object becomes first
+
+            if (First != nearestObj)
+            {
+
+                var p1 = First;
+                //Debug.Log("p1 is at = " + p1.transform.localPosition);
+
+                var p2 = nearestObj;
+                //Debug.Log("p2 is at = " + p2.transform.localPosition);
+
+                
+                Vector3 p1prime = PlaneProjection(p1, Plane);
+                Vector3 p2prime = PlaneProjection(p2, Plane);
+                //var pstar = p2.transform.localPosition;
+
+                d1 = _distance(p1prime, p1.transform.localPosition);
+                Debug.Log("distance d1 = " + d1);
+                d2 = _distance(p2.transform.localPosition, p1.transform.localPosition);
+                Debug.Log("distance d2 = " + d2);
+                d3 = _distance(p1prime, p2prime);
+                Debug.Log("distance d3 = " + d3);
+                d4 = _distance(p2prime, p2.transform.localPosition);
+                Debug.Log("distance d4 = " + d4);
+                time_throughplane = d1 / velinside + d3 / veloutside + d4 / velinside;
+                time_inside = d2 / velinside;
+
+                //if ((d1) >= d2)
+                if (time_inside < time_throughplane)
+                {
+                    //pstar = p2.transform.localPosition;
+                    //nearobpostion = pstar;
+                    Nearobpos = p2.transform.localPosition; ;
+                    //Debug.Log("route inside:" + pstar + "time inside " + time_inside + " < time outside " + time_throughplane);
+                }
+                else
+                {
+                    //Debug.Log("route outside:" + pstar + "time inside " + time_inside + " > time outside" + time_throughplane);
+                    //create a local stack
+                    Stack<Vector3> ts = new Stack<Vector3>();
+                    //fill the stck
+                    ts.Push(p1prime);
+                    ts.Push(p2prime);           
+                    ts.Push(p2.transform.localPosition);
+
+                    //empty stack
+                    //pstar=Adaptiveselection(p1) //recursive call;
+                    while (ts.Count > 0)
+                    {
+                        Nearobpos = ts.Pop();
+                        StartCoroutine(ProjectionCoroutine());
+                        //Debug.Log("Taking plane proj Nearets pstar at:" + Nearobpos.ToString("F3"));
+                        Debug.Log("Taking plane proj Nearets pstar at:" + Nearobpos.ToString("F3")+"count "+ts.Count);                        
+                    }
+
+                }
+
+                
+            }
+
+            //Debug.Log("First changed is at " + First.transform.localPosition);
+            First = nearestObj;
+
+        }
+
+    }
+
     
 
-    void Update()
-    { 
-        BlackballsList.UpdatePositions();
-        foreach (var whiteball in WhiteballsList)
-        {
-            FallingBlackObj nearestObj = BlackballsList.FindClosest(whiteball.transform.position);
 
+    public void withHead()
+    {
+        foreach (var whiteball in Hands)
+        {
+            SpawnedPoint nearestObj = PointsInCar.FindClosest(whiteball.transform.position);
+            nearestObj.tag = "nearestpoint";
+            First.tag = "nearestpoint";
+            pts = GameObject.FindGameObjectWithTag("nearestpoint");
+            renderers = pts.GetComponents<Renderer>();
             _isnearestfound = true;
 
             Debug.DrawLine(whiteball.transform.position, nearestObj.transform.position, Color.red);
-           // _ClosestObject.transform.position = nearestObj.transform.localPosition;
-            nearobpostion = nearestObj.transform.localPosition;
+            nearestObj = best(nearestObj, First, Testraycast());
+            //nearobpostion = nearestObj.transform.localPosition;
+            
+            Nearobpos = nearestObj.transform.localPosition;
+            nearoblocalpose = nearestObj.transform.position;
             nearobrot = nearestObj.transform.localRotation;
-            //Debug.Log("From Kd Found next " + nearestObj.transform.localPosition.ToString("F3")); // This is the final location to send.
+
+            if (First != nearestObj)
+                First = nearestObj;
+        }
 
 
-            //ClosestObject.transform.position = nearestObj.transform.position;
-            //change to a certain color        
+    }
 
-            //var cubeRenderer = nearestObj.GetComponent<Renderer>();
-            if (_isnearestfound)
+
+    public void WithoutHeadOld()
+    {
+        foreach (var whiteball in Hands)
+        {
+            SpawnedPoint nearestObj = PointsInCar.FindClosest(whiteball.transform.position);
+            nearestObj.tag = "nearestpoint";
+            First.tag = "nearestpoint";
+            pts = GameObject.FindGameObjectWithTag("nearestpoint");
+            renderers = pts.GetComponents<Renderer>();
+            _isnearestfound = true;
+
+            Debug.DrawLine(whiteball.transform.position, nearestObj.transform.position, Color.red);
+            //nearestObj = best(nearestObj, First, Testraycast());
+            Nearobpos = nearestObj.transform.localPosition;
+            //nearobpostion = nearestObj.transform.localPosition;
+            //nearoblocalpose = nearestObj.transform.position;
+            nearobrot = nearestObj.transform.localRotation;
+
+/***
+            if (First != nearestObj)
+                First = nearestObj;
+***/
+        }
+
+
+    }
+
+
+    private void AdaptiveselectionwithHead(GameObject Plane)
+    {
+        ///Inputs point from kd tree and Returns projection of point on plane.
+        foreach (var whiteball in Hands)
+        {
+            SpawnedPoint nearestObj = PointsInCar.FindClosest(whiteball.transform.position);
+            nearestObj.tag = "nearestpoint";
+            First.tag = "nearestpoint";
+            pts = GameObject.FindGameObjectWithTag("nearestpoint");
+            renderers = pts.GetComponents<Renderer>();
+
+            Debug.DrawLine(whiteball.transform.position, nearestObj.transform.position, Color.red);
+
+            nearestObj = best(nearestObj, First, Testraycast()); //finds nearest object based on headgaze
+
+            var p1 = First;
+            Debug.Log("p1 is at {0} " + p1.transform.position);
+            var p2 = nearestObj;
+            Debug.Log("p2 is at {0} " + p2.transform.position);
+
+            //nearobpostion = nearestObj.transform.localPosition;
+            //nearoblocalpose = nearestObj.transform.position;
+            nearobrot = nearestObj.transform.localRotation;
+
+            if (First != nearestObj)
+                First = nearestObj;
+
+            var pstar = nearestObj.transform.localPosition;
+            Vector3 p1prime = PlaneProjection(p1, Plane);      
+            Vector3 p2prime = PlaneProjection(p2, Plane);
+  
+
+
+            float d1 = _distance(p1prime, p1.transform.localPosition);
+            //Debug.Log("d1 is +" + d1);
+            float d2 = _distance(p2.transform.localPosition, p1.transform.localPosition);
+            //Debug.Log("d2 is +" + d1);
+
+            if ((2 * d1) >= d2)
             {
-                var cubeRenderer = nearestObj.GetComponent<Renderer>();
-                cubeRenderer.material.color = Color.red;
-                //Call SetColor using the shader property name "_Color" and setting the color to red
-                cubeRenderer.material.SetColor("_Color", Color.red);
-                _isnearestfound = false;
+                pstar = p2.transform.localPosition;
+                nearobpostion = pstar;
+                //Debug.Log("Nearets obj at:" + pstar);
             }
-           // _isnearestfound = false;
+            else
+            {
+                //pstar=Adaptiveselection(p1) //recursive call;
+                pstar = p1prime;
+                nearobpostion = pstar;
+
+                //wait for a few seconds
+                StartCoroutine(ProjectionCoroutine());
+                pstar = p2prime;
+                nearobpostion = pstar;
+
+                //wait a few secs
+                StartCoroutine(ProjectionCoroutine());
+                pstar = p2.transform.localPosition;
+                nearobpostion = pstar;
+            }
+
         }
     }
 
+    IEnumerator ProjectionCoroutine()
+    {
+        //Print the time of when the function is first called.
+        Debug.Log("Started Coroutine at timestamp : " + Time.time);
+
+        //yield on a new YieldInstruction that waits for 5 seconds.
+        yield return new WaitForSeconds(0.1f);
+
+        //After we have waited 5 seconds print the time again.
+        Debug.Log("Finished Coroutine at timestamp : " + Time.time);
+    }
+
+
+
     public Vector3 getclosestobjectposition()
-    { 
-         return nearobpostion;
+    {
+        return nearobpostion;
     }
 
     public Quaternion getclosestobjectrotation()
     {
         return nearobrot;
     }
-
-
-
+    public Vector3 getclosestobjectlocalposition()
+    {
+        return nearoblocalpose;
+    }
     //get the positio of the game object stored in a varaibale
-    public Vector3 getclosestobjectpose(){        
+    public Vector3 getclosestobjectpose()
+    {
         return _ClosestObject.transform.localPosition;
     }
-    public Quaternion getclosestobjectrot() { 
-    return _ClosestObject.transform.rotation;
+    public Quaternion getclosestobjectrot()
+    {
+        return _ClosestObject.transform.rotation;
     }
+
+    public void setposition(Vector3 pos)
+    {
+        nearobpostion = pos;
+    }
+
+    
+
+    public Vector3 Testraycast()
+    {
+
+        RaycastHit hitInfo;
+        if (Physics.Raycast(
+                cam.transform.position,
+                cam.transform.forward,
+                out hitInfo,
+                20.0f,
+                Physics.DefaultRaycastLayers))
+        {
+            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hitInfo.distance, Color.black);
+            return hitInfo.point;
+        }
+        else
+        {
+            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
+            return hitInfo.point;
+            // Debug.Log("Did not Hit");
+        }
+
+    }
+
+    public SpawnedPoint best(SpawnedPoint first, SpawnedPoint second, Vector3 raycasthit)
+    {
+        float d1 = _distance(first.transform.position, raycasthit);
+        float d2 = _distance(second.transform.position, raycasthit);
+        //Add condition if in view
+
+        if ((d1 <= d2) && IsVisible(first.GetComponent<Renderer>()))
+            return first;
+        else if ((d2 <= d1) && IsVisible(second.GetComponent<Renderer>()))
+            return second;
+        else
+            return first;
+    }
+
+    protected float _distance(Vector3 a, Vector3 b)
+    {
+        //return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z);
+        return Vector3.Distance(a, b);
+    }
+
+    //void OutputVisibleRenderers(Renderer[] renderers)
+    private bool IsVisible(Renderer renderer)
+    {
+        Plane[] planes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
+
+        if (GeometryUtility.TestPlanesAABB(planes, renderer.bounds))
+            return true;
+        else
+            return false;
+    }
+
+
+    public Vector3 PlaneProjection(SpawnedPoint start, GameObject Plane)
+    {
+        //Inputs point p 
+        //returns position of projection of p on plane
+        Vector3 Interpoint = Vector3.ProjectOnPlane(start.transform.localPosition, Plane.transform.up) + Vector3.Dot(Plane.transform.localPosition, Plane.transform.up) * Plane.transform.up; ;
+        return Interpoint;
+    }
+
+    private void Adaptiveselection(SpawnedPoint p, GameObject Plane, SpawnedPoint closest)
+    {
+        //inputs point p
+        //outpus optimal points or route.
+        Vector3 pstar = closest.transform.position;
+        Vector3 p1prime = PlaneProjection(p, Plane);
+        Vector3 p2prime = PlaneProjection(closest, Plane);
+
+
+        float d1 = _distance(p1prime, p.transform.position);
+        float d2 = _distance(p2prime, p.transform.position);
+        if ((2 * d1) >= d2)
+        {
+            pstar = closest.transform.position;
+        }
+        else
+        {
+            //pstar=Adaptiveselection(p1) //recursive call;
+            pstar = p1prime;
+            pstar = p2prime;
+            pstar = closest.transform.position;
+        }
+
+    }
+
+
+
+
+    
 }
+
+
+
