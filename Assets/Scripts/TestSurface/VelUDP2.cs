@@ -110,7 +110,7 @@ public class VelUDP2 : MonoBehaviour
         //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1,1,1)) * Transform4(63.44f);
 
         // Changes 23
-        Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1, 1, 1)) * Transform4(63.44f) * FindObjectOfType<SelectFace>().ChangeSurface();
+        Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1, 1, 1)) * FindObjectOfType<SelectFace>().ChangeSurface();
         //Before changing base
         // print("base" + Matrixsent);
 

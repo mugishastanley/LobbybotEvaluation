@@ -5,7 +5,7 @@ using UnityEngine;
 public class SelectFace : MonoBehaviour
 {
     // Start is called before the first frame update
-    public enum Surface { VeryRough, Rough, Neutral, Smooth, VerySmooth };
+    public enum Surface {Front, VeryRough, Rough, Neutral, Smooth, VerySmooth };
     float rotation;
     private float Thetaside = 63.44f;
     private float ThetaFront = 90.00f;
@@ -30,20 +30,23 @@ public class SelectFace : MonoBehaviour
     {
         switch (mySurface)
         {
+            case Surface.Front:
+                T3 = TransformFront();
+                break;
             case Surface.VeryRough:
-                T3=TransformationChangeface(0.0f);
+                T3=Transformside(Thetaside) * TransformationChangeface(0.0f);
                 break;
             case Surface.Rough:
-                T3 = TransformationChangeface(72.0f);
+                T3 = Transformside(Thetaside) * TransformationChangeface(72.0f);
                 break;
             case Surface.Neutral:
-                T3 = TransformationChangeface(144.0f);
+                T3 = Transformside(Thetaside) * TransformationChangeface(144.0f);
                 break;
             case Surface.Smooth:
-                T3 = TransformationChangeface(216.0f);
+                T3 = Transformside(Thetaside) * TransformationChangeface(216.0f);
                 break;
             case Surface.VerySmooth:
-                T3 = TransformationChangeface(288.0f);
+                T3 = Transformside(Thetaside) * TransformationChangeface(288.0f);
                 break;
         }
         return T3;
