@@ -110,7 +110,7 @@ public class VelUDP2 : MonoBehaviour
         //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1,1,1)) * Transform4(63.44f);
 
         // Changes 23
-        Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1, 1, 1)) * Transform4(63.44f);
+        Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1, 1, 1)) * Transform4(63.44f) * FindObjectOfType<SelectFace>().ChangeSurface();
         //Before changing base
         // print("base" + Matrixsent);
 
@@ -628,23 +628,7 @@ public class VelUDP2 : MonoBehaviour
         T4[2, 0] = 0.0f;    T4[2, 1] = -Mathf.Sin(Theta);       T4[2, 2] = Mathf.Cos(Theta);          T4[2, 3] = 0.0285f * Mathf.Sin(Theta);
         T4[3, 0] = 0.0f;    T4[3, 1] = 0.0f;                    T4[3, 2] = 0.0f;                      T4[3, 3] = 1.0f;
 
-           return T4;
-
-    }
-
-
-    Matrix4x4 Transform45(float Theta1, float Theta2)
-    {/*Inverse of T2*/ //to reach the side surfaces of the prop
-        Theta1 = Theta1 * Mathf.PI / 180;
-        Theta2 = Theta2 * Mathf.PI / 180;
-
-        T5[0, 0] = Mathf.Cos(Theta1);                            T5[0, 1] = 0.0f;                 T5[0, 2] = -Mathf.Sin(Theta1);                      T5[0, 3] = 0.0f;
-        T5[1, 0] = Mathf.Sin(Theta1) * Mathf.Sin(Theta2);        T5[1, 1] = Mathf.Cos(Theta2);    T5[1, 2] = Mathf.Cos(Theta1)*Mathf.Sin(Theta2);     T5[1, 3] = -0.0285f * Mathf.Cos(Theta2) - 0.0775f;
-        T5[2, 0] = Mathf.Cos(Theta2) * Mathf.Sin(Theta1);        T5[2, 1] = -Mathf.Sin(Theta2);   T5[2, 2] = Mathf.Cos(Theta1)*Mathf.Cos(Theta2);     T5[2, 3] = 0.0285f * Mathf.Sin(Theta2);
-        T5[3, 0] = 0.0f;                                         T5[3, 1] = 0.0f;                 T5[3, 2] = 0.0f;                                    T5[3, 3] = 1.0f;
-
-        return T5;                    
-
+        return T4;
 
     }
 

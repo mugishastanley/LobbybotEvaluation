@@ -432,10 +432,6 @@ public class KdFindClosest : MonoBehaviour
         }
 
     }
-
-
-
-
     
 }
 
