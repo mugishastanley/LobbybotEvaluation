@@ -16,7 +16,7 @@ public class SelectFace : MonoBehaviour
 
     void Start()
     {
-        mySurface = Surface.VerySmooth;
+        mySurface = Surface.Front;
     }
 
 

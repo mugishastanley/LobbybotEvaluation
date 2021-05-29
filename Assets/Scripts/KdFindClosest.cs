@@ -17,6 +17,7 @@ public class KdFindClosest : MonoBehaviour
     public float veloutside =0.6f;
     public int CountWhite;
     public int CountBlack;
+    float tol = 0.3f;
 
     public GameObject[] points;
     private GameObject _ClosestObject;
@@ -86,14 +87,12 @@ public class KdFindClosest : MonoBehaviour
     void Update()
     {
         PointsInCar.UpdatePositions();
-        //withHead();
-        WithoutHeadPlane();
+        withHead();
+        //WithoutHeadPlane();
         //WithoutHeadOld();
         //AdaptiveselectionwithHead(Plane);
 
     }
-
-
     public void WithoutHeadPlane()
     {
         foreach (var whiteball in Hands)
@@ -116,10 +115,8 @@ public class KdFindClosest : MonoBehaviour
 
             if (First != nearestObj)
             {
-
                 var p1 = First;
                 //Debug.Log("p1 is at = " + p1.transform.localPosition);
-
                 var p2 = nearestObj;
                 //Debug.Log("p2 is at = " + p2.transform.localPosition);
 
@@ -146,26 +143,35 @@ public class KdFindClosest : MonoBehaviour
                     //nearobpostion = pstar;
                     Nearobpos = p2.transform.localPosition; ;
                     //Debug.Log("route inside:" + pstar + "time inside " + time_inside + " < time outside " + time_throughplane);
+                    Debug.Log("route inside:");
                 }
                 else
                 {
                     //Debug.Log("route outside:" + pstar + "time inside " + time_inside + " > time outside" + time_throughplane);
+                    Debug.Log("route outside:");
+
+
                     //create a local stack
                     Stack<Vector3> ts = new Stack<Vector3>();
                     //fill the stck
                     ts.Push(p1prime);
-                    ts.Push(p2prime);           
-                    ts.Push(p2.transform.localPosition);
+                    ts.Push(p2prime);
+                    //ts.Push(p2.transform.localPosition);
 
                     //empty stack
                     //pstar=Adaptiveselection(p1) //recursive call;
+                    Debug.Log("Before ts size :" + ts.Count);
                     while (ts.Count > 0)
                     {
+                        Debug.Log("ts size :" + ts.Count);
                         Nearobpos = ts.Pop();
                         StartCoroutine(ProjectionCoroutine());
                         //Debug.Log("Taking plane proj Nearets pstar at:" + Nearobpos.ToString("F3"));
-                        Debug.Log("Taking plane proj Nearets pstar at:" + Nearobpos.ToString("F3")+"count "+ts.Count);                        
+                        Debug.Log("Stack contains projections:" + Nearobpos.ToString("F3"));
+                        //Debug.Log("ts size :"+ts.Count);
+                        //Debug.Log("Taking plane proj Nearets pstar at:" + Nearobpos.ToString("F3")+"count "+ts.Count);                        
                     }
+                                        
 
                 }
 
@@ -307,7 +313,7 @@ public class KdFindClosest : MonoBehaviour
         Debug.Log("Started Coroutine at timestamp : " + Time.time);
 
         //yield on a new YieldInstruction that waits for 5 seconds.
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.001f);
 
         //After we have waited 5 seconds print the time again.
         Debug.Log("Finished Coroutine at timestamp : " + Time.time);
@@ -382,6 +388,19 @@ public class KdFindClosest : MonoBehaviour
             return first;
     }
 
+
+    public SpawnedPoint best2(SpawnedPoint first, SpawnedPoint second, Vector3 raycasthit)
+    {
+        SpawnedPoint best = first;
+        float d1 = _distance(first.transform.position, raycasthit);
+        float d2 = _distance(second.transform.position, raycasthit);
+        if (((d1 <= d2) && (d1 <= tol)) && IsVisible(first.GetComponent<Renderer>()))
+            best=first;
+        else if(((d2 <= d1) && (d2 <= tol)) && IsVisible(second.GetComponent<Renderer>()))
+            best= second;
+        return best;
+    }
+
     protected float _distance(Vector3 a, Vector3 b)
     {
         //return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z);
@@ -398,7 +417,6 @@ public class KdFindClosest : MonoBehaviour
         else
             return false;
     }
-
 
     public Vector3 PlaneProjection(SpawnedPoint start, GameObject Plane)
     {
