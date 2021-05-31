@@ -19,9 +19,12 @@ public class TrackingdataLog : MonoBehaviour
     private string HeadRotationEuler = @"c:\temp\HeadRotEuler.txt";
     private string HeadPosition = @"c:\temp\HeadPos.txt";
     private string EETransform = @"c:\temp\EETransform.txt";
+    private string Sentdata = @"c:\temp\SentDataTransform.txt";
 
     public GameObject RobotEndEffector;
     public GameObject Hand;
+
+   
 
     public void Start()
     {
@@ -32,9 +35,20 @@ public class TrackingdataLog : MonoBehaviour
     // to drive the map display
     void Update()
     {
-        trackerinfo();
+        //trackerinfo();
+        matrixsent();
         //trackingdata();
     }
+
+    private void matrixsent() {
+        //Matrix4x4 sent = FindObjectOfType<VelUDP2>().sentdata;
+        using (StreamWriter sw = File.AppendText(Sentdata))
+        {
+            sw.WriteLine(System.DateTime.Now + "," + Time.time + ", "+ FindObjectOfType<VelUDP2>().sentdata);//time in seconds since start of game
+                                                                                                 //sw.WriteLine("Extra line");                      
+        }
+    }
+
 
     private void trackerinfo()
     {

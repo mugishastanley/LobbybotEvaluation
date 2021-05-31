@@ -44,8 +44,10 @@ public class KdFindClosest : MonoBehaviour
     protected KdTree<SpawnedPoint> Hands = new KdTree<SpawnedPoint>();
 
     SpawnedPoint First;
+    SpawnedPoint second;
 
     public Vector3 Nearobpos { get; set; }
+    public Vector3 Colorpose { get; set; }
 
 
 
@@ -79,6 +81,7 @@ public class KdFindClosest : MonoBehaviour
             Hands.Add(Instantiate(WhitePrefab).GetComponent<SpawnedPoint>());
         }
         First = PointsInCar[0];
+        second = PointsInCar[0];
     }
 
 
@@ -87,8 +90,9 @@ public class KdFindClosest : MonoBehaviour
     void Update()
     {
         PointsInCar.UpdatePositions();
-        withHead();
-        //WithoutHeadPlane();
+        //withHead();
+       // withHead2();
+        WithoutHeadPlane();
         //WithoutHeadOld();
         //AdaptiveselectionwithHead(Plane);
 
@@ -110,6 +114,7 @@ public class KdFindClosest : MonoBehaviour
             Nearobpos = nearestObj.transform.localPosition;
             //nearobrot = nearestObj.transform.localRotation;
             nearobrot = nearestObj.transform.localRotation;
+            Colorpose = nearestObj.transform.position;
             //Debug.Log("nearest is found is second is at " + nearobpostion);
             //last object becomes first
 
@@ -147,19 +152,17 @@ public class KdFindClosest : MonoBehaviour
                 }
 
 
-                /**
+                
                 else
                 {
 
                     
                     //Debug.Log("route outside:" + pstar + "time inside " + time_inside + " > time outside" + time_throughplane);
                     Debug.Log("route outside:");
-
-
                     //create a local stack
                     Stack<Vector3> ts = new Stack<Vector3>();
                     //fill the stck
-                    //ts.Push(p1prime);
+                    ts.Push(p1prime);
                     ts.Push(p2prime);
                     ts.Push(p2.transform.localPosition);
 
@@ -171,9 +174,9 @@ public class KdFindClosest : MonoBehaviour
                     {
                         Debug.Log("ts size :" + ts.Count);
                         
-                        Nearobpos = ts.Peek();
-                        //Nearobpos = ts.Pop();
-                        ts.Pop();
+                        //Nearobpos = ts.Peek();
+                        Nearobpos = ts.Pop();
+                        //ts.Pop();
                         //StartCoroutine(ProjectionCoroutine());
                         //Debug.Log("Taking plane proj Nearets pstar at:" + Nearobpos.ToString("F3"));
                         Debug.Log("Stack contains projections:" + Nearobpos.ToString("F3"));
@@ -184,21 +187,32 @@ public class KdFindClosest : MonoBehaviour
 
                 }
                 
-                **/
+                /***
 
                 else {
                     Nearobpos = p1prime;
+                    Colorpose = p1prime;
                     Debug.Log("Taking plane proj Nearets pstar 1:" + Nearobpos.ToString("F3"));
-                    StartCoroutine(ProjectionCoroutine());
+                    //StartCoroutine(ProjectionCoroutine());
                     Nearobpos = p2prime;
-                    StartCoroutine(ProjectionCoroutine());
+                    Colorpose = p2prime;
+                    //StartCoroutine(ProjectionCoroutine());
                     Debug.Log("Taking plane proj Nearets pstar 2:" + Nearobpos.ToString("F3"));
                     Nearobpos = p2.transform.localPosition;
+                    Colorpose = p2.transform.position;
                     Debug.Log("Taking plane proj Nearets pstar 3:" + Nearobpos.ToString("F3"));
+                    //StartCoroutine(ProjectionCoroutine());
                 }
-                
 
-                
+                ****/
+
+                Debug.DrawLine(whiteball.transform.position, nearestObj.transform.position, Color.red);
+
+                //Nearobpos = nearestObj.transform.localPosition;
+                //Colorpose = nearestObj.transform.position;
+                //nearobrot = nearestObj.transform.localRotation;
+
+
             }
 
             //Debug.Log("First changed is at " + First.transform.localPosition);
@@ -222,16 +236,53 @@ public class KdFindClosest : MonoBehaviour
             renderers = pts.GetComponents<Renderer>();
             _isnearestfound = true;
 
-            Debug.DrawLine(whiteball.transform.position, nearestObj.transform.position, Color.red);
+            //Debug.DrawLine(whiteball.transform.position, nearestObj.transform.position, Color.red);
             nearestObj = best(nearestObj, First, Testraycast());
+            Debug.DrawLine(whiteball.transform.position, nearestObj.transform.position, Color.red);
             //nearobpostion = nearestObj.transform.localPosition;
-            
+
             Nearobpos = nearestObj.transform.localPosition;
-            nearoblocalpose = nearestObj.transform.position;
+            Colorpose = nearestObj.transform.position;
             nearobrot = nearestObj.transform.localRotation;
 
             if (First != nearestObj)
                 First = nearestObj;
+        }
+
+
+    }
+
+
+    public void withHead2()
+    {
+        foreach (var whiteball in Hands)
+        {
+            SpawnedPoint nearestObj = PointsInCar.FindClosest(whiteball.transform.position);
+            nearestObj.tag = "nearestpoint";
+            second.tag = "nearestpoint";
+            pts = GameObject.FindGameObjectWithTag("nearestpoint");
+            renderers = pts.GetComponents<Renderer>();
+            _isnearestfound = true;
+
+            Debug.DrawLine(whiteball.transform.position, nearestObj.transform.position, Color.red);
+
+
+            if (_isnearestfound)
+            {
+                var cubeRenderer = nearestObj.GetComponent<Renderer>();
+                cubeRenderer.material.color = Color.red;
+                //Call SetColor using the shader property name "_Color" and setting the color to red
+                cubeRenderer.material.SetColor("_Color", Color.red);
+                _isnearestfound = false;
+            }
+            nearestObj = best2(nearestObj, second, Testraycast());
+            nearobpostion = nearestObj.transform.localPosition;
+            nearoblocalpose = nearestObj.transform.position;
+            nearobrot = nearestObj.transform.localRotation;
+
+            if (second != nearestObj)
+                second = nearestObj;
+            //  Debug.Log("Nearest is at " + nearestObj.transform.position);
         }
 
 
@@ -336,7 +387,7 @@ public class KdFindClosest : MonoBehaviour
         Debug.Log("Started Coroutine at timestamp : " + Time.time);
 
         //yield on a new YieldInstruction that waits for 5 seconds.
-        yield return new WaitForSeconds(0.001f);
+        yield return new WaitForSeconds(0.8f);
 
         //After we have waited 5 seconds print the time again.
         Debug.Log("Finished Coroutine at timestamp : " + Time.time);
@@ -405,10 +456,10 @@ public class KdFindClosest : MonoBehaviour
 
         if ((d1 <= d2) && IsVisible(first.GetComponent<Renderer>()))
             return first;
-        else if ((d2 <= d1) && IsVisible(second.GetComponent<Renderer>()))
+        else //if ((d2 <= d1) && IsVisible(second.GetComponent<Renderer>()))
             return second;
-        else
-            return first;
+        //else
+           // return first;
     }
 
 
