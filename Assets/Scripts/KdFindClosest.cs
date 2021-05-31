@@ -145,8 +145,13 @@ public class KdFindClosest : MonoBehaviour
                     //Debug.Log("route inside:" + pstar + "time inside " + time_inside + " < time outside " + time_throughplane);
                     Debug.Log("route inside:");
                 }
+
+
+                /**
                 else
                 {
+
+                    
                     //Debug.Log("route outside:" + pstar + "time inside " + time_inside + " > time outside" + time_throughplane);
                     Debug.Log("route outside:");
 
@@ -154,26 +159,44 @@ public class KdFindClosest : MonoBehaviour
                     //create a local stack
                     Stack<Vector3> ts = new Stack<Vector3>();
                     //fill the stck
-                    ts.Push(p1prime);
+                    //ts.Push(p1prime);
                     ts.Push(p2prime);
-                    //ts.Push(p2.transform.localPosition);
+                    ts.Push(p2.transform.localPosition);
 
                     //empty stack
                     //pstar=Adaptiveselection(p1) //recursive call;
+                    
                     Debug.Log("Before ts size :" + ts.Count);
                     while (ts.Count > 0)
                     {
                         Debug.Log("ts size :" + ts.Count);
-                        Nearobpos = ts.Pop();
-                        StartCoroutine(ProjectionCoroutine());
+                        
+                        Nearobpos = ts.Peek();
+                        //Nearobpos = ts.Pop();
+                        ts.Pop();
+                        //StartCoroutine(ProjectionCoroutine());
                         //Debug.Log("Taking plane proj Nearets pstar at:" + Nearobpos.ToString("F3"));
                         Debug.Log("Stack contains projections:" + Nearobpos.ToString("F3"));
                         //Debug.Log("ts size :"+ts.Count);
                         //Debug.Log("Taking plane proj Nearets pstar at:" + Nearobpos.ToString("F3")+"count "+ts.Count);                        
-                    }
+                    }                              
                                         
 
                 }
+                
+                **/
+
+                else {
+                    Nearobpos = p1prime;
+                    Debug.Log("Taking plane proj Nearets pstar 1:" + Nearobpos.ToString("F3"));
+                    StartCoroutine(ProjectionCoroutine());
+                    Nearobpos = p2prime;
+                    StartCoroutine(ProjectionCoroutine());
+                    Debug.Log("Taking plane proj Nearets pstar 2:" + Nearobpos.ToString("F3"));
+                    Nearobpos = p2.transform.localPosition;
+                    Debug.Log("Taking plane proj Nearets pstar 3:" + Nearobpos.ToString("F3"));
+                }
+                
 
                 
             }
