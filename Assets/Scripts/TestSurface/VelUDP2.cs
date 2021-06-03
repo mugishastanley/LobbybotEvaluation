@@ -20,7 +20,7 @@ public class VelUDP2 : MonoBehaviour
     [SerializeField]
     private GameObject RobotURDF;
     [SerializeField]
-    private GameObject Tosend;
+    private GameObject Visual;
     [SerializeField]
     private GameObject Workspaceplane;
     [SerializeField]
@@ -37,6 +37,8 @@ public class VelUDP2 : MonoBehaviour
     // "connection" things
     IPEndPoint remoteEndPoint;
     UdpClient client;
+
+    public Matrix4x4 sentdata{get;set; }
 
     // gui
     string strMessage = "";
@@ -90,14 +92,19 @@ public class VelUDP2 : MonoBehaviour
     {
         //Location of closest object
         //Tosend.transform.position = FindObjectOfType<KdFindClosest>().getclosestobjectposition();
-        Tosend.transform.position = FindObjectOfType<KdFindClosest>().Nearobpos;
-        Tosend.transform.rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
+
+
+        var position = FindObjectOfType<KdFindClosest>().Nearobpos;
+        var rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
+        Visual.transform.position = FindObjectOfType<KdFindClosest>().Colorpose;
+        Visual.transform.rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
+        
 
 
         Matrix4x4 RobotToCalTracker = FindObjectOfType<TestTransforms>().RB2CT();
         // var mat2 = FindObjectOfType<TestTransforms>().CaltoRobot();
 
-        Vector3 posbe4 = Tosend.transform.position;
+        Vector3 posbe4 = position;
         //string velocity = Velscaler3(posbe4, Torso).ToString("F4");
         //Debug.Log("posbe4 " + posbe4.ToString("F4"));
 
@@ -110,7 +117,8 @@ public class VelUDP2 : MonoBehaviour
         //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1,1,1)) * Transform4(63.44f);
 
         // Changes 23
-        Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1, 1, 1)) * FindObjectOfType<SelectFace>().ChangeSurface();
+        Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(position, rotation, new Vector3(1, 1, 1)) * FindObjectOfType<SelectFace>().ChangeSurface();
+        sentdata = Matrixsent;
         //Before changing base
         // print("base" + Matrixsent);
 
