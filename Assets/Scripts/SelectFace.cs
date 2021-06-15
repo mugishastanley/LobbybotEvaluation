@@ -54,12 +54,18 @@ public class SelectFace : MonoBehaviour
 
    static Matrix4x4 TransformationChangeface(float Theta)
     {/*ROTATION OF PROP ABOUT Y TO CHANGE FACE*/
-
+        Theta = Theta * Mathf.PI / 180;
         Matrix4x4 T3 = new Matrix4x4();
         T3[0, 0] = Mathf.Cos(Theta);    T3[0, 1] = 0;               T3[0, 2] = Mathf.Sin(Theta);           T3[0, 3] = 0f;
         T3[1, 0] = 0;                   T3[1, 1] = 1.0f;            T3[1, 2] = 0.0f;                       T3[1, 3] = 0;
         T3[2, 0] = -Mathf.Sin(Theta);   T3[2, 1] = 0f;              T3[2, 2] = Mathf.Cos(Theta);           T3[2, 3] = 0f;
         T3[3, 0] = 0f;                  T3[3, 1] = 0f;              T3[3, 2] = 0f;                         T3[3, 3] = 1.0f;
+
+        //T3[0, 0] = Mathf.Cos(Theta1);   T3[0, 1] = Mathf.Sin(Theta1) * Mathf.Sin(Theta2);   T3[0, 2] = Mathf.Cos(Theta2) * Mathf.Sin(Theta1);   T3[0, 3] = 0.0775f * Mathf.Sin(Theta1) * Mathf.Sin(Theta2);
+        //T3[1, 0] = 0;                   T3[1, 1] = Mathf.Cos(Theta2);                       T3[1, 2] = -Mathf.Sin(Theta2);                      T3[1, 3] = 0.0775f * Mathf.Cos(Theta2) + 0.0287;
+        //T3[2, 0] = -Mathf.Sin(Theta1);  T3[2, 1] = Mathf.Cos(Theta1) * Mathf.Sin(Theta2);   T3[2, 2] = Mathf.Cos(Theta1) * Mathf.Cos(Theta2);   T3[2, 3] = 0.0775f * Mathf.Sin(Theta2) * Mathf.Cos(Theta1);
+        //T3[3, 0] = 0f;                  T3[3, 1] = 0f;                                      T3[3, 2] = 0f;                                      T3[3, 3] = 1.0f;
+
         return T3;
     }
 

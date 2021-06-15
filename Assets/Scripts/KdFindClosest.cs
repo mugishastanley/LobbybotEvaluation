@@ -92,8 +92,8 @@ public class KdFindClosest : MonoBehaviour
         PointsInCar.UpdatePositions();
         //withHead();
        // withHead2();
-        WithoutHeadPlane();
-        //WithoutHeadOld();
+       // WithoutHeadPlane();
+        WithoutHeadOld();
         //AdaptiveselectionwithHead(Plane);
 
     }

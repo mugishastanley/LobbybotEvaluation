@@ -54,8 +54,6 @@ public class VelUDP2 : MonoBehaviour
     Matrix4x4 T3;
     Matrix4x4 T4;
     Matrix4x4 T5;
-    Matrix4x4 b1_T_b;
-    Matrix4x4 tp1_T_tp;
     Matrix4x4 Home;
 
     //Vector3 rotation = new Vector3(0, 90, 0);
@@ -67,7 +65,7 @@ public class VelUDP2 : MonoBehaviour
     //Vector3 Interpoint = new Vector3(0, 180, 0);
 
 
-
+    /**
     // call it from shell (as program)
     private static void Main()
     {
@@ -80,6 +78,9 @@ public class VelUDP2 : MonoBehaviour
         sendObj.sendEndless(" endless infos \n");
 
     }
+
+    **/
+
     // start from unity3d
     public void Start()
     {
@@ -90,23 +91,15 @@ public class VelUDP2 : MonoBehaviour
     // OnGUI
     void OnGUI()
     {
-        //Location of closest object
-        //Tosend.transform.position = FindObjectOfType<KdFindClosest>().getclosestobjectposition();
-
-
         var position = FindObjectOfType<KdFindClosest>().Nearobpos;
         var rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
         Visual.transform.position = FindObjectOfType<KdFindClosest>().Colorpose;
         Visual.transform.rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
-        
 
+        //Matrix4x4 RobotToCalTracker = FindObjectOfType<TestTransforms>().RB2CT();
 
-        Matrix4x4 RobotToCalTracker = FindObjectOfType<TestTransforms>().RB2CT();
-        // var mat2 = FindObjectOfType<TestTransforms>().CaltoRobot();
-
+        Matrix4x4 RobotToCalTracker = RB2CT();
         Vector3 posbe4 = position;
-        //string velocity = Velscaler3(posbe4, Torso).ToString("F4");
-        //Debug.Log("posbe4 " + posbe4.ToString("F4"));
 
         string velocity = VelscalerTest(posbe4).ToString("F4");
         Debug.Log("posbe4 " + posbe4.ToString("F3")+"Velocity "+velocity);
@@ -119,33 +112,11 @@ public class VelUDP2 : MonoBehaviour
         // Changes 23
         Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(position, rotation, new Vector3(1, 1, 1)) * FindObjectOfType<SelectFace>().ChangeSurface();
         sentdata = Matrixsent;
-        //Before changing base
-        // print("base" + Matrixsent);
 
-        // Matrix4x4 Matrixsent_b1 = base1_T_base(90) * Matrixsent;
-        //Matrix4x4 Matrixsent_b1_tcp1 = Matrixsent_b1 * TCP_T_TCP1(90);
-
-        //after changing base
-        //print("base1" + Matrixsent_b1);
-        //print("b1_TCP1" + Matrixsent_b1_tcp1);
-
-        //Matrix4x4 Matrixsent = RobotToCalTracker * base1_T_base(90) * Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1,1,1)) * TCP_T_TCP1(90);
-
-        ////Before
-        // print("Before" + Matrixsent);
-
-        //Matrixsent = Matrixsent_b1;
-
-        //After conversion.
         Matrix4x4 Matrixsent2 = Unity2urmat(Matrixsent);
-
-        //print("After" + Matrixsent2);
-
         string datasent = Matrixsent2.ToString("F4") + ' ' + velocity;
         Debug.Log($"To send pos{datasent}");
-        //Debug.Log("To send pos" + pos + "Orient" + rot);
 
-        //string datasent = EEWRTRobot.ToString("F8");
 
         Rect rectObj = new Rect(40, 380, 200, 400);
         GUIStyle style = new GUIStyle();
@@ -158,15 +129,9 @@ public class VelUDP2 : MonoBehaviour
         // ------------------------
         // send it
         // ------------------------
-
         strMessage = GUI.TextField(new Rect(40, 420, 140, 20), datasent);
 
-        // if (GUI.Button(new Rect(190, 420, 40, 20), "send"))
-        // {
         sendString(strMessage + "\n");
-
-        // print("Testing: nc -lu " + IP + " : " + pos);
-        // }
     }
 
     private static Matrix4x4 Unity2urmat(Matrix4x4 Matrixsent)
@@ -217,7 +182,6 @@ public class VelUDP2 : MonoBehaviour
         print("Sending to " + IP + " : " + port);
         //print("Testing: nc -lu " + IP + " : " + pos);
 
-
     }
 
     // inputFromConsole
@@ -267,17 +231,6 @@ public class VelUDP2 : MonoBehaviour
         {
             print(err.ToString());
         }
-    }
-
-    // endless test
-    private void sendEndless(string testStr)
-    {
-        do
-        {
-            sendString(testStr);
-        }
-        while (true);
-
     }
 
    Matrix4x4 HomePos()
@@ -479,204 +432,10 @@ public class VelUDP2 : MonoBehaviour
     }
         **/
 
-    //intermediate point algorithm.
-    public void workspaceintermediate(Vector3 p, out float wspace, out Vector3 Interpoint)
-    {
-        Interpoint = new Vector3(0, 0, 0);
-        float xplanedivider = Workspaceplane.transform.position.x;
-        if (p.x >= xplanedivider)
-        {
-            wspace = 0.6f;
-        }
-        else wspace = 0.8f;
-    }
-
-    //Matrix Transforms
-
-    //ROBOT REERENCE FRAME//
-    // Transform from TCP to prop top surface , In ROBOT Cordinate System.
-    // Translation in z by 0.116 m
-    //    T1 = [ 1  0   0   0
-    //           0  1   0   0
-    //           0  0   1   0.116
-    //           0  0   0   1     ]
-
-    // Transform from prop top surface To TCP, In ROBOT Cordinate System.
-    // Translation in z by -0.116 m
-    //    T1' = [ 1  0   0   0
-    //           0  1   0   0
-    //           0  0   1   -0.116
-    //           0  0   0   1     ]
-
-    // Transform from TCP to prop side surface , In ROBOT Cordinate System.
-    // Trans Z (0.0287) Rot x (-63.44) Trans Z(0.0775)
-    //    T2 = [ 1  0               0               0
-    //           0  cos(theta)     -sin(theta)     -0.0775*sin(theta)   
-    //           0  sin(theta)      cos(theta)      0.0775cos(theta) + 0.0287
-    //           0  0               0               1                            ]
-
-    // Transform from prop side surface to TCP , In ROBOT Cordinate System.
-    // Trans Z(-0.0775) Rot x (63.44) Trans Z (-0.0287)  
-    //    T2' = [   1   0               0               0
-    //              0   cos(theta)      sin(theta)     -0.0287*sin(theta)   
-    //              0  -sin(theta)      cos(theta)     -0.0775 - 0.0287*cos(theta)
-    //              0   0               0               1                            ]
-
-
-
-
-    //CAPSULE REFERENCE FRAME //
-    // Transform from tcp to prop top surface , In Capsule Reference. (X Y Z) is (Z Y X) in Robot System
-    // Translation in x by 0.116 m
-    //    T1 = [ 1  0   0   0.116
-    //           0  1   0   0
-    //           0  0   1   0
-    //           0  0   0   1     ]
-
-    // Transform from prop top surface To TCP, In Capsule Reference. (X Y Z) is (Z Y X) in Robot System.
-    // Translation in x by -0.116 m
-    //    T1' = [   1  0   0   -0.116
-    //              0  1   0    0
-    //              0  0   1    0
-    //              0  0   0    1     ]
-
-    // Transform from TCP to prop side surface ,In Capsule Reference. (X Y Z) is (Z Y X) in Robot System.
-    // Trans X (0.0287) Rot Z (-63.44) Trans X (0.0775)
-    //    T2 = [ cos(theta)   - sin(theta)      0     0.0775cos(theta) + 0.0287
-    //           sin(theta)     cos(theta)      0     0.0775*sin(theta)   
-    //           0              0               1     0
-    //           0              0               0     1                            ]
-
-    // Transform from prop side surface to TCP , In Capsule Reference. (X Y Z) is (Z Y X) in Robot System.
-    // Trans X(-0.0775) Rot Z (63.44) Trans X (-0.0287)  
-    //    T2' = [    cos(theta)     sin(theta)      0      -0.0775 - 0.0287*cos(theta)
-    //              -sin(theta)     cos(theta)      0       0.0287*sin(theta)   
-    //                  0           0               1       0
-    //                  0           0               0            1                ]
-
-    //UNITY REFERENCE FRAME//
-    // Transform from tcp to prop top surface , In Unity Reference. (X Y Z) is ( X Z Y) in Robot System.
-    // Translation in Y by 0.116 m
-    //    T1 = [ 1  0   0   0
-    //           0  1   0   0.116
-    //           0  0   1   0
-    //           0  0   0   1     ]
-
-    // Transform from prop top surface To TCP, In Unity Reference. (X Y Z) is ( X Z Y) in Robot System.
-    // Translation in Y by -0.116 m
-    //    T1' = [   1  0   0    0
-    //              0  1   0    -0.116
-    //              0  0   1    0
-    //              0  0   0    1     ]
-
-    // Transform from TCP to prop side surface ,In Unity Reference. (X Y Z) is ( X Z Y) in Robot System.
-    // Trans Y (0.0287) Rot X (63.44) Trans Y (0.0775)
-    //    T2 = [ 1  0            0             0 
-    //           0  cos(theta)  -sin(theta)    0.0775*cos(theta) + 0.0287
-    //           0  sin(theta)   cos(theta)    0.0775sin(theta)
-    //           0  0            0             1                                 ]
-
-
-    // Transform from prop side surface to TCP , In Unity Reference. (X Y Z) is ( X Z Y) in Robot System.
-    // Trans Y(-0.0775) Rot X (-63.44) Trans Y (-0.0287)  
-    //    T2' = [    1      0               0               0
-    //               0      cos(theta)      sin(theta)      -0.0287*cos(theta) - 0.0775   
-    //               0      -sin(theta)     cos(theta)      0.0287*sin(theta)
-    //               0      0               0               1                ]
-
-
-    // Transform from TCP to prop side surface ,In Unity Reference. (X Y Z) is ( X Z Y) in Robot System.
-    // Trans Y (0.0287)Rot Y(72.n) Rot X (63.44) Trans Y (0.0775)
-    //    T2 = [ cos(theta1)    sin(theta1)*sin(theta2)   cos(theta2)*sin(theta1)      0.0775*sin(theta1)*sin(theta2) 
-    //           0              cos(theta2)              -sin(theta2)                    0.0775*cos(theta2) + 0.0287
-    //          -sin(theta1)    cos(theta1)*sin(theta2)   cos(theta2)*cos(theta1)       0.0775sin(theta2)*cos(theta1)
-    //           0              0                         0                             1                                 ]
-
-
-    // Transform from prop side surface to TCP , In Unity Reference. (X Y Z) is ( X Z Y) in Robot System.
-    // Trans Y(-0.0775) Rot Y(-72.n) Rot X (-63.44) Trans Y (-0.0287)
-    // the input has to a positive angle.(sign has beeen taken into cosideration)
-    //    T2' = [   cos(theta1)                   0                   -sin(theta1)                   0
-    //              sin(theta1)*sin(theta2)       cos(theta2)          cos(theta1)*sin(theta2)       -0.0287*cos(theta2) - 0.0775 
-    //              cos(theta2)*sin(theta1)      -sin(theta2)          cos(theta2)*cos(theta1)       0.0287*sin(theta2)
-    //              0                             0                    0                             1                                 ]
-
-    Matrix4x4 Transform3(float theta)
-    {/*Inverse of T1*/
-        T3[0, 0] = 1.0f; T3[0, 1] = 0.0f;     T3[0, 2] = 0.0f;       T3[0, 3] = 0.0f;
-        T3[1, 0] = 0.0f; T3[1, 1] = 1.0f;     T3[1, 2] = 0.0f;       T3[1, 3] = -0.116f;
-        T3[2, 0] = 0.0f; T3[2, 1] = 0.0f;     T3[2, 2] = 1.0f;       T3[2, 3] = 0.0f;
-        T3[3, 0] = 0.0f; T3[3, 1] = 0.0f;     T3[3, 2] = 0.0f;       T3[3, 3] = 1.0f;
-        return T3;
-    }
-
-    Matrix4x4 base1_T_base(float theta)
-    {
-        b1_T_b[0, 0] = -1.0f;    b1_T_b[0, 1] = 0.0f;     b1_T_b[0, 2] = 0.0f;     b1_T_b[0, 3] = 0.0f;
-        b1_T_b[1, 0] = 0.0f;     b1_T_b[1, 1] = 1.0f;     b1_T_b[1, 2] = 0.0f;     b1_T_b[1, 3] = 0.0f;
-        b1_T_b[2, 0] = 0.0f;     b1_T_b[2, 1] = 0.0f;     b1_T_b[2, 2] = -1.0f;    b1_T_b[2, 3] = 0.0f;
-        b1_T_b[3, 0] = 0.0f;     b1_T_b[3, 1] = 0.0f;     b1_T_b[3, 2] = 0.0f;     b1_T_b[3, 3] = 1.0f;
-        return  b1_T_b;
-    }
-    Matrix4x4 TCP_T_TCP1(float theta)
-    {
-        tp1_T_tp[0, 0] = 1.0f;      tp1_T_tp[0, 1] = 0.0f;      tp1_T_tp[0, 2] = 0.0f;      tp1_T_tp[0, 3] = 0.0f;
-        tp1_T_tp[1, 0] = 0.0f;      tp1_T_tp[1, 1] = 0.0f;      tp1_T_tp[1, 2] = 1.0f;      tp1_T_tp[1, 3] = 0.0f;
-        tp1_T_tp[2, 0] = 0.0f;      tp1_T_tp[2, 1] = -1.0f;     tp1_T_tp[2, 2] = 0.0f;      tp1_T_tp[2, 3] = 0.0f;
-        tp1_T_tp[3, 0] = 0.0f;      tp1_T_tp[3, 1] = 0.0f;      tp1_T_tp[3, 2] = 0.0f;      tp1_T_tp[3, 3] = 1.0f;
-        return tp1_T_tp;
-    }
-  
-
-    Matrix4x4 Transform4(float Theta)
-    {/*Inverse of T2*/ //to reach the side surfaces of the prop
-        Theta = Theta * Mathf.PI / 180;
-        T4[0, 0] = 1.0f;    T4[0, 1] =  0.0f;                   T4[0, 2] = 0.0f;                      T4[0, 3] = 0.0f;
-        T4[1, 0] = 0.0f;    T4[1, 1] = Mathf.Cos(Theta);        T4[1, 2] = Mathf.Sin(Theta);          T4[1, 3] = -0.0285f * Mathf.Cos(Theta) - 0.0775f;
-        T4[2, 0] = 0.0f;    T4[2, 1] = -Mathf.Sin(Theta);       T4[2, 2] = Mathf.Cos(Theta);          T4[2, 3] = 0.0285f * Mathf.Sin(Theta);
-        T4[3, 0] = 0.0f;    T4[3, 1] = 0.0f;                    T4[3, 2] = 0.0f;                      T4[3, 3] = 1.0f;
-
-        return T4;
-
-    }
-
-    /*Matrix utils*/
-
-    public Quaternion GetRotation(Matrix4x4 matrix4X4)
-    {
-        float qw = Mathf.Sqrt(1f + matrix4X4.m00 + matrix4X4.m11 + matrix4X4.m22) / 2;
-        float w = 4 * qw;
-        float qx = (matrix4X4.m21 - matrix4X4.m12) / w;
-        float qy = (matrix4X4.m02 - matrix4X4.m20) / w;
-        float qz = (matrix4X4.m10 - matrix4X4.m01) / w;
-        return new Quaternion(qx, qy, qz, qw);
-    }
-
-    public Vector3 GetPostion(Matrix4x4 matrix4X4)
-    {
-        var x = matrix4X4.m03;
-        var y = matrix4X4.m13;
-        var z = matrix4X4.m23;
-        return new Vector3(x, y, z);
-    }
-    public Matrix4x4 FromTRS(Vector3 pos, Vector3 rot) {// returns a transform matrix from rotation translatio and scale.
-        Vector3 scale = new Vector3(1, 1, 1);
-        Quaternion rotation = Quaternion.Euler(rot.x, rot.y, rot.z);
-        Matrix4x4 m = Matrix4x4.TRS(pos, rotation, scale);
-        return m;
-    }
-
+   
     public Matrix4x4 RB2CT()
     {
         Matrix4x4 T4 = new Matrix4x4();
-
-        //RotY90 RotX45 RotZ90 x=-0.17 y=-0.01 z=0.02  cal_T_base
-        //T4[0, 0] = 0.7071068f;  T4[0, 1] = 0f;              T4[0, 2] = 0.7071068f;       T4[0, 3] = -0.17f;
-        //T4[1, 0] = 0.7071068f;  T4[1, 1] = 0f;              T4[1, 2] = -0.7071068ff;    T4[1, 3] = -0.01f;
-        //T4[2, 0] = 0f;          T4[2, 1] = 1f;              T4[2, 2] = 0;       T4[2, 3] = 0.02f;
-        //T4[3, 0] = 0f;          T4[3, 1] = 0f;              T4[3, 2] = 0f;      T4[3, 3] = 1.0f;
-
-
         ////base_T_cal
         T4[0, 0] = 0.7071068f; T4[0, 1] = 0.7071068f; T4[0, 2] = 0.0f; T4[0, 3] = 0.12728f;
         T4[1, 0] = 0.0f; T4[1, 1] = 0.0f; T4[1, 2] = 1.0f; T4[1, 3] = -0.02000f;
