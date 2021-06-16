@@ -27,6 +27,9 @@ public class VelUDP2 : MonoBehaviour
     private GameObject Workspaceplane;
     [SerializeField]
     private Transform Torso;
+    [SerializeField]
+    private int homecounter =0;
+
 
     private Transform Tooltip;
     private bool send;
@@ -64,13 +67,13 @@ public class VelUDP2 : MonoBehaviour
     Vector3 previous = new Vector3(0.0f, 0.0f, 0.0f);
     private Vector3 position;
     private Vector3 Homepose;
-    private bool Sendhome = false;
+    [SerializeField] 
+    private bool Sendhome;
     private Quaternion rotation;
     float velfactor=0.25f;
     float wspace = 0f;
     private readonly float tol = 0.01f;
-    private int homecounter =0;
-
+    
 
     //Vector3 Interpoint = new Vector3(0, 180, 0);
 
@@ -114,7 +117,7 @@ public class VelUDP2 : MonoBehaviour
         // Send
         // ----------------------------
         send = false;
-        
+        Sendhome = false;
         remoteEndPoint = new IPEndPoint(IPAddress.Parse(IP), port);
         client = new UdpClient();
         Homepose = new Vector3(-0.422f, -0.412f, 0.581f);
@@ -168,6 +171,7 @@ public class VelUDP2 : MonoBehaviour
         {
             GameObject.Find("Home").GetComponentInChildren<Text>().text = "Continue";
             Debug.Log("Back to Home");
+            position = Homepose;
             Sendhome = true;
         }
  
