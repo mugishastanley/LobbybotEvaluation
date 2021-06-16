@@ -227,9 +227,9 @@ public class KdFindClosest : MonoBehaviour
 
     public void withHead()
     {
-        foreach (var whiteball in Hands)
+        foreach (var hand in Hands)
         {
-            SpawnedPoint nearestObj = PointsInCar.FindClosest(whiteball.transform.position);
+            SpawnedPoint nearestObj = PointsInCar.FindClosest(hand.transform.position);
             nearestObj.tag = "nearestpoint";
             First.tag = "nearestpoint";
             pts = GameObject.FindGameObjectWithTag("nearestpoint");
@@ -238,13 +238,18 @@ public class KdFindClosest : MonoBehaviour
 
             //Debug.DrawLine(whiteball.transform.position, nearestObj.transform.position, Color.red);
             nearestObj = best(nearestObj, First, Testraycast());
-            Debug.DrawLine(whiteball.transform.position, nearestObj.transform.position, Color.red);
-            //nearobpostion = nearestObj.transform.localPosition;
+            nearestObj = best2(nearestObj, First, Testraycast());
+            
 
-            Nearobpos = nearestObj.transform.localPosition;
-            Colorpose = nearestObj.transform.position;
-            nearobrot = nearestObj.transform.localRotation;
-
+            if (Vector3.Distance(nearestObj.transform.position, hand.transform.position) < 0.3f)
+            {
+                Debug.DrawLine(hand.transform.position, nearestObj.transform.position, Color.red);
+                //nearobpostion = nearestObj.transform.localPosition;
+                Nearobpos = nearestObj.transform.localPosition;
+                Colorpose = nearestObj.transform.position;
+                nearobrot = nearestObj.transform.localRotation;
+            }
+            
             if (First != nearestObj)
                 First = nearestObj;
         }
@@ -291,22 +296,24 @@ public class KdFindClosest : MonoBehaviour
 
     public void WithoutHeadOld()
     {
-        foreach (var whiteball in Hands)
+        foreach (var hand in Hands)
         {
-            SpawnedPoint nearestObj = PointsInCar.FindClosest(whiteball.transform.position);
+            SpawnedPoint nearestObj = PointsInCar.FindClosest(hand.transform.position);
             nearestObj.tag = "nearestpoint";
             First.tag = "nearestpoint";
             pts = GameObject.FindGameObjectWithTag("nearestpoint");
             renderers = pts.GetComponents<Renderer>();
             _isnearestfound = true;
 
-            Debug.DrawLine(whiteball.transform.position, nearestObj.transform.position, Color.red);
-            //nearestObj = best(nearestObj, First, Testraycast());
-            Nearobpos = nearestObj.transform.localPosition;
-            //nearobpostion = nearestObj.transform.localPosition;
-            //nearoblocalpose = nearestObj.transform.position;
-            nearobrot = nearestObj.transform.localRotation;
-
+            if (Vector3.Distance(nearestObj.transform.position, hand.transform.position) < 0.3f)
+            {
+                Debug.DrawLine(hand.transform.position, nearestObj.transform.position, Color.red);
+                //nearestObj = best(nearestObj, First, Testraycast());
+                Nearobpos = nearestObj.transform.localPosition;
+                //nearobpostion = nearestObj.transform.localPosition;
+                //nearoblocalpose = nearestObj.transform.position;
+                nearobrot = nearestObj.transform.localRotation;
+            }
 /***
             if (First != nearestObj)
                 First = nearestObj;

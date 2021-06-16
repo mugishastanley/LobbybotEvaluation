@@ -7,6 +7,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Linq;
+using UnityEngine.UI;
+
 //using Renci.SshNet;
 
 /*
@@ -27,6 +29,8 @@ public class VelUDP2 : MonoBehaviour
     private Transform Torso;
 
     private Transform Tooltip;
+    private bool send;
+    private static int counter;
 
     private static int localPort;
     private readonly float PI = 3.1416f;
@@ -58,9 +62,15 @@ public class VelUDP2 : MonoBehaviour
 
     //Vector3 rotation = new Vector3(0, 90, 0);
     Vector3 previous = new Vector3(0.0f, 0.0f, 0.0f);
+    private Vector3 position;
+    private Vector3 Homepose;
+    private bool Sendhome = false;
+    private Quaternion rotation;
     float velfactor=0.25f;
     float wspace = 0f;
-    private readonly float tol = 0.01f; 
+    private readonly float tol = 0.01f;
+    private int homecounter =0;
+
 
     //Vector3 Interpoint = new Vector3(0, 180, 0);
 
@@ -86,53 +96,139 @@ public class VelUDP2 : MonoBehaviour
     {
 
         init();
+        
+
+    }
+
+    public void init()
+    {
+        //<Summary>
+        //Initialise all variables here
+        //<!Summary>
+
+        print("UDPSend.init()");
+        IP = "192.168.0.101";
+        port = 21000;
+
+        // ----------------------------
+        // Send
+        // ----------------------------
+        send = false;
+        
+        remoteEndPoint = new IPEndPoint(IPAddress.Parse(IP), port);
+        client = new UdpClient();
+        Homepose = new Vector3(-0.422f, -0.412f, 0.581f);
+        position = Homepose;
+        print("Sending to " + IP + " : " + port);
+        
+
     }
 
     // OnGUI
-    void OnGUI()
+    public void OnGUI()
     {
-        var position = FindObjectOfType<KdFindClosest>().Nearobpos;
-        var rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
-        Visual.transform.position = FindObjectOfType<KdFindClosest>().Colorpose;
-        Visual.transform.rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
+        if (send)
+        {
+            SendData();
+        }
+    }
 
-        //Matrix4x4 RobotToCalTracker = FindObjectOfType<TestTransforms>().RB2CT();
+    public void ClickedButton()
+    {
+        //Opens Data stream  from UNity to robot
+        //
+        counter++;
+        if (counter % 2 == 0)
+        {
+            //position = Homepose;
+            GameObject.Find("StartBtn").GetComponentInChildren<Text>().text = "Click to Start";
+            //Sendhome = false;
+            send = false;
+        }
+        else
+        {
+            GameObject.Find("StartBtn").GetComponentInChildren<Text>().text = "Click to Pause";
+            //Sendhome = true;
+            send = true;
+        }
+    }
 
-        Matrix4x4 RobotToCalTracker = RB2CT();
-        Vector3 posbe4 = position;
+    public void MoveHomePose()
+    {//Moves robot to home pose
+        homecounter++;
+        if (homecounter % 2 == 0)
+        {
+            
+            //position = Homepose;
+            GameObject.Find("Home").GetComponentInChildren<Text>().text = "Move Home";
+            Debug.Log("Back to Hand motion");
+            Sendhome = false;
+        }
+        else
+        {
+            GameObject.Find("Home").GetComponentInChildren<Text>().text = "Continue";
+            Debug.Log("Back to Home");
+            Sendhome = true;
+        }
+ 
+    }
 
-        string velocity = VelscalerTest(posbe4).ToString("F4");
-        Debug.Log("posbe4 " + posbe4.ToString("F3")+"Velocity "+velocity);
-        //string velocity = Velscaler(posbe4).ToString("F4");
+    public void SendData()
+        {
+            if (Sendhome)
+            {
+                position = Homepose;
+                rotation = Quaternion.identity;
+            }
+            else
+            {
+                position = FindObjectOfType<KdFindClosest>().Nearobpos; 
+                rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
+                
+            }
+            position = FindObjectOfType<KdFindClosest>().Nearobpos;
+            rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
+            Visual.transform.position = FindObjectOfType<KdFindClosest>().Colorpose;
+            Visual.transform.rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
 
-        //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1,1,1));
-        //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1,1,1)) * Transform3(90);
-        //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1,1,1)) * Transform4(63.44f);
+            //Matrix4x4 RobotToCalTracker = FindObjectOfType<TestTransforms>().RB2CT();
 
-        // Changes 23
-        Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(position, rotation, new Vector3(1, 1, 1)) * FindObjectOfType<SelectFace>().ChangeSurface();
-        sentdata = Matrixsent;
+            Matrix4x4 RobotToCalTracker = RB2CT();
+            Vector3 posbe4 = position;
 
-        Matrix4x4 Matrixsent2 = Unity2urmat(Matrixsent);
-        string datasent = Matrixsent2.ToString("F4") + ' ' + velocity;
-        Debug.Log($"To send pos{datasent}");
+            string velocity = VelscalerTest(posbe4).ToString("F4");
+            Debug.Log("posbe4 " + posbe4.ToString("F3") + "Velocity " + velocity);
+            //string velocity = Velscaler(posbe4).ToString("F4");
+
+            //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1,1,1));
+            //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1,1,1)) * Transform3(90);
+            //Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(Tosend.transform.position, Tosend.transform.rotation, new Vector3(1,1,1)) * Transform4(63.44f);
+
+            // Changes 23
+            Matrix4x4 Matrixsent = RobotToCalTracker * Matrix4x4.TRS(position, rotation, new Vector3(1, 1, 1)) *
+                                   FindObjectOfType<SelectFace>().ChangeSurface();
+            sentdata = Matrixsent;
+
+            Matrix4x4 Matrixsent2 = Unity2urmat(Matrixsent);
+            string datasent = Matrixsent2.ToString("F4") + ' ' + velocity;
+            Debug.Log($"To send pos{datasent}");
 
 
-        Rect rectObj = new Rect(40, 380, 200, 400);
-        GUIStyle style = new GUIStyle();
-        style.alignment = TextAnchor.UpperLeft;
-        GUI.Box(rectObj, "# UDPSend-Data\n127.0.0.1 " + port + " #\n"
-                    + "shell> nc -lu 127.0.0.1  " + port + " \n"
-                    + datasent
+            Rect rectObj = new Rect(40, 380, 200, 400);
+            GUIStyle style = new GUIStyle();
+            style.alignment = TextAnchor.UpperLeft;
+            GUI.Box(rectObj, "# UDPSend-Data\n127.0.0.1 " + port + " #\n"
+                             + "shell> nc -lu 127.0.0.1  " + port + " \n"
+                             + datasent
                 , style);
 
-        // ------------------------
-        // send it
-        // ------------------------
-        strMessage = GUI.TextField(new Rect(40, 420, 140, 20), datasent);
+            // ------------------------
+            // send it
+            // ------------------------
+            strMessage = GUI.TextField(new Rect(40, 420, 140, 20), datasent);
 
-        sendString(strMessage + "\n");
-    }
+            sendString(strMessage + "\n");
+        }
 
     private static Matrix4x4 Unity2urmat(Matrix4x4 Matrixsent)
     {
@@ -162,28 +258,7 @@ public class VelUDP2 : MonoBehaviour
     }
 
     // init
-    public void init()
-    {
-        // Endpunkt definieren, von dem die Nachrichten gesendet werden.
-        print("UDPSend.init()");
-
-        // define
-               
-        IP = "192.168.0.101";
-        port = 21000;
-
-        // ----------------------------
-        // Send
-        // ----------------------------
-        remoteEndPoint = new IPEndPoint(IPAddress.Parse(IP), port);
-        client = new UdpClient();
-        // mat_to_vec();
-        // status
-        print("Sending to " + IP + " : " + port);
-        //print("Testing: nc -lu " + IP + " : " + pos);
-
-    }
-
+    
     // inputFromConsole
     private void inputFromConsole()
     {
