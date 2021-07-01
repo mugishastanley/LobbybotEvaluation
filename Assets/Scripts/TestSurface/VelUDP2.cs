@@ -1,12 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
-using System.Linq;
 using UnityEngine.UI;
 
 //using Renci.SshNet;
@@ -217,7 +213,6 @@ public class VelUDP2 : MonoBehaviour
             string datasent = Matrixsent2.ToString("F4") + ' ' + velocity;
             Debug.Log($"To send pos{datasent}");
 
-
             Rect rectObj = new Rect(40, 380, 200, 400);
             GUIStyle style = new GUIStyle();
             style.alignment = TextAnchor.UpperLeft;
@@ -225,7 +220,6 @@ public class VelUDP2 : MonoBehaviour
                              + "shell> nc -lu 127.0.0.1  " + port + " \n"
                              + datasent
                 , style);
-
             // ------------------------
             // send it
             // ------------------------

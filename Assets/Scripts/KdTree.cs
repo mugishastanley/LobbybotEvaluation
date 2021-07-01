@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Profiling;
 
 public class KdTree<T> : IEnumerable<T>, IEnumerable where T : Component
 {

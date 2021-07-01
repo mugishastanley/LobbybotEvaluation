@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +17,7 @@ public class KdFindClosest : MonoBehaviour
     public GameObject Safepoint;
     private float velinside = 0.25f;
     private float veloutside =0.6f;
-    private float tol = 0.3f;
+    private float tol = 0.2f;
 
     [SerializeField]
     private GameObject[] points;
@@ -39,11 +40,12 @@ public class KdFindClosest : MonoBehaviour
 
     protected KdTree<SpawnedPoint> PointsInCar = new KdTree<SpawnedPoint>();
     protected KdTree<SpawnedPoint> Hands = new KdTree<SpawnedPoint>();
-    protected List<GameObject> Safepoints = new List<GameObject>();
+    protected List<SpawnedPoint> Safepoints = new List<SpawnedPoint>();
+    protected List<SpawnedPoint> PointsInCar2 = new List<SpawnedPoint>();
 
-    SpawnedPoint First;
-    SpawnedPoint second;
-    SpawnedPoint nearestObj;
+    private SpawnedPoint First;
+    private SpawnedPoint second;
+    private SpawnedPoint nearestObj;
 
     public Vector3 Nearobpos { get; set; }
     public Vector3 Colorpose { get; set; }
@@ -71,15 +73,31 @@ public class KdFindClosest : MonoBehaviour
         {
             GameObject point = (Instantiate(BlackPrefab, Safepoint.transform.GetChild(i).position, 
                 Safepoint.transform.GetChild(i).rotation, CalTracker.transform));
-            Safepoints.Add(point);
+            Safepoints.Add((point).GetComponent<SpawnedPoint>());
         }
+        
+        //initialise the 
+        for (int i = 0; i < points.Length; i++)
+        {
+            //initialise the points of interest  
+            GameObject point = (Instantiate(BlackPrefab, points[i].transform.position, 
+                points[i].transform.rotation, 
+                CalTracker.transform));
+            PointsInCar2.Add((point).GetComponent<SpawnedPoint>());
+        }
+
         
         //initialise the number of hands
        // for (int i = 0; i < CountWhite; i++)
         {
             Hands.Add(Instantiate(WhitePrefab).GetComponent<SpawnedPoint>());
         }
-        First = PointsInCar[0];
+        
+        
+        
+        //First point in the car should be the home position.
+        //First = PointsInCar[0];
+        First = Safepoints[0];
         second = PointsInCar[0];
         nearestObj = PointsInCar[0];
     }
@@ -89,14 +107,20 @@ public class KdFindClosest : MonoBehaviour
 
     void Update()
     {
-        PointsInCar.UpdatePositions();
-        withHead();
-       // withHead2();
-        //WithoutHeadPlane();
-        //WithoutHeadOld();
-        //AdaptiveselectionwithHead(Plane);
-
     }
+
+    private void FixedUpdate()
+    {
+        //NaiveNN();
+        //KdWithoutHead();
+        //withHead();
+        //TestHandvel();
+        HomeSafepoint();
+        //withHead2();
+        //WithoutHeadPlane();
+        //AdaptiveselectionwithHead(Plane);
+    }
+
     public void WithoutHeadPlane()
     {
         foreach (var whiteball in Hands)
@@ -231,12 +255,9 @@ public class KdFindClosest : MonoBehaviour
             First.tag = "nearestpoint";
             pts = GameObject.FindGameObjectWithTag("nearestpoint");
             renderers = pts.GetComponents<Renderer>();
-            //Debug.DrawLine(whiteball.transform.position, nearestObj.transform.position, Color.red);
             nearestObj = best(nearestObj, First, Testraycast()); //used first and nearest obj because could not get the second from tree, 
             //nearestObj = best2(nearestObj, First, Testraycast());
-            
-
-            if (Vector3.Distance(nearestObj.transform.position, hand.transform.position) < 0.3f)
+            if (Vector3.Distance(nearestObj.transform.position, hand.transform.position) < tol)
             {
                 Debug.DrawLine(hand.transform.position, nearestObj.transform.position, Color.red);
                 //nearobpostion = nearestObj.transform.localPosition;
@@ -244,12 +265,9 @@ public class KdFindClosest : MonoBehaviour
                 Colorpose = nearestObj.transform.position;
                 nearobrot = nearestObj.transform.localRotation;
             }
-            
             if (First != nearestObj)
                 First = nearestObj;
         }
-
-
     }
 
 
@@ -289,33 +307,18 @@ public class KdFindClosest : MonoBehaviour
     }
 
 
-    public void WithoutHeadOld()
+    public void KdWithoutHead()
     {
         foreach (var hand in Hands)
         {
             SpawnedPoint nearestObj = PointsInCar.FindClosest(hand.transform.position);
-            nearestObj.tag = "nearestpoint";
-            First.tag = "nearestpoint";
-            pts = GameObject.FindGameObjectWithTag("nearestpoint");
-            renderers = pts.GetComponents<Renderer>();
-            _isnearestfound = true;
-
-            if (Vector3.Distance(nearestObj.transform.position, hand.transform.position) < 0.3f)
+         if (Vector3.Distance(nearestObj.transform.position, hand.transform.position) < 0.3f)
             {
                 Debug.DrawLine(hand.transform.position, nearestObj.transform.position, Color.red);
-                //nearestObj = best(nearestObj, First, Testraycast());
                 Nearobpos = nearestObj.transform.localPosition;
-                //nearobpostion = nearestObj.transform.localPosition;
-                //nearoblocalpose = nearestObj.transform.position;
                 nearobrot = nearestObj.transform.localRotation;
             }
-/***
-            if (First != nearestObj)
-                First = nearestObj;
-***/
         }
-
-
     }
 
 
@@ -407,7 +410,7 @@ public class KdFindClosest : MonoBehaviour
         //      Best point
         {
             var nearestDist = float.MaxValue;
-            GameObject nearestObj = null;
+            //GameObject nearestObj = null;
 
             foreach (var safepoint in Safepoints)
             {
@@ -465,12 +468,12 @@ public class KdFindClosest : MonoBehaviour
                 20.0f,
                 Physics.DefaultRaycastLayers))
         {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hitInfo.distance, Color.black);
+            Debug.DrawRay(cam.transform.position, cam.transform.TransformDirection(Vector3.forward) * hitInfo.distance, Color.green);
             return hitInfo.point;
         }
         else
         {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
+            Debug.DrawRay(cam.transform.position, cam.transform.TransformDirection(Vector3.forward) * 1000, Color.red);
             return hitInfo.point;
             // Debug.Log("Did not Hit");
         }
@@ -557,7 +560,7 @@ public class KdFindClosest : MonoBehaviour
 
     }
     
-    //addditional info
+    void addditional_info()
     {
         //condition based on hand threshhold set boolean flag
         //boolean flag on : go to desired point
@@ -565,9 +568,16 @@ public class KdFindClosest : MonoBehaviour
         
         
     }
-    
+
+    void movesafepoint()
+    {
+        //find closest point to ray from head cast,
+        //input: raycast, safe points
+        //output: safe point
+    }
+
     //section Hand Vel
-    SpawnedPoint TestHandvel(List<SpawnedPoint> PointsInCar, List<Hand> Hands)
+    void TestHandvel()
     {
         var NewPos = Hands[0].transform.position; // each frame track the new position
         var ObjVelocity = (NewPos - PrevPos); // Time.fixedDeltaTime;  // velocity = dist/time
@@ -579,23 +589,15 @@ public class KdFindClosest : MonoBehaviour
 
         RaycastHit hitcollider = new RaycastHit();
 
-        //Ray ray = new Ray(rayOrigin, raydirection);
-        //Debug.DrawRay(rayOrigin,raydirection,Color.red,0,false);
-        //var Handvel = ObjVelocity.magnitude;
-
-        //ray hit collider
         if (Physics.Raycast(NewPos, raydirection, out hitcollider, 20f))
         {
-            //ray hit ball
+            nearestObj = Distfromray(hitcollider, NewPos, ObjVelocity);
             //nearestObj = Directray(hitcollider, NewPos, ObjVelocity);
-            nearestObj = Distfromray(hitcollider, NewPos, ObjVelocity, PointsInCar);
 
-            //shortest distance from ray.
-            //Approach2
-            //nearestObj=Distfromray(Hands);
         }
         Debug.DrawLine(NewPos,nearestObj.transform.position,Color.green);
-        return nearestObj;
+        Nearobpos = nearestObj.transform.localPosition;
+        //return nearestObj;
     }
 
     private SpawnedPoint Directray(RaycastHit hitcollider, Vector3 NewPos, Vector3 ObjVelocity)
@@ -607,13 +609,11 @@ public class KdFindClosest : MonoBehaviour
             Debug.Log("Ray hit Tennisball");
             nearestObj = b;
         }
-
         Debug.DrawRay(NewPos, ObjVelocity * 1000f, Color.red, 0.5f, false);
         return nearestObj;
-        //Debug.DrawLine(b.transform.position,);
     }
     
-    private SpawnedPoint Distfromray(RaycastHit hitcollider, Vector3 NewPos, Vector3 ObjVelocity, List<SpawnedPoint> PointsInCar)
+    private SpawnedPoint Distfromray(RaycastHit hitcollider, Vector3 NewPos, Vector3 ObjVelocity)
     {
         //find nearest point from ray hit point
         var smallestf = float.MaxValue;
@@ -631,35 +631,68 @@ public class KdFindClosest : MonoBehaviour
     }
     
     
-    void NaiveNN(List<SpawnedPoint> PointsInSpace, List<Hand> Hand)
+    private void NaiveNN()
     {
-
         var smallestf = float.MaxValue;
-        foreach (var hand in Hand)
+        foreach (var hand in Hands)
         {
-            foreach (var point in PointsInSpace)
+            foreach (var point in PointsInCar2)
             {
-                             
                 var dist=Vector3.Distance(hand.transform.position, point.transform.position);
-                //Debug.Log("Speed of Ball " + speed.ToString("F5") + " dist from hand = " + dist + " at " + Time.time.ToString("F6"));
-                //var f = ((1 - alpha) * dist) + (alpha * speed);
-                //Debug.Log("Tenisball  = " + Tenisball + i +" f ="+ f.ToString("F6"));
-                if (dist < smallestf)
+                if ((dist < smallestf)&& (dist< tol))
                 {
-                    //nearestvel = Vector3.Distance(hand.transform.position, Tenisball.transform.position);
                     smallestf = dist;
                     nearestObj = point;
                 }
             }
-
             Nearobpos = nearestObj.transform.localPosition;
             Debug.DrawLine(hand.transform.position, nearestObj.transform.position, Color.red);
-            // Debug.Log("nearest f + " + nearestObj.transform.position);
         }
-        //return nearestObj;
     }
+    
+    Vector3 ClosestPointOnLineSegment(Vector3 segmentStart, Vector3 segmentEnd, Vector3 point) {
+        // Shift the problem to the origin to simplify the math.    
+        var wander = point - segmentStart;
+        var span = segmentEnd - segmentStart;
 
+        // Compute how far along the line is the closest approach to our point.
+        float t = Vector3.Dot(wander, span) / span.sqrMagnitude;
 
+        // Restrict this point to within the line segment from start to end.
+        t = Mathf.Clamp01(t);
+
+        // Return this point.
+        return segmentStart + t * span;
+    }
+    
+    void HomeSafepoint()
+    {
+        //find closest point to ray from head cast,
+        //input: raycast, safe points
+        //output: safe point
+        int closestIndex = -1;
+        float closestSquaredRange = Single.MaxValue;
+
+        for (int i = 0; i < Safepoints.Count; i++)
+        {
+            var closestPoint = ClosestPointOnLineSegment(
+                cam.transform.position,
+                cam.transform.TransformDirection(Vector3.forward) * 1000f,
+                Safepoints[i].transform.position
+            );
+            
+            var squaredRange = (Safepoints[i].transform.position - closestPoint).sqrMagnitude;
+            if(squaredRange < closestSquaredRange) {
+                closestSquaredRange = squaredRange;
+                closestIndex = i;
+                Nearobpos = Safepoints[closestIndex].transform.position;
+                nearobrot = Quaternion.identity;
+            }
+        }
+        Debug.DrawLine(cam.transform.position,Nearobpos,
+        Color.yellow);
+    }
+    
 }
 
 
