@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 public class KdFindClosest : MonoBehaviour
 {
     public Button InitialiseButton;
@@ -46,6 +45,7 @@ public class KdFindClosest : MonoBehaviour
     private SpawnedPoint First;
     private SpawnedPoint second;
     private SpawnedPoint nearestObj;
+    private bool _trackhome = true;
 
     public Vector3 Nearobpos { get; set; }
     public Vector3 Colorpose { get; set; }
@@ -111,14 +111,30 @@ public class KdFindClosest : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //NaiveNN();
-        //KdWithoutHead();
-        //withHead();
-        //TestHandvel();
-        HomeSafepoint();
-        //withHead2();
-        //WithoutHeadPlane();
-        //AdaptiveselectionwithHead(Plane);
+        NaiveNN();
+    }
+    
+    void Routehome()
+    {
+        if (_trackhome)
+        {
+            MovetoSafePoint();
+        }
+        else
+        {
+            NaiveNN();
+            //KdWithoutHead();
+            //withHead();
+            //TestHandvel();
+            //
+            //withHead2();
+            //WithoutHeadPlane();
+            //AdaptiveselectionwithHead(Plane);
+        }
+        //condition based on hand threshhold set boolean flag.
+        //boolean flag on : go to desired point.
+        //boolean flag off : go to safe pose.
+
     }
 
     public void WithoutHeadPlane()
@@ -398,7 +414,6 @@ public class KdFindClosest : MonoBehaviour
         Debug.Log("Finished Coroutine at timestamp : " + Time.time);
     }
 
-
     private void SafepointsAlgo (Vector3 raycasthit)
     {
         //<summary>
@@ -454,9 +469,7 @@ public class KdFindClosest : MonoBehaviour
     {
         nearobpostion = pos;
     }
-
     
-
     public Vector3 Testraycast()
     {
 
@@ -494,10 +507,6 @@ public class KdFindClosest : MonoBehaviour
            // return first;
     }
     
-    
-    
-
-
     public SpawnedPoint best2(SpawnedPoint first, SpawnedPoint second, Vector3 raycasthit)
     {
         SpawnedPoint best = first;
@@ -560,22 +569,6 @@ public class KdFindClosest : MonoBehaviour
 
     }
     
-    void addditional_info()
-    {
-        //condition based on hand threshhold set boolean flag
-        //boolean flag on : go to desired point
-        //boolean flag off : go to safe pose 
-        
-        
-    }
-
-    void movesafepoint()
-    {
-        //find closest point to ray from head cast,
-        //input: raycast, safe points
-        //output: safe point
-    }
-
     //section Hand Vel
     void TestHandvel()
     {
@@ -586,14 +579,12 @@ public class KdFindClosest : MonoBehaviour
         var rayOrigin = NewPos;
         var raydirection = ObjVelocity;
         var rayLength = 5.0f;
-
         RaycastHit hitcollider = new RaycastHit();
 
         if (Physics.Raycast(NewPos, raydirection, out hitcollider, 20f))
         {
             nearestObj = Distfromray(hitcollider, NewPos, ObjVelocity);
             //nearestObj = Directray(hitcollider, NewPos, ObjVelocity);
-
         }
         Debug.DrawLine(NewPos,nearestObj.transform.position,Color.green);
         Nearobpos = nearestObj.transform.localPosition;
@@ -630,7 +621,6 @@ public class KdFindClosest : MonoBehaviour
         return nearestObj;
     }
     
-    
     private void NaiveNN()
     {
         var smallestf = float.MaxValue;
@@ -639,13 +629,24 @@ public class KdFindClosest : MonoBehaviour
             foreach (var point in PointsInCar2)
             {
                 var dist=Vector3.Distance(hand.transform.position, point.transform.position);
-                if ((dist < smallestf)&& (dist< tol))
+                if ((dist < smallestf))
                 {
-                    smallestf = dist;
-                    nearestObj = point;
+                    if (dist < tol)
+                    {
+                        smallestf = dist;
+                        nearestObj = point;
+                        _trackhome = false;
+                    }
+                    else
+                    {
+                        _trackhome = true;
+                        nearestObj = MovetoSafePoint();
+                    }
                 }
             }
             Nearobpos = nearestObj.transform.localPosition;
+            nearobrot = nearestObj.transform.rotation;
+            Colorpose = nearestObj.transform.position;
             Debug.DrawLine(hand.transform.position, nearestObj.transform.position, Color.red);
         }
     }
@@ -665,14 +666,14 @@ public class KdFindClosest : MonoBehaviour
         return segmentStart + t * span;
     }
     
-    void HomeSafepoint()
+    SpawnedPoint MovetoSafePoint()
     {
         //find closest point to ray from head cast,
         //input: raycast, safe points
         //output: safe point
+        SpawnedPoint best = Safepoints[0];
         int closestIndex = -1;
         float closestSquaredRange = Single.MaxValue;
-
         for (int i = 0; i < Safepoints.Count; i++)
         {
             var closestPoint = ClosestPointOnLineSegment(
@@ -685,12 +686,14 @@ public class KdFindClosest : MonoBehaviour
             if(squaredRange < closestSquaredRange) {
                 closestSquaredRange = squaredRange;
                 closestIndex = i;
-                Nearobpos = Safepoints[closestIndex].transform.position;
-                nearobrot = Quaternion.identity;
+                best.transform.position=Safepoints[closestIndex].transform.position;
+                best.transform.rotation=Safepoints[closestIndex].transform.rotation;
+                //Nearobpos = nearestObj.transform.localPosition;
+                
             }
         }
-        Debug.DrawLine(cam.transform.position,Nearobpos,
-        Color.yellow);
+       // Debug.DrawLine(cam.transform.position,Nearobpos,Color.yellow);
+       return best;
     }
     
 }
