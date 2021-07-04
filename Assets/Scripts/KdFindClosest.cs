@@ -111,7 +111,9 @@ public class KdFindClosest : MonoBehaviour
 
     private void FixedUpdate()
     {
-        NaiveNN();
+        //NaiveNN();
+        WithHead();
+        //TestHandvel();
     }
     
     void Routehome()
@@ -262,8 +264,9 @@ public class KdFindClosest : MonoBehaviour
 
     }
     
-    public void withHead()
+    public void WithHead()
     {
+        //Abit buggy ... ray cast from head performs 2 conflicting functions.!!
         foreach (var hand in Hands)
         {
             SpawnedPoint nearestObj = PointsInCar.FindClosest(hand.transform.position);
@@ -271,16 +274,26 @@ public class KdFindClosest : MonoBehaviour
             First.tag = "nearestpoint";
             pts = GameObject.FindGameObjectWithTag("nearestpoint");
             renderers = pts.GetComponents<Renderer>();
-            nearestObj = best(nearestObj, First, Testraycast()); //used first and nearest obj because could not get the second from tree, 
+            //nearestObj 
+             var   point = best(nearestObj, First, Testraycast()); //used first and nearest obj because could not get the second from tree, 
             //nearestObj = best2(nearestObj, First, Testraycast());
             if (Vector3.Distance(nearestObj.transform.position, hand.transform.position) < tol)
             {
-                Debug.DrawLine(hand.transform.position, nearestObj.transform.position, Color.red);
-                //nearobpostion = nearestObj.transform.localPosition;
-                Nearobpos = nearestObj.transform.localPosition;
-                Colorpose = nearestObj.transform.position;
-                nearobrot = nearestObj.transform.localRotation;
+                //smallestf = dist;
+                nearestObj = point;
+                _trackhome = false;
             }
+            else
+            {
+              _trackhome = true;
+              nearestObj = MovetoSafePoint();
+            }
+            Debug.DrawLine(hand.transform.position, nearestObj.transform.position, Color.red);
+            //nearobpostion = nearestObj.transform.localPosition;
+             Nearobpos = nearestObj.transform.localPosition;
+             Colorpose = nearestObj.transform.position;
+             nearobrot = nearestObj.transform.localRotation;
+            
             if (First != nearestObj)
                 First = nearestObj;
         }
@@ -585,9 +598,12 @@ public class KdFindClosest : MonoBehaviour
         {
             nearestObj = Distfromray(hitcollider, NewPos, ObjVelocity);
             //nearestObj = Directray(hitcollider, NewPos, ObjVelocity);
+            Debug.DrawLine(NewPos,nearestObj.transform.position,Color.green);
         }
         Debug.DrawLine(NewPos,nearestObj.transform.position,Color.green);
-        Nearobpos = nearestObj.transform.localPosition;
+        //Nearobpos = nearestObj.transform.localPosition;
+        //nearobrot = nearestObj.transform.rotation;
+       // Colorpose = nearestObj.transform.localPosition;
         //return nearestObj;
     }
 
@@ -617,7 +633,7 @@ public class KdFindClosest : MonoBehaviour
                 nearestObj = ball;
             }
         }
-        Debug.DrawRay(NewPos, ObjVelocity * 1000f, Color.red, 2, false);
+        //Debug.DrawRay(NewPos, ObjVelocity * 1000f, Color.red, 0.1f, false);
         return nearestObj;
     }
     
@@ -671,8 +687,10 @@ public class KdFindClosest : MonoBehaviour
         //find closest point to ray from head cast,
         //input: raycast, safe points
         //output: safe point
-        SpawnedPoint best = Safepoints[0];
-        int closestIndex = -1;
+        //SpawnedPoint best = Safepoints[0];
+        SpawnedPoint best = nearestObj;
+
+        
         float closestSquaredRange = Single.MaxValue;
         for (int i = 0; i < Safepoints.Count; i++)
         {
@@ -685,9 +703,8 @@ public class KdFindClosest : MonoBehaviour
             var squaredRange = (Safepoints[i].transform.position - closestPoint).sqrMagnitude;
             if(squaredRange < closestSquaredRange) {
                 closestSquaredRange = squaredRange;
-                closestIndex = i;
-                best.transform.position=Safepoints[closestIndex].transform.position;
-                best.transform.rotation=Safepoints[closestIndex].transform.rotation;
+                best.transform.position=Safepoints[i].transform.position;
+                best.transform.rotation=Safepoints[i].transform.rotation;
                 //Nearobpos = nearestObj.transform.localPosition;
                 
             }
