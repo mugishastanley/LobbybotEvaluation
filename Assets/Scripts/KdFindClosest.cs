@@ -13,14 +13,17 @@ public class KdFindClosest : MonoBehaviour
     public bool ProjectiononPlane;
     public Transform CalTracker;
 
-    public GameObject Safepoint;
+    //public GameObject Safepoint;
     private float velinside = 0.25f;
     private float veloutside =0.6f;
     private float tol = 0.2f;
 
     [SerializeField]
     private GameObject[] points;
-    private GameObject _ClosestObject;
+    [SerializeField]
+    private GameObject[] safepoints;
+    [SerializeField]
+    //private GameObject _safepointparent;
     private bool _isnearestfound = false;
 
 
@@ -59,23 +62,41 @@ public class KdFindClosest : MonoBehaviour
     {
         PointsInCar.UpdatePositions();
         cam = Camera.main;
+        
+        //initialise the safe points in a list
+        /***
+        for (int i=0; i< _safepointparent.transform.childCount;i++)
+        {
+            GameObject point = (Instantiate(BlackPrefab, _safepointparent.transform.GetChild(i).position, 
+                _safepointparent.transform.GetChild(i).rotation, CalTracker.transform));
+            Safepoints.Add((point).GetComponent<SpawnedPoint>());
+        }
+        ***/
+        
+        for (int i = 0; i < safepoints.Length; i++)
+        {
+            //initialise the points of interest  
+            GameObject point = (Instantiate(BlackPrefab, safepoints[i].transform.position, 
+                safepoints[i].transform.rotation, 
+                CalTracker.transform));
+            Safepoints.Add((point).GetComponent<SpawnedPoint>());
+        }
+        
+        
+        
+        //initialise the points of interest  
         for (int i = 0; i < points.Length; i++)
         {
-          //initialise the points of interest  
             GameObject point = (Instantiate(BlackPrefab, points[i].transform.position, 
                 points[i].transform.rotation, 
                 CalTracker.transform));
             PointsInCar.Add((point).GetComponent<SpawnedPoint>());
         }
         
-        //initialise the safe points in a list
-        for (int i=0; i< Safepoint.transform.childCount;i++)
-        {
-            GameObject point = (Instantiate(BlackPrefab, Safepoint.transform.GetChild(i).position, 
-                Safepoint.transform.GetChild(i).rotation, CalTracker.transform));
-            Safepoints.Add((point).GetComponent<SpawnedPoint>());
-        }
+ 
         
+        
+        /**
         //initialise the 
         for (int i = 0; i < points.Length; i++)
         {
@@ -85,7 +106,7 @@ public class KdFindClosest : MonoBehaviour
                 CalTracker.transform));
             PointsInCar2.Add((point).GetComponent<SpawnedPoint>());
         }
-
+    **/
         
         //initialise the number of hands
        // for (int i = 0; i < CountWhite; i++)
@@ -469,15 +490,6 @@ public class KdFindClosest : MonoBehaviour
         return nearoblocalpose;
     }
     //get the positio of the game object stored in a varaibale
-    public Vector3 getclosestobjectpose()
-    {
-        return _ClosestObject.transform.localPosition;
-    }
-    public Quaternion getclosestobjectrot()
-    {
-        return _ClosestObject.transform.rotation;
-    }
-
     public void setposition(Vector3 pos)
     {
         nearobpostion = pos;
@@ -689,9 +701,7 @@ public class KdFindClosest : MonoBehaviour
         //output: safe point
         //SpawnedPoint best = Safepoints[0];
         SpawnedPoint best = nearestObj;
-
-        
-        float closestSquaredRange = Single.MaxValue;
+        float closestSquaredRange = Mathf.Infinity;
         for (int i = 0; i < Safepoints.Count; i++)
         {
             var closestPoint = ClosestPointOnLineSegment(
@@ -703,10 +713,10 @@ public class KdFindClosest : MonoBehaviour
             var squaredRange = (Safepoints[i].transform.position - closestPoint).sqrMagnitude;
             if(squaredRange < closestSquaredRange) {
                 closestSquaredRange = squaredRange;
-                best.transform.position=Safepoints[i].transform.position;
-                best.transform.rotation=Safepoints[i].transform.rotation;
+                //best.transform.position=Safepoints[i].transform.position;
+                //best.transform.rotation=Safepoints[i].transform.rotation;
+                best = Safepoints[i];
                 //Nearobpos = nearestObj.transform.localPosition;
-                
             }
         }
        // Debug.DrawLine(cam.transform.position,Nearobpos,Color.yellow);
