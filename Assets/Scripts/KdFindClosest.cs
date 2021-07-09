@@ -133,8 +133,8 @@ public class KdFindClosest : MonoBehaviour
     private void FixedUpdate()
     {
         //NaiveNN();
-        WithHead();
-        //TestHandvel();
+        //WithHead();
+        TestHandvel();
     }
     
     void Routehome()
@@ -145,10 +145,10 @@ public class KdFindClosest : MonoBehaviour
         }
         else
         {
-            NaiveNN();
+            //NaiveNN();
             //KdWithoutHead();
             //withHead();
-            //TestHandvel();
+            TestHandvel();
             //
             //withHead2();
             //WithoutHeadPlane();
@@ -608,8 +608,8 @@ public class KdFindClosest : MonoBehaviour
 
         if (Physics.Raycast(NewPos, raydirection, out hitcollider, 20f))
         {
-            nearestObj = Distfromray(hitcollider, NewPos, ObjVelocity);
-            //nearestObj = Directray(hitcollider, NewPos, ObjVelocity);
+            //nearestObj = Distfromray(hitcollider, NewPos, ObjVelocity);
+            nearestObj = Directray(hitcollider, NewPos, ObjVelocity);
             Debug.DrawLine(NewPos,nearestObj.transform.position,Color.green);
         }
         Debug.DrawLine(NewPos,nearestObj.transform.position,Color.green);

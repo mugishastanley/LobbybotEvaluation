@@ -352,8 +352,7 @@ public class VelUDP2 : MonoBehaviour
                     velfactor = 0.25f;
                     Debug.Log("else previous.x >= plane.x" + velfactor.ToString("F3"));
                 }
-                    
-
+                
             }
             previous = point;
         }
