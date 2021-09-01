@@ -20,7 +20,7 @@ public class TrackingdataLog : MonoBehaviour
     private string Sentdata = @"c:\temp\SentDataTransform.txt";
 
     public GameObject RobotEndEffector;
-    public GameObject Hand;
+    public GameObject hand;
 
    
 
@@ -33,8 +33,8 @@ public class TrackingdataLog : MonoBehaviour
     // to drive the map display
     void Update()
     {
-        //trackerinfo();
-        matrixsent();
+        trackerinfo();
+        //matrixsent();
         //trackingdata();
     }
 
@@ -133,24 +133,17 @@ public class TrackingdataLog : MonoBehaviour
                         //sw.WriteLine("Extra line");                      
                     }
                 }
-
-                
-
             }
 
             //get transform matrix of End Effector
             //Tmat = RobotEndEffector.transform.localToWorldMatrix;
             {
-                using (StreamWriter sw3 = File.AppendText(EETransform))
-                {
-                    sw3.WriteLine(System.DateTime.Now + "," + Time.time + "," + RobotEndEffector.transform.position.ToString("F4"));
-                   // Debug.Log("Robot EE" + Tmat.ToString());
-                }
                 using (StreamWriter sw3 = File.AppendText(handPos))
                 {
-                    sw3.WriteLine(System.DateTime.Now + "," + Time.time + "," + Hand.transform.position.ToString("F4"));
+                    sw3.WriteLine(System.DateTime.Now + "," + Time.time + "," + hand.transform.position.ToString("F4"));
                     // Debug.Log("Robot EE" + Tmat.ToString());
                 }
+                
             }
         }
 

@@ -250,7 +250,6 @@ public class VelUDP2 : MonoBehaviour
         Matrixsent2[0, 2] = Matrixsent[0, 1];
         Matrixsent2[1, 2] = Matrixsent[2, 1];
         Matrixsent2[2, 2] = Matrixsent[1, 1];
-
         Matrixsent2[3, 3] = 1.0f;
         return Matrixsent2;
     }
@@ -344,7 +343,7 @@ public class VelUDP2 : MonoBehaviour
                 if ( Mathf.Approximately(previous.x, plane.x))//previous point inside or on plane
                 {
                     Debug.Log("We are outside");
-                    velfactor = 0.6f;
+                    velfactor = 1.0f;
                     Debug.Log("previous.x >= plane.x " + velfactor.ToString("F3"));
                 }
                 else

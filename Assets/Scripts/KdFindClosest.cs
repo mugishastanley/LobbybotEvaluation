@@ -6,8 +6,7 @@ using UnityEngine.UI;
 
 public class KdFindClosest : MonoBehaviour
 {
-    public Button InitialiseButton;
-    public GameObject WhitePrefab;
+   public GameObject WhitePrefab;
     public GameObject BlackPrefab;
     public GameObject Plane;
     public bool ProjectiononPlane;
@@ -96,7 +95,7 @@ public class KdFindClosest : MonoBehaviour
  
         
         
-        /**
+        /*
         //initialise the 
         for (int i = 0; i < points.Length; i++)
         {
@@ -134,7 +133,7 @@ public class KdFindClosest : MonoBehaviour
     {
         //NaiveNN();
         //WithHead();
-        TestHandvel();
+        //TestHandvel();
     }
     
     void Routehome()
@@ -148,7 +147,7 @@ public class KdFindClosest : MonoBehaviour
             //NaiveNN();
             //KdWithoutHead();
             //withHead();
-            TestHandvel();
+            //TestHandvel();
             //
             //withHead2();
             //WithoutHeadPlane();
