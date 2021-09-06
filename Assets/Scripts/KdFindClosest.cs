@@ -15,7 +15,7 @@ public class KdFindClosest : MonoBehaviour
     //public GameObject Safepoint;
     private float velinside = 0.25f;
     private float veloutside =0.6f;
-    private float tol = 0.2f;
+    private float tol = 0.3f;
 
     [SerializeField]
     private GameObject[] points;
@@ -134,6 +134,8 @@ public class KdFindClosest : MonoBehaviour
         //NaiveNN();
         //WithHead();
         //TestHandvel();
+        //withHead2();
+        WithHead_Handthreshold_Homepose();
     }
     
     void Routehome()
@@ -297,7 +299,7 @@ public class KdFindClosest : MonoBehaviour
             //nearestObj 
              var   point = best(nearestObj, First, Testraycast()); //used first and nearest obj because could not get the second from tree, 
             //nearestObj = best2(nearestObj, First, Testraycast());
-            if (Vector3.Distance(nearestObj.transform.position, hand.transform.position) < tol)
+            if (Vector3.Distance(nearestObj.transform.position, hand.transform.position) < 3.0f)
             {
                 //smallestf = dist;
                 nearestObj = point;
@@ -353,6 +355,49 @@ public class KdFindClosest : MonoBehaviour
         }
 
 
+    }
+    
+    
+    public void WithHead_Handthreshold_Homepose()
+    {
+        //Abit buggy ... ray cast from head performs 2 conflicting functions.!!
+        foreach (var hand in Hands)
+        {
+            //Debug.Log("Hand pos:"+hand.transform.position);
+            SpawnedPoint nearestObj = PointsInCar.FindClosest(hand.transform.position); 
+            nearestObj.tag = "nearestpoint";
+            First.tag = "nearestpoint";
+            pts = GameObject.FindGameObjectWithTag("nearestpoint");
+            renderers = pts.GetComponents<Renderer>();
+            //nearestObj 
+            var   point = best(nearestObj, First, Testraycast()); //used first and nearest obj because could not get the second from tree, 
+            //nearestObj = best2(nearestObj, First, Testraycast());
+
+            
+            if (Vector3.Distance(nearestObj.transform.position, hand.transform.position) < tol)
+            {
+                //smallestf = dist;
+                nearestObj = point;
+                _trackhome = false;
+            }
+            else
+            {
+                _trackhome = true;
+                nearestObj = MovetoSafePoint();
+            }
+
+            var position = nearestObj.transform.position;
+            Debug.DrawLine(hand.transform.position, position, Color.red);
+            //write_result(Time.fixedTime, position);
+            //Debug.Log("Found point at :"+ position.ToString("F5")+"Time"+Time.fixedTime);
+            //nearobpostion = nearestObj.transform.localPosition;
+            //Nearobpos = nearestObj.transform.localPosition;
+            Nearobpos = nearestObj.transform.localPosition;
+            Colorpose = nearestObj.transform.position;
+            nearobrot = nearestObj.transform.localRotation;
+            if (First != nearestObj)
+                First = nearestObj;
+        }
     }
 
 
@@ -721,6 +766,9 @@ public class KdFindClosest : MonoBehaviour
        // Debug.DrawLine(cam.transform.position,Nearobpos,Color.yellow);
        return best;
     }
+    
+    //To DO
+    //Send data by frame IDs and not vel UDP.
     
 }
 
