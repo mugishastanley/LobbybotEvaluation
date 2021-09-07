@@ -15,7 +15,8 @@ public class KdFindClosest : MonoBehaviour
     //public GameObject Safepoint;
     private float velinside = 0.25f;
     private float veloutside =0.6f;
-    private float tol = 0.3f;
+    private float tol = 0.2f;
+    private float _lambda = 0.3f;
 
     [SerializeField]
     private GameObject[] points;
@@ -51,6 +52,7 @@ public class KdFindClosest : MonoBehaviour
 
     public Vector3 Nearobpos { get; set; }
     public Vector3 Colorpose { get; set; }
+    public string Idtoros { get; set; }
 
     void Start()
     {
@@ -74,10 +76,13 @@ public class KdFindClosest : MonoBehaviour
         
         for (int i = 0; i < safepoints.Length; i++)
         {
+            
+            var num=1+i;
             //initialise the points of interest  
             GameObject point = (Instantiate(BlackPrefab, safepoints[i].transform.position, 
                 safepoints[i].transform.rotation, 
                 CalTracker.transform));
+            point.GetComponent<SpawnedPoint>().Id = "SP"+num;
             Safepoints.Add((point).GetComponent<SpawnedPoint>());
         }
         
@@ -86,9 +91,11 @@ public class KdFindClosest : MonoBehaviour
         //initialise the points of interest  
         for (int i = 0; i < points.Length; i++)
         {
+            var num=i+1;
             GameObject point = (Instantiate(BlackPrefab, points[i].transform.position, 
                 points[i].transform.rotation, 
                 CalTracker.transform));
+            point.GetComponent<SpawnedPoint>().Id = num.ToString();
             PointsInCar.Add((point).GetComponent<SpawnedPoint>());
         }
         
@@ -135,7 +142,9 @@ public class KdFindClosest : MonoBehaviour
         //WithHead();
         //TestHandvel();
         //withHead2();
-        WithHead_Handthreshold_Homepose();
+       // WithHead_Handthreshold_Homepose();
+        WithHead_Handthreshold_Homepose2();
+        Debug.Log("Id to ros is: "+Idtoros);
     }
     
     void Routehome()
@@ -372,7 +381,6 @@ public class KdFindClosest : MonoBehaviour
             //nearestObj 
             var   point = best(nearestObj, First, Testraycast()); //used first and nearest obj because could not get the second from tree, 
             //nearestObj = best2(nearestObj, First, Testraycast());
-
             
             if (Vector3.Distance(nearestObj.transform.position, hand.transform.position) < tol)
             {
@@ -399,6 +407,64 @@ public class KdFindClosest : MonoBehaviour
                 First = nearestObj;
         }
     }
+    
+     private void WithHead_Handthreshold_Homepose2()
+    {
+        /* This function selects safe point based on safe point based on association with a given point
+         * and not the head gaze.
+         * 
+         */
+        
+        foreach (var hand in Hands)
+        {
+            //Debug.Log("Hand pos:"+hand.transform.position);
+            SpawnedPoint nearestObj = PointsInCar.FindClosest(hand.transform.position); 
+            nearestObj.tag = "nearestpoint";
+            First.tag = "nearestpoint";
+            pts = GameObject.FindGameObjectWithTag("nearestpoint");
+            renderers = pts.GetComponents<Renderer>();
+            //nearestObj 
+            
+            //List<SpawnedPoint> pts2 = new List<SpawnedPoint>();
+            //if(IsVisible(nearestObj.GetComponent<Renderer>()))
+            //    pts2.Add(nearestObj);
+           // if(IsVisible(second.GetComponent<Renderer>()))
+             //   pts2.Add(second);
+            //var point = Use_Angles(pts2, _lambda);
+
+            if ((Vector3.Distance(nearestObj.transform.position, hand.transform.position) < tol) && IsVisible(nearestObj.GetComponent<Renderer>()))
+            {
+                //smallestf = dist;
+                nearestObj = nearestObj;
+                _trackhome = false;
+            }
+            else
+            {
+                _trackhome = true;
+                nearestObj = MovetoSafePoint();
+            }
+
+            var position = nearestObj.transform.position;
+            Debug.DrawLine(hand.transform.position, position, Color.red);
+            Idtoros = nearestObj.Id;
+            //write_result(Time.fixedTime, position);
+            
+            //Debug.Log("Found point at :"+ position.ToString("F5")+"Time"+Time.fixedTime);
+            //nearobpostion = nearestObj.transform.localPosition;
+            //Nearobpos = nearestObj.transform.localPosition;
+            Nearobpos = nearestObj.transform.localPosition;
+            Colorpose = nearestObj.transform.position;
+            nearobrot = nearestObj.transform.localRotation;
+            if (First != nearestObj)
+                First = nearestObj;
+        }
+    }
+    
+    
+    
+    
+    
+    
 
 
     public void KdWithoutHead()
@@ -769,6 +835,41 @@ public class KdFindClosest : MonoBehaviour
     
     //To DO
     //Send data by frame IDs and not vel UDP.
+    
+    
+    SpawnedPoint Use_Angles(List<SpawnedPoint> pt, float lambda= Mathf.Infinity)
+    {
+        /*This function returns closest object based on the angle from camera
+         * Input : point 1, point2, head ray
+         * Output: point star
+         *steps.
+         * Draw ray from cam.
+         * calclualte distance l1 from point from cam,
+         * calcluate distance l2 from ray
+         * 
+         */
+        var position = cam.transform.position;
+        SpawnedPoint nearest = pt[0];
+        var minAng = 0.0f;
+        var maxL = Mathf.Infinity;
+        for (int i = 0; i < pt.Count; i++)
+        {
+            var tt= ClosestPointOnLineSegment(
+                position, cam.transform.forward * 10f, pt[i].transform.position);
+            Debug.DrawLine(position,cam.transform.forward * 10, Color.green);
+            var l1 = Vector3.Distance(position, tt);
+            var l2 = Vector3.Distance(pt[i].transform.position, tt);
+            var ang = l2 / l1;
+
+            if ((ang > minAng) && (ang < _lambda))
+            {
+                minAng = ang;
+                nearest = pt[i];
+            }
+        }
+        Debug.DrawLine(position,nearest.transform.position, Color.red);
+        return nearest;
+    }
     
 }
 

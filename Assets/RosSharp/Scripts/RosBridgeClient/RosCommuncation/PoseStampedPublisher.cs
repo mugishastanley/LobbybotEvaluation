@@ -19,8 +19,8 @@ namespace RosSharp.RosBridgeClient
 {
     public class PoseStampedPublisher : Publisher<Messages.Geometry.PoseStamped>
     {
-        public Transform PublishedTransform;
-        public string FrameId = "Unity";
+        public Transform PublishedTransform ;
+        public string FrameId = "default";
 
         private Messages.Geometry.PoseStamped message;
 
@@ -32,7 +32,10 @@ namespace RosSharp.RosBridgeClient
 
         private void FixedUpdate()
         {
+            
+            FrameId = FindObjectOfType<KdFindClosest>().Idtoros;
             UpdateMessage();
+            Debug.Log("Frame id is "+FrameId);
         }
 
         private void InitializeMessage()
@@ -49,9 +52,9 @@ namespace RosSharp.RosBridgeClient
         private void UpdateMessage()
         {
             message.header.Update();
+            message.header.frame_id = FrameId;
             message.pose.position = GetGeometryPoint(PublishedTransform.position.Unity2Ros());
             message.pose.orientation = GetGeometryQuaternion(PublishedTransform.rotation.Unity2Ros());
-
             Publish(message);
         }
 
