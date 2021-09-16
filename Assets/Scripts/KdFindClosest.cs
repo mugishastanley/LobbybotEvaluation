@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +17,7 @@ public class KdFindClosest : MonoBehaviour
     //public GameObject Safepoint;
     private float velinside = 0.25f;
     private float veloutside =0.6f;
-    private float tol = 0.2f;
+    private float _threshold = 0.2f;
     private float _lambda = 0.3f;
 
     [SerializeField]
@@ -142,34 +144,29 @@ public class KdFindClosest : MonoBehaviour
         //WithHead();
         //TestHandvel();
         //withHead2();
-       // WithHead_Handthreshold_Homepose();
+        
+        KdWithoutHead1();
+        //WithHead_Handthreshold_Homepose();
         //WithHead_Handthreshold_Homepose2();
         Debug.Log("Id to ros is: "+Idtoros);
     }
-    
-    void Routehome()
+    private void write_result2(float time, string i, int stid)
     {
-        if (_trackhome)
+        //var pos=PosTopoint(point);
+        using (StreamWriter sw = File.AppendText(@"c:\temp\Results"+stid+".csv"))
         {
-            MovetoSafePoint();
+            var numAlpha = new Regex("(?<Alpha>[a-zA-Z]*)(?<Numeric>[0-9]*)");
+            var match = numAlpha.Match(i);
+            if (i.Contains("SP"))
+            {
+                var num = match.Groups["Numeric"].Value;
+                i = 2 + num;
+            }
+            sw.WriteLine(time +","+i );
         }
-        else
-        {
-            //NaiveNN();
-            //KdWithoutHead();
-            //withHead();
-            //TestHandvel();
-            //
-            //withHead2();
-            //WithoutHeadPlane();
-            //AdaptiveselectionwithHead(Plane);
-        }
-        //condition based on hand threshhold set boolean flag.
-        //boolean flag on : go to desired point.
-        //boolean flag off : go to safe pose.
-
     }
-
+    
+   
     public void WithoutHeadPlane()
     {
         foreach (var whiteball in Hands)
@@ -308,7 +305,7 @@ public class KdFindClosest : MonoBehaviour
             //nearestObj 
              var   point = best(nearestObj, First, Testraycast()); //used first and nearest obj because could not get the second from tree, 
             //nearestObj = best2(nearestObj, First, Testraycast());
-            if (Vector3.Distance(nearestObj.transform.position, hand.transform.position) < 3.0f)
+            if (Vector3.Distance(nearestObj.transform.position, hand.transform.position) < _threshold)
             {
                 //smallestf = dist;
                 nearestObj = point;
@@ -382,7 +379,7 @@ public class KdFindClosest : MonoBehaviour
             var   point = best(nearestObj, First, Testraycast()); //used first and nearest obj because could not get the second from tree, 
             //nearestObj = best2(nearestObj, First, Testraycast());
             
-            if (Vector3.Distance(nearestObj.transform.position, hand.transform.position) < tol)
+            if (Vector3.Distance(nearestObj.transform.position, hand.transform.position) < _threshold)
             {
                 //smallestf = dist;
                 nearestObj = point;
@@ -396,10 +393,9 @@ public class KdFindClosest : MonoBehaviour
 
             var position = nearestObj.transform.position;
             Debug.DrawLine(hand.transform.position, position, Color.red);
-            //write_result(Time.fixedTime, position);
-            //Debug.Log("Found point at :"+ position.ToString("F5")+"Time"+Time.fixedTime);
-            //nearobpostion = nearestObj.transform.localPosition;
-            //Nearobpos = nearestObj.transform.localPosition;
+            
+            write_result2(Time.fixedTime,  nearestObj.Id,6);
+            
             Nearobpos = nearestObj.transform.localPosition;
             Colorpose = nearestObj.transform.position;
             nearobrot = nearestObj.transform.localRotation;
@@ -432,7 +428,7 @@ public class KdFindClosest : MonoBehaviour
              //   pts2.Add(second);
             //var point = Use_Angles(pts2, _lambda);
 
-            if ((Vector3.Distance(nearestObj.transform.position, hand.transform.position) < tol) && IsVisible(nearestObj.GetComponent<Renderer>()))
+            if ((Vector3.Distance(nearestObj.transform.position, hand.transform.position) < _threshold) && IsVisible(nearestObj.GetComponent<Renderer>()))
             {
                 //smallestf = dist;
                 nearestObj = nearestObj;
@@ -465,9 +461,21 @@ public class KdFindClosest : MonoBehaviour
     
     
     
+     private void KdWithoutHead1()
+     {
+         foreach (var hand in Hands)
+         {
+             SpawnedPoint nearestObj = PointsInCar.FindClosest(hand.transform.position);
+             Debug.DrawLine(hand.transform.position, nearestObj.transform.position, Color.red);
+             write_result2(Time.fixedTime,  nearestObj.Id,1);
+             Nearobpos = nearestObj.transform.localPosition;
+             Colorpose = nearestObj.transform.position;
+             nearobrot = nearestObj.transform.localRotation;
+         }
+     }
 
 
-    public void KdWithoutHead()
+    public void KdWithoutHead2()
     {
         foreach (var hand in Hands)
         {
@@ -647,9 +655,9 @@ public class KdFindClosest : MonoBehaviour
         SpawnedPoint best = first;
         float d1 = _distance(first.transform.position, raycasthit);
         float d2 = _distance(second.transform.position, raycasthit);
-        if (((d1 <= d2) && (d1 <= tol)) && IsVisible(first.GetComponent<Renderer>()))
+        if (((d1 <= d2) && (d1 <= _threshold)) && IsVisible(first.GetComponent<Renderer>()))
             best=first;
-        else if(((d2 <= d1) && (d2 <= tol)) && IsVisible(second.GetComponent<Renderer>()))
+        else if(((d2 <= d1) && (d2 <= _threshold)) && IsVisible(second.GetComponent<Renderer>()))
             best= second;
         return best;
     }
@@ -769,7 +777,7 @@ public class KdFindClosest : MonoBehaviour
                 var dist=Vector3.Distance(hand.transform.position, point.transform.position);
                 if ((dist < smallestf))
                 {
-                    if (dist < tol)
+                    if (dist < _threshold)
                     {
                         smallestf = dist;
                         nearestObj = point;
