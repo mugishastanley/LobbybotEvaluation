@@ -145,11 +145,20 @@ public class KdFindClosest : MonoBehaviour
         //TestHandvel();
         //withHead2();
         
-        KdWithoutHead1();
+        //KdWithoutHead1();
+        WithHead_Handthreshold_Homepose();
+        //WithHead_Handthreshold_Homepose2();
+        //Debug.Log("Id to ros is: "+Idtoros);
+    }
+
+    public void runstrat()
+    {
+        //KdWithoutHead2();
+        //KdWithoutHead1();
         //WithHead_Handthreshold_Homepose();
         //WithHead_Handthreshold_Homepose2();
-        Debug.Log("Id to ros is: "+Idtoros);
     }
+
     private void write_result2(float time, string i, int stid)
     {
         //var pos=PosTopoint(point);

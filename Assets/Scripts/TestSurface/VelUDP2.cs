@@ -147,6 +147,7 @@ public class VelUDP2 : MonoBehaviour
         else
         {
             GameObject.Find("StartBtn").GetComponentInChildren<Text>().text = "Click to Pause";
+            //GameObject.FindObjectOfType<KdFindClosest>().runstrat();
             //Sendhome = true;
             send = true;
         }
@@ -403,19 +404,19 @@ public class VelUDP2 : MonoBehaviour
             { //we are inside the car
                 if ((previous.x > plane.x) || (Mathf.Abs(previous.x - plane.x) < tol))//previous point outside or on plane
                 {
-                    velfactor = 0.6f;
+                    velfactor = 5f;
                     Debug.Log("previous was outside or on plane vel next is outside or on plane" + velfactor.ToString("F3") + "prev pos" + previous.x);
                 }
                 else
                 {
-                        velfactor = 0.25f;
+                        velfactor = 0.8f;
                     //    Debug.Log("else previous.x >= plane.x" + velfactor.ToString("F3"));
                     Debug.Log("previous was inside plane  next is on plane vel " + velfactor.ToString("F3") +"prev pos"+previous.x);
                 }
             }
             else
             {
-                velfactor = 0.25f;
+                velfactor = 0.8f;
                 //Debug.Log("point.x < plane.x " + velfactor.ToString("F3"));
                 //Debug.Log("point.x < plane.x == plane.x " + plane.x.ToString("F3"));
                 //Debug.Log("point.x < plane.x == point.x " + point.x.ToString("F3"));
