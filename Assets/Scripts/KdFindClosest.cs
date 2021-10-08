@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.Advertisements.Editor;
 using UnityEngine.UI;
 
 public class KdFindClosest : MonoBehaviour
@@ -13,6 +14,7 @@ public class KdFindClosest : MonoBehaviour
     public GameObject Plane;
     public bool ProjectiononPlane;
     public Transform CalTracker;
+    public GameObject RobotProp;
 
     //public GameObject Safepoint;
     private float velinside = 0.25f;
@@ -46,6 +48,7 @@ public class KdFindClosest : MonoBehaviour
     protected KdTree<SpawnedPoint> Hands = new KdTree<SpawnedPoint>();
     protected List<SpawnedPoint> Safepoints = new List<SpawnedPoint>();
     protected List<SpawnedPoint> PointsInCar2 = new List<SpawnedPoint>();
+    protected List<SpawnedPoint> Allpoints = new List<SpawnedPoint>();
 
     private SpawnedPoint First;
     private SpawnedPoint second;
@@ -75,6 +78,19 @@ public class KdFindClosest : MonoBehaviour
             Safepoints.Add((point).GetComponent<SpawnedPoint>());
         }
         ***/
+        for (int i = 0; i < points.Length; i++)
+        {
+            var num=i+1;
+            GameObject point = (Instantiate(BlackPrefab, points[i].transform.position, 
+                points[i].transform.rotation, 
+                CalTracker.transform));
+            point.GetComponent<SpawnedPoint>().Id = num.ToString();
+            PointsInCar.Add((point).GetComponent<SpawnedPoint>());
+
+            Debug.Log("Point" + num + point.transform.localPosition.ToString("F4"));
+            Debug.Log("point" + num + point.transform.position.ToString("F4"));
+            //Allpoints.Add(point.GetComponent<SpawnedPoint>());
+        }
         
         for (int i = 0; i < safepoints.Length; i++)
         {
@@ -86,24 +102,13 @@ public class KdFindClosest : MonoBehaviour
                 CalTracker.transform));
             point.GetComponent<SpawnedPoint>().Id = "SP"+num;
             Safepoints.Add((point).GetComponent<SpawnedPoint>());
+            Allpoints.Add(point.GetComponent<SpawnedPoint>());
+            Debug.Log("Safepoint" + num + point.transform.localPosition.ToString("F4"));
+            Debug.Log("Safepoint" + num + point.transform.position.ToString("F4"));
+
         }
-        
-        
-        
         //initialise the points of interest  
-        for (int i = 0; i < points.Length; i++)
-        {
-            var num=i+1;
-            GameObject point = (Instantiate(BlackPrefab, points[i].transform.position, 
-                points[i].transform.rotation, 
-                CalTracker.transform));
-            point.GetComponent<SpawnedPoint>().Id = num.ToString();
-            PointsInCar.Add((point).GetComponent<SpawnedPoint>());
-        }
-        
- 
-        
-        
+
         /*
         //initialise the 
         for (int i = 0; i < points.Length; i++)
@@ -118,6 +123,7 @@ public class KdFindClosest : MonoBehaviour
         
         //initialise the number of hands
        // for (int i = 0; i < CountWhite; i++)
+       
         {
             Hands.Add(Instantiate(WhitePrefab).GetComponent<SpawnedPoint>());
         }
@@ -129,6 +135,9 @@ public class KdFindClosest : MonoBehaviour
         First = Safepoints[0];
         second = PointsInCar[0];
         nearestObj = PointsInCar[0];
+        
+        
+        
     }
 
 
@@ -136,6 +145,7 @@ public class KdFindClosest : MonoBehaviour
 
     void Update()
     {
+        Hands[0].transform.position= RobotProp.transform.position;
     }
 
     private void FixedUpdate()
@@ -145,10 +155,12 @@ public class KdFindClosest : MonoBehaviour
         //TestHandvel();
         //withHead2();
         
-        //KdWithoutHead1();
-        WithHead_Handthreshold_Homepose();
+        
+        KdWithoutHead1();
+        //recordtraj2();
+        //WithHead_Handthreshold_Homepose();
         //WithHead_Handthreshold_Homepose2();
-        //Debug.Log("Id to ros is: "+Idtoros);
+        Debug.Log("Id to ros is: "+Idtoros);
     }
 
     public void runstrat()
@@ -886,6 +898,79 @@ public class KdFindClosest : MonoBehaviour
         }
         Debug.DrawLine(position,nearest.transform.position, Color.red);
         return nearest;
+    }
+    
+    int start = 0;
+    int end = 0;
+    bool towrite=true;
+    
+    private void recordtraj()
+    {
+
+        while (Vector3.Distance(Allpoints[start].transform.position, RobotProp.transform.position) > 0.05)
+        {
+            if (start == end)
+            {
+                end++;
+            }
+            else
+            {
+                if (towrite)
+                {
+                    //write_result2(Time.time,RobotProp.transform.position,start,end);
+                }
+
+                while (Vector3.Distance(Allpoints[end].transform.position, RobotProp.transform.position) < 0.05)
+                {
+                    while(Vector3.Distance(Allpoints[start].transform.position,RobotProp.transform.position) <0.001)
+                    {
+                        end++;
+                    }
+                    towrite = false;
+                }
+            }
+        }
+
+    }
+
+
+    private bool newfile = true;
+    private Vector3 oldpos = new Vector3(0, 0, 0);
+    public void recordtraj2()
+    {
+        var newpos = RobotProp.transform.position;
+        var vel = (newpos - oldpos).magnitude;
+        oldpos = newpos;
+        var origin = newpos;
+       // if (towrite)
+        {
+            //write_result2(Time.time, RobotProp.transform.position, start, end, vel = 0.0f);
+           // end++;
+        }
+       // if ((vel) < 0.001f)
+        {
+            //towrite = false;
+            //end = 1000;
+           // write_result2(Time.time, RobotProp.transform.position, start, end, vel);
+            //Debug.Log("stopped");
+        }
+       // else
+        {
+            //towrite = true;
+            write_result2(Time.time, RobotProp.transform.position, start, end, vel);
+            write_result2(Time.time, PointsInCar[17].transform.position, 8, end, vel);
+        }
+    }
+    
+
+    private void write_result2(float tt, Vector3 pos, int start, int end, float vel)
+    {
+        //var pos=PosTopoint(point);
+        String path = start.ToString() +"-"+ end.ToString();
+        using (StreamWriter sw = File.AppendText(@"c:\temp\RobotTrajectory\traj"+path+".csv"))
+        {
+            sw.WriteLine(tt + ","+pos.x+","+pos.y+","+pos.z+","+vel);
+        }
     }
     
 }

@@ -48,6 +48,7 @@ public class TrackingdataLog : MonoBehaviour
     }
 
 
+
     private void trackerinfo()
     {
         /*Gets information of devices available */

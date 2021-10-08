@@ -124,12 +124,23 @@ public class VelUDP2 : MonoBehaviour
     }
 
     // OnGUI
+    /**
     public void OnGUI()
     {
         if (send)
         {
             SendData();
         }
+    }
+    **/
+
+    private void FixedUpdate()
+    {
+        if (send)
+        {
+            SendData();
+        }
+       
     }
 
     public void ClickedButton()
@@ -185,7 +196,8 @@ public class VelUDP2 : MonoBehaviour
             {
                 position = FindObjectOfType<KdFindClosest>().Nearobpos; 
                 rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
-                
+                FindObjectOfType<KdFindClosest>().recordtraj2();
+
             }
             position = FindObjectOfType<KdFindClosest>().Nearobpos;
             rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
