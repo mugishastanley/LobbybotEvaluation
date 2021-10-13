@@ -35,7 +35,7 @@ namespace RosSharp.RosBridgeClient
             
             FrameId = FindObjectOfType<KdFindClosest>().Idtoros;
             UpdateMessage();
-            Debug.Log("Frame id is "+FrameId);
+            //Debug.Log("Frame id is "+FrameId);
         }
 
         private void InitializeMessage()

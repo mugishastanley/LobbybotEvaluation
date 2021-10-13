@@ -184,13 +184,15 @@ public class VelUDP2 : MonoBehaviour
             else
             {
                 position = FindObjectOfType<KdFindClosest>().Nearobpos; 
-                rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
+                //rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
+                
+                
                 
             }
             position = FindObjectOfType<KdFindClosest>().Nearobpos;
-            rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
+            //rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
             Visual.transform.position = FindObjectOfType<KdFindClosest>().Colorpose;
-            Visual.transform.rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
+            //Visual.transform.rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
 
             //Matrix4x4 RobotToCalTracker = FindObjectOfType<TestTransforms>().RB2CT();
 
