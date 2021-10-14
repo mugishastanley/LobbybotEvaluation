@@ -2,17 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a7d6c149-18a7-4f8f-a564-d7fb5fd7b90b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/LoadData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Lobbybot - Evaluation/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Lobbybot - Evaluation/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/HTC.UnityPlugin/StereoRendering/Examples/Common/Material/Green.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/HTC.UnityPlugin/StereoRendering/Examples/Common/Material/Green.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/RosSharp/Scripts/RosBridgeClient/RosCommuncation/PoseStampedPublisher.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/RosSharp/Scripts/RosBridgeClient/RosCommuncation/PoseStampedPublisher.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/RosSharp/Scripts/RosBridgeClient/RosCommuncation/RosConnector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/RosSharp/Scripts/RosBridgeClient/RosCommuncation/RosConnector.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/TestSurfaces.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/TestSurfaces.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/KDstuff/KdUDP.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/KDstuff/KdUDP.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/KdFindClosest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/KdFindClosest.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/TestSurface/VelUDP2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/TestSurface/VelUDP2.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/VelocityControl/VelUDP.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/VelocityControl/VelUDP.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/prefabs/RightHand.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/prefabs/RightHand.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unityProject.vrmanifest" beforeDir="false" afterPath="$PROJECT_DIR$/unityProject.vrmanifest" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,10 +83,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="46220">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="46220" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -157,6 +150,7 @@
       <workItem from="1633699163215" duration="444000" />
       <workItem from="1633699638512" duration="5090000" />
       <workItem from="1633943271206" duration="11369000" />
+      <workItem from="1634152119508" duration="1075000" />
     </task>
     <servers />
   </component>
