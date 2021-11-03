@@ -121,7 +121,7 @@ public class KdFindClosest : MonoBehaviour
 
     void Start()
     {
-        //runImmediately(Hand, _handposition, _headpostion, _headrotation,_time);
+        runImmediately(Hand, _handposition, _headpostion, _headrotation,_time);
     }
 
     void init_from_sim()
@@ -362,10 +362,10 @@ public class KdFindClosest : MonoBehaviour
             cam.transform.position = headpos[counter];
             cam.transform.rotation = headrot[counter];
             _handtime = time[counter];
-            //KdWithoutHead1();
-            //KdWithoutHead_threshold();
-            //WithHead3();
-            //WithHead_threshold4();
+            KdWithoutHead1();
+            KdWithoutHead_threshold();
+            WithHead3();
+            WithHead_threshold4();
             //WithHead_threshold42();
             //WithHead_Homepose5();
             //WithHead_Homepose52();
@@ -420,8 +420,8 @@ public class KdFindClosest : MonoBehaviour
             //write_result(_handtime,  Nearobpos);
             
             //StartCoroutine runDelay(Hand, _handposition, _headpostion, _headrotation,);
-            StartCoroutine(RunDelay(Hand, _handposition, _headpostion, _headrotation,_time));
-            isDone = true;
+            //StartCoroutine(RunDelay(Hand, _handposition, _headpostion, _headrotation,_time));
+            //isDone = true;
             //return;
         }
         //Debug.Log("Is done is"+isDone);
