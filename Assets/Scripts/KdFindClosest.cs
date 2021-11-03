@@ -13,13 +13,13 @@ using Valve.VR;
 public class KdFindClosest : MonoBehaviour
 {
     public Button initialiseButton;
-    [FormerlySerializedAs("WhitePrefab")] public GameObject whitePrefab;
-    [FormerlySerializedAs("BlackPrefab")] public GameObject blackPrefab;
-    [FormerlySerializedAs("Plane")] public GameObject plane;
-    [FormerlySerializedAs("ProjectiononPlane")] public bool projectiononPlane;
-    [FormerlySerializedAs("CalTracker")] public Transform calTracker;
+    public GameObject whitePrefab;
+    public GameObject blackPrefab;
+    public GameObject plane;
+    public bool projectiononPlane;
+    public Transform calTracker;
     public Camera cam;
-    public GameObject qq;
+    //public GameObject qq;
 
     //public GameObject Safepoint;
     private float _velinside = 0.25f;
@@ -74,11 +74,9 @@ public class KdFindClosest : MonoBehaviour
     
     
     public Vector3 Colorpose { get; set; }
-    [FormerlySerializedAs("Oldvel")] public Vector3 oldvel;
+    private Vector3 oldvel;
 
-    private Dictionary< int, float> _pointtoxyz;
-    
-    
+
     [Header("Data")]
     private string RightControllerPos = @"c:\temp\RightContPos.txt";
     //private string RightControllerPos = @"c:\temp\HandPos.txt";
@@ -96,9 +94,9 @@ public class KdFindClosest : MonoBehaviour
     private List<Quaternion> _headrotation;
     private List<float> _time;
     // Start is called before the first frame update
-    public TextAsset textFile;     // drop your file here in inspector
-    public Transform Hand;
-    public Transform Head;
+    //public TextAsset textFile;     // drop your file here in inspector
+    private Transform Hand;
+    private Transform Head;
     private bool isDone;
     private int _stop;
 
@@ -121,7 +119,7 @@ public class KdFindClosest : MonoBehaviour
 
     void Start()
     {
-        runImmediately(Hand, _handposition, _headpostion, _headrotation,_time);
+        //runImmediately(Hand, _handposition, _headpostion, _headrotation,_time);
     }
 
     void init_from_sim()
@@ -242,7 +240,7 @@ public class KdFindClosest : MonoBehaviour
     {
         PointsInCar.UpdatePositions();
         oldvel = new Vector3();
-        _pointtoxyz = new Dictionary<int, float>();
+        //_pointtoxyz = new Dictionary<int, float>();
         
         //cam = Camera.main;
         
@@ -378,7 +376,7 @@ public class KdFindClosest : MonoBehaviour
         Debug.Log("MyScript.Start " + GetInstanceID(), this);
     }
     
-    IEnumerator RunDelay(Transform hand, List<Vector3> handpos, List<Vector3> headpos,
+    IEnumerator RunDelay(GameObject hand, List<Vector3> handpos, List<Vector3> headpos,
         List<Quaternion> headrot, List<float> time)
     {
         
@@ -386,14 +384,14 @@ public class KdFindClosest : MonoBehaviour
         var size = handpos.Capacity;
         while (counter < size)
         {
-            Debug.Log("counter is "+counter+ "Hand pos"+hand.position);
+            Debug.Log("counter is "+counter+ "Hand pos"+hand.transform.position);
             
-            hand.position = handpos[counter];
+            hand.transform.position = handpos[counter];
             cam.transform.position = headpos[counter];
             cam.transform.rotation = headrot[counter];
             _handtime = time[counter];
-            //KdWithoutHead1();
-            //KdWithoutHead_threshold();
+            KdWithoutHead1();
+            KdWithoutHead_threshold();
             //WithHead3();
             //WithHead_threshold4();
             //WithHead_threshold42();
@@ -420,8 +418,8 @@ public class KdFindClosest : MonoBehaviour
             //write_result(_handtime,  Nearobpos);
             
             //StartCoroutine runDelay(Hand, _handposition, _headpostion, _headrotation,);
-            //StartCoroutine(RunDelay(Hand, _handposition, _headpostion, _headrotation,_time));
-            //isDone = true;
+            StartCoroutine(RunDelay(whitePrefab, _handposition, _headpostion, _headrotation,_time));
+            isDone = true;
             //return;
         }
         //Debug.Log("Is done is"+isDone);

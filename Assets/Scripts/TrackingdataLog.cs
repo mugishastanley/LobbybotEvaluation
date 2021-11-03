@@ -31,7 +31,7 @@ public class TrackingdataLog : MonoBehaviour
 
     // Once you complete this module, we'll keep your Update function active
     // to drive the map display
-    void Update()
+    void FixedUpdate()
     {
         trackerinfo();
         //matrixsent();
