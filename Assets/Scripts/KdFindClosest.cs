@@ -390,8 +390,8 @@ public class KdFindClosest : MonoBehaviour
             cam.transform.position = headpos[counter];
             cam.transform.rotation = headrot[counter];
             _handtime = time[counter];
-            KdWithoutHead1();
-            KdWithoutHead_threshold();
+            //KdWithoutHead1();
+            //KdWithoutHead_threshold();
             //WithHead3();
             //WithHead_threshold4();
             //WithHead_threshold42();
