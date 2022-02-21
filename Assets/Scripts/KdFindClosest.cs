@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Advertisements.Editor;
 using UnityEngine.UI;
 using System.IO;
 using System.Linq;
@@ -13,6 +12,7 @@ using Valve.VR;
 
 public class KdFindClosest : MonoBehaviour
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
    public GameObject WhitePrefab;
     public GameObject BlackPrefab;
@@ -30,6 +30,16 @@ public class KdFindClosest : MonoBehaviour
     public Camera cam;
     //public GameObject qq;
 >>>>>>> ASMEmodification
+=======
+    public Button initialiseButton;
+    [FormerlySerializedAs("WhitePrefab")] public GameObject whitePrefab;
+    [FormerlySerializedAs("BlackPrefab")] public GameObject blackPrefab;
+    [FormerlySerializedAs("Plane")] public GameObject plane;
+    [FormerlySerializedAs("ProjectiononPlane")] public bool projectiononPlane;
+    [FormerlySerializedAs("CalTracker")] public Transform calTracker;
+    public Camera cam;
+    public GameObject qq;
+>>>>>>> ASMEprep
 
     //public GameObject Safepoint;
     private float _velinside = 0.25f;
@@ -68,7 +78,6 @@ public class KdFindClosest : MonoBehaviour
     protected KdTree<SpawnedPoint> Hands = new KdTree<SpawnedPoint>();
     protected List<SpawnedPoint> Safepoints = new List<SpawnedPoint>();
     protected List<SpawnedPoint> PointsInCar2 = new List<SpawnedPoint>();
-    protected List<SpawnedPoint> Allpoints = new List<SpawnedPoint>();
 
     private SpawnedPoint _first;
     private SpawnedPoint _second;
@@ -86,12 +95,20 @@ public class KdFindClosest : MonoBehaviour
     
     public Vector3 Colorpose { get; set; }
 <<<<<<< HEAD
+<<<<<<< HEAD
     public string Idtoros { get; set; }
     
 =======
     private Vector3 oldvel;
 
 
+=======
+    [FormerlySerializedAs("Oldvel")] public Vector3 oldvel;
+
+    private Dictionary< int, float> _pointtoxyz;
+    
+    
+>>>>>>> ASMEprep
     [Header("Data")]
     private string RightControllerPos = @"c:\temp\RightContPos.txt";
     //private string RightControllerPos = @"c:\temp\HandPos.txt";
@@ -109,9 +126,15 @@ public class KdFindClosest : MonoBehaviour
     private List<Quaternion> _headrotation;
     private List<float> _time;
     // Start is called before the first frame update
+<<<<<<< HEAD
     //public TextAsset textFile;     // drop your file here in inspector
     private Transform Hand;
     private Transform Head;
+=======
+    public TextAsset textFile;     // drop your file here in inspector
+    public Transform Hand;
+    public Transform Head;
+>>>>>>> ASMEprep
     private bool isDone;
     private int _stop;
 
@@ -131,11 +154,17 @@ public class KdFindClosest : MonoBehaviour
         init_from_sim();
         Init();
     }
+<<<<<<< HEAD
 >>>>>>> ASMEmodification
 
     void Start()
     {
         //runImmediately(Hand, _handposition, _headpostion, _headrotation,_time);
+=======
+
+    void Start()
+    {
+        runImmediately(Hand, _handposition, _headpostion, _headrotation,_time);
     }
 
     void init_from_sim()
@@ -248,15 +277,135 @@ public class KdFindClosest : MonoBehaviour
         }
         inp_stm.Close( );  
         //("rotations loaded is:");
+>>>>>>> ASMEprep
+    }
+
+    void init_from_sim()
+    {
+        isDone = true;
+        //string text = textFile.text;  //this is the content as string
+        _handposition= new List<Vector3>();
+        _headpostion= new List<Vector3>();
+        _headrotation= new List<Quaternion>();
+        _time = new List<float>();
+        _handtime = 0.0f;
+       
+        
+        readhandTextFileVector3(RightControllerPos,_handposition, _time);
+        readTextFileVector3(HeadPosition,_headpostion);
+        readTextFileVector4(HeadRotation,_headrotation);
+        
+  }
+    
+<<<<<<< HEAD
+    void readTextFileVector3(string file_path, List<Vector3> structure)
+    {
+        //Mthd 2
+        StreamReader inp_stm = new StreamReader(file_path);
+        while(!inp_stm.EndOfStream)
+        {
+            string inp_ln = inp_stm.ReadLine( );
+            // Extract everything between brackets
+            Regex regex = new Regex(@"\(.*?\)");
+            MatchCollection matches = regex.Matches(inp_ln);
+            //remove brackets
+            var tr = matches[0].ToString();
+            var result = tr.Trim('(', ')');
+            var sStrings = result.Split(","[0]);
+            float x = float.Parse(sStrings[0]);
+            float y = float.Parse(sStrings[1]);
+            float z = float.Parse(sStrings[2]);
+            Vector3 pos = new Vector3(x, y, z);
+            
+            structure.Add(pos);
+           // Debug.Log("Row :"+" x:"+x+" Y:"+y+" z:"+z);
+           //Debug.Log("Pos is:"+pos);
+        }
+        inp_stm.Close( );  
+      //  Debug.Log("positions loaded:");
     }
     
+    
+    void readhandTextFileVector3(string file_path, List<Vector3> structure, List<float> time)
+    {
+        //Mthd 2
+        StreamReader inp_stm = new StreamReader(file_path);
+        while(!inp_stm.EndOfStream)
+        {
+            string inp_ln = inp_stm.ReadLine( );
+            
+            // Extract everything between comas
+            Regex regex2 = new Regex(@"\,.*?\,");
+            MatchCollection tt = regex2.Matches(inp_ln);
+            //remove comas
+            var tr0 = tt[0].ToString();
+            var res = tr0.Trim(',', ',');
+            //Debug.Log("time is "+ res);
+            time.Add(float.Parse(res));
+
+            // Extract everything between brackets
+            Regex regex = new Regex(@"\(.*?\)");
+            MatchCollection matches = regex.Matches(inp_ln);
+            //remove brackets
+            var tr = matches[0].ToString();
+            var result = tr.Trim('(', ')');
+            var sStrings = result.Split(","[0]);
+            float x = float.Parse(sStrings[0]);
+            float y = float.Parse(sStrings[1]);
+            float z = float.Parse(sStrings[2]);
+            Vector3 pos = new Vector3(x, y, z);
+            structure.Add(pos);
+            //Debug.Log("Row :"+" x:"+x+" Y:"+y+" z:"+z);
+            //Debug.Log("Time is "+tr0+" Pos is:"+pos);
+        }
+        inp_stm.Close( );  
+        //  Debug.Log("positions loaded:");
+    }
+    
+    
+
+    
+    void readTextFileVector4(string file_path, List<Quaternion> structure)
+    {
+        //Mthd 2
+        StreamReader inp_stm = new StreamReader(file_path);
+        while(!inp_stm.EndOfStream)
+        {
+            
+            string inp_ln = inp_stm.ReadLine( );
+            // Extract everything between brackets
+            Regex regex = new Regex(@"\(.*?\)");
+            MatchCollection matches = regex.Matches(inp_ln);
+            //remove brackets
+            var tr = matches[0].ToString();
+            var result = tr.Trim('(', ')');
+            var sStrings = result.Split(","[0]);
+            float x = float.Parse(sStrings[0]);
+            float y = float.Parse(sStrings[1]);
+            float z = float.Parse(sStrings[2]);
+            float w = float.Parse(sStrings[3]);
+            Quaternion rot = new Quaternion(x, y, z,w);
+            structure.Add(rot);
+            // Debug.Log("Row :"+" x:"+x+" Y:"+y+" z:"+z);
+            //Debug.Log("Pos is:"+rot);
+        }
+        inp_stm.Close( );  
+        //("rotations loaded is:");
+    }
+    
+=======
+>>>>>>> ASMEprep
     
 
     public void Init()
     {
         PointsInCar.UpdatePositions();
         oldvel = new Vector3();
+<<<<<<< HEAD
         //_pointtoxyz = new Dictionary<int, float>();
+=======
+        _pointtoxyz = new Dictionary<int, float>();
+>>>>>>> ASMEprep
         
         //cam = Camera.main;
         
@@ -269,18 +418,26 @@ public class KdFindClosest : MonoBehaviour
             Safepoints.Add((point).GetComponent<SpawnedPoint>());
         }
         ***/
+        
+        //initialise the points of interest  
         for (int i = 0; i < points.Length; i++)
         {
-            var num=i+1;
-            GameObject point = (Instantiate(BlackPrefab, points[i].transform.position, 
-                points[i].transform.rotation, 
-                CalTracker.transform));
+            var num = i + 1;
+            GameObject point = (Instantiate(blackPrefab, points[i].transform.position, 
+                points[i].transform.rotation,calTracker.transform));
             point.GetComponent<SpawnedPoint>().Id = num.ToString();
             PointsInCar.Add((point).GetComponent<SpawnedPoint>());
+            //Debug.Log("original Point  :"+i + points[i].transform.position.ToString("F4") + " localpos " +
+                     // points[i].transform.localPosition.ToString("F4"));
+            //Debug.Log("Spawned Point at :"+i+point.transform.position.ToString("F4")+" localpos "+point.transform.localPosition.ToString("F4"));
+            //Debug.Log("points " +i +"position"+ points[i].transform.position.ToString("F4"));
+            //pointtoxyz.Add(points[i].transform.position, i+1);
+            //_pointtoxyz.Add(i+1, point.GetComponent<SpawnedPoint>().Id);
+            //writes points to results
+            //write_result2(i+1,  point.GetComponent<SpawnedPoint>().Id);
+            //points_in_space.Add(i+1,points[i].transform.position);
 
-            Debug.Log("Point" + num + point.transform.localPosition.ToString("F4"));
-            Debug.Log("point" + num + point.transform.position.ToString("F4"));
-            //Allpoints.Add(point.GetComponent<SpawnedPoint>());
+            
         }
         
         //initialise the points of interest  
@@ -303,20 +460,28 @@ public class KdFindClosest : MonoBehaviour
 
             
 <<<<<<< HEAD
+<<<<<<< HEAD
             var num=1+i;
+=======
+            var num=i+20;
+>>>>>>> ASMEprep
             //initialise the points of interest  
-            GameObject point = (Instantiate(BlackPrefab, safepoints[i].transform.position, 
-                safepoints[i].transform.rotation, 
-                CalTracker.transform));
-            point.GetComponent<SpawnedPoint>().Id = "SP"+num;
+            GameObject point = (Instantiate(blackPrefab, safepoints[i].transform.position, 
+                safepoints[i].transform.rotation,calTracker.transform));
             Safepoints.Add((point).GetComponent<SpawnedPoint>());
-            Allpoints.Add(point.GetComponent<SpawnedPoint>());
-            Debug.Log("Safepoint" + num + point.transform.localPosition.ToString("F4"));
-            Debug.Log("Safepoint" + num + point.transform.position.ToString("F4"));
+            
+            //Debug.Log("safe points "+i +"position"+ safepoints[i].transform.position.ToString("F4"));
+            /*Mechanically changing safe points**/
+            //point.GetComponent<SpawnedPoint>().Id = "SP"+num;
+            point.GetComponent<SpawnedPoint>().Id = num.ToString();
+            //pointtoxyz.Add(safepoints[i].transform.position,20+i);
+           // _pointtoxyz.Add( 20 + i,  point.GetComponent<SpawnedPoint>().Id);
+            //writes safe points to results
+           // write_result2(20+i,  point.GetComponent<SpawnedPoint>().Id);
 
         }
-        //initialise the points of interest  
 
+<<<<<<< HEAD
 =======
         }
         
@@ -340,11 +505,16 @@ public class KdFindClosest : MonoBehaviour
 
         }
 
+=======
+>>>>>>> ASMEprep
         
  
         
         
+<<<<<<< HEAD
 >>>>>>> ASMEmodification
+=======
+>>>>>>> ASMEprep
         /*
         //initialise the 
         for (int i = 0; i < points.Length; i++)
@@ -359,7 +529,6 @@ public class KdFindClosest : MonoBehaviour
         
         //initialise the number of hands
        // for (int i = 0; i < CountWhite; i++)
-       
         {
             //Hands.Add(Instantiate(WhitePrefab).GetComponent<SpawnedPoint>());
             Hands.Add((whitePrefab).GetComponent<SpawnedPoint>());
@@ -369,12 +538,72 @@ public class KdFindClosest : MonoBehaviour
         //First point in the car should be the home position.
         //First = PointsInCar[0];
 <<<<<<< HEAD
+<<<<<<< HEAD
         First = Safepoints[0];
         second = PointsInCar[0];
         nearestObj = PointsInCar[0];
+=======
+         _first = Safepoints[0];
+        _second = PointsInCar[0];
+        _first_2 = Safepoints[0];
+        _first_3 = Safepoints[0];
+        _first_4 = Safepoints[0];
+        _first_43 = Safepoints[0];
+        _first_5 = Safepoints[0];
+        _first_52 = Safepoints[0];
+        _first_6 = Safepoints[0];
+        _nearestObj = PointsInCar[0];
+>>>>>>> ASMEprep
         
+        {
+            Startpose =PointsInCar[points.Length-1].transform.localPosition;
+            Startrot = PointsInCar[points.Length-1].transform.localRotation;
+        }
+
+        //runImmediately(Hand, _handposition, _headpostion, _headrotation);
         
+    }
+    
+    public void ClickedButton()
+    {
+        isDone = false;
+    }
+    
+    void runImmediately(Transform hand, List<Vector3> handpos, List<Vector3> headpos,
+        List<Quaternion> headrot, List<float> time)
+    {
         
+        var counter = 0;
+        var size = handpos.Capacity;
+        while (counter < size)
+        {
+            // Debug.Log("counter is "+counter);
+            
+            hand.transform.position = handpos[counter];
+            cam.transform.position = headpos[counter];
+            cam.transform.rotation = headrot[counter];
+            _handtime = time[counter];
+            KdWithoutHead1();
+            KdWithoutHead_threshold();
+            WithHead3();
+            WithHead_threshold4();
+            WithHead_threshold42();
+            WithHead_Homepose5();
+            WithHead_Homepose52();
+            WithHead_Handthreshold_Homepose6();
+            WithHead_Handthreshold_Homepose62();
+            //TestHandvel_distfromray2(hand);
+            //TestHandvel_distfromray3(hand);
+            counter++;
+        }
+        Debug.Log("MyScript.Start " + GetInstanceID(), this);
+    }
+    
+    IEnumerator RunDelay(Transform hand, List<Vector3> handpos, List<Vector3> headpos,
+        List<Quaternion> headrot, List<float> time)
+    {
+        
+<<<<<<< HEAD
 =======
          _first = Safepoints[0];
         _second = PointsInCar[0];
@@ -435,13 +664,21 @@ public class KdFindClosest : MonoBehaviour
         List<Quaternion> headrot, List<float> time)
     {
         
+=======
+>>>>>>> ASMEprep
         var counter = 0;
         var size = handpos.Capacity;
         while (counter < size)
         {
+<<<<<<< HEAD
             Debug.Log("counter is "+counter+ "Hand pos"+hand.transform.position);
             
             hand.transform.position = handpos[counter];
+=======
+            Debug.Log("counter is "+counter+ "Hand pos"+hand.position);
+            
+            hand.position = handpos[counter];
+>>>>>>> ASMEprep
             cam.transform.position = headpos[counter];
             cam.transform.rotation = headrot[counter];
             _handtime = time[counter];
@@ -460,7 +697,10 @@ public class KdFindClosest : MonoBehaviour
             yield return new WaitForSecondsRealtime(0.022f);
         }
         //Debug.Log("MyScript.Start " + GetInstanceID(), this);
+<<<<<<< HEAD
 >>>>>>> ASMEmodification
+=======
+>>>>>>> ASMEprep
     }
 
 
@@ -469,16 +709,25 @@ public class KdFindClosest : MonoBehaviour
     private void FixedUpdate()
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         Hands[0].transform.position= RobotProp.transform.position;
 =======
         if (!isDone)
+=======
+        //if (!isDone)
+>>>>>>> ASMEprep
         {
             //StartCoroutine(Delaymotion(Hand, _handposition, Head, _headpostion, _headrotation));
             //write_result(_handtime,  Nearobpos);
             
             //StartCoroutine runDelay(Hand, _handposition, _headpostion, _headrotation,);
+<<<<<<< HEAD
             StartCoroutine(RunDelay(whitePrefab, _handposition, _headpostion, _headrotation,_time));
             isDone = true;
+=======
+            ///StartCoroutine(RunDelay(Hand, _handposition, _headpostion, _headrotation,_time));
+            //isDone = true;
+>>>>>>> ASMEprep
             //return;
         }
         //Debug.Log("Is done is"+isDone);
@@ -516,7 +765,10 @@ public class KdFindClosest : MonoBehaviour
         //TestHandvel_distfromray2();
         //TestHandvel_distfromray3();
         //Strategy(5);
+<<<<<<< HEAD
 >>>>>>> ASMEmodification
+=======
+>>>>>>> ASMEprep
     }
     
     
@@ -524,6 +776,7 @@ public class KdFindClosest : MonoBehaviour
 
     void Strategy(int st)
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
         //NaiveNN();
         //WithHead();
@@ -537,6 +790,8 @@ public class KdFindClosest : MonoBehaviour
         WithHead_Handthreshold_Homepose2();
         Debug.Log("Id to ros is: "+Idtoros);
 =======
+=======
+>>>>>>> ASMEprep
         switch (st)
         {
             case 1 :
@@ -567,7 +822,10 @@ public class KdFindClosest : MonoBehaviour
                 KdWithoutHead1();
                 break;
         }
+<<<<<<< HEAD
 >>>>>>> ASMEmodification
+=======
+>>>>>>> ASMEprep
     }
     
 
@@ -819,6 +1077,7 @@ public class KdFindClosest : MonoBehaviour
                 nearestObj = Associate_Safepointtopoint(point);
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
             var position = nearestObj.transform.position;
             Debug.DrawLine(hand.transform.position, position, Color.red);
@@ -838,6 +1097,11 @@ public class KdFindClosest : MonoBehaviour
             write_result2(_handtime, nearestObj.Id,5);
             Idtoros = nearestObj.Id;
 >>>>>>> ASMEmodification
+=======
+            Debug.DrawLine(hand.transform.position, nearestObj.transform.position, Color.red);
+            write_result2(_handtime, nearestObj.Id,5);
+            Idtoros = nearestObj.Id;
+>>>>>>> ASMEprep
             //nearobpostion = nearestObj.transform.localPosition;
             Nearobpos = nearestObj.transform.localPosition;
             Colorpose = nearestObj.transform.position;
@@ -846,6 +1110,7 @@ public class KdFindClosest : MonoBehaviour
                 _first_52 = nearestObj;
         }
     }
+<<<<<<< HEAD
 <<<<<<< HEAD
      
      private void KdWithoutHead1()
@@ -862,6 +1127,8 @@ public class KdFindClosest : MonoBehaviour
      }
 =======
 >>>>>>> ASMEmodification
+=======
+>>>>>>> ASMEprep
 
 
     private void WithHead_Homepose52()
@@ -1151,6 +1418,7 @@ public class KdFindClosest : MonoBehaviour
         {
             pts2.Add(pt);
         }
+<<<<<<< HEAD
 
         if (objVelocity.magnitude > 0.4f)
         {
@@ -1217,6 +1485,74 @@ public class KdFindClosest : MonoBehaviour
     {
         return Nearobrot;
     }
+=======
+
+        if (objVelocity.magnitude > 0.4f)
+        {
+            best = Use_AnglesHandvel(pts2,newPos, raydirection,_lambda);
+
+        }
+        else
+        {
+            best = first;
+        }
+
+        _nearestObj = best;
+        Nearobpos = _nearestObj.transform.localPosition;
+        Nearobrot = _nearestObj.transform.rotation;
+        write_result2(_handtime, _nearestObj.Id,8);
+        
+        Debug.DrawLine(newPos,_nearestObj.transform.position,Color.red);
+        if (first != _nearestObj)
+            first = _nearestObj;
+    }
+
+    private SpawnedPoint Use_AnglesHandvel(List<SpawnedPoint> pt, Vector3 newpos, Vector3 raydirection, float lambda=Mathf.Infinity)
+    {
+                /*This function returns closest object based on the angle from camera
+         * Input : point 1, point2, head ray
+         * Output: point star
+         *steps.
+         * Draw ray from cam.
+         * calclualte distance l1 from point from cam,
+         * calcluate distance l2 from ray
+         * 
+         */
+        
+        var position = Hands[0].transform.position;
+        SpawnedPoint nearest = pt[0];
+        var minAng = 0.0f;
+        var maxL = Mathf.Infinity;
+        for (int i = 0; i < pt.Count; i++)
+        {
+            var tt= ClosestPointOnLineSegment(
+                position, raydirection * 10f, pt[i].transform.position);
+            Debug.DrawLine(position,raydirection * 10, Color.green);
+            var l1 = Vector3.Distance(position, tt);
+            var l2 = Vector3.Distance(pt[i].transform.position, tt);
+            var ang = l2 / l1;
+
+            if ((ang > minAng)&& ang < _lambda &&  IsVisible(pt[i].GetComponent<Renderer>()))
+            {
+                minAng = ang;
+                nearest = pt[i];
+            }
+        }
+        Debug.DrawLine(position,nearest.transform.position, Color.red);
+        return nearest;
+    }
+
+
+    public Vector3 Getclosestobjectposition()
+    {
+        return Nearobpos;
+    }
+
+    public Quaternion Getclosestobjectrotation()
+    {
+        return Nearobrot;
+    }
+>>>>>>> ASMEprep
     
     //public Vector3 Getclosestobjectlocalposition()
     //{
@@ -1408,6 +1744,7 @@ public class KdFindClosest : MonoBehaviour
        return best;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     
     
     
@@ -1420,6 +1757,10 @@ public class KdFindClosest : MonoBehaviour
 
     private SpawnedPoint Use_Angles(List<SpawnedPoint> pt,float lambda= Mathf.Infinity )
 >>>>>>> ASMEmodification
+=======
+
+    private SpawnedPoint Use_Angles(List<SpawnedPoint> pt,float lambda= Mathf.Infinity )
+>>>>>>> ASMEprep
     {
         /*This function returns closest object based on the angle from camera
          * Input : point list, head ray
@@ -1454,80 +1795,74 @@ public class KdFindClosest : MonoBehaviour
     }
     
 <<<<<<< HEAD
+<<<<<<< HEAD
     int start = 0;
     int end = 0;
     bool towrite=true;
     
     private void recordtraj()
+=======
+    private SpawnedPoint Associate_Safepointtopoint(SpawnedPoint pt)
+>>>>>>> ASMEprep
     {
-
-        while (Vector3.Distance(Allpoints[start].transform.position, RobotProp.transform.position) > 0.05)
+        /* Associates visible home pose to point, does not take head gaze into account.
+         * input point 1, list of home poses/Safe points
+         * output safe point 
+         * procedure:
+         * find closest home pose from point.
+         */
+   
+        SpawnedPoint sp = _nearestObj;
+        var Maxdist = Mathf.Infinity;
+        foreach (var s in Safepoints)
         {
-            if (start == end)
+            var dist = Vector3.Distance(s.transform.position, pt.transform.position);
+            if (dist < Maxdist)
             {
-                end++;
-            }
-            else
-            {
-                if (towrite)
-                {
-                    //write_result2(Time.time,RobotProp.transform.position,start,end);
-                }
-
-                while (Vector3.Distance(Allpoints[end].transform.position, RobotProp.transform.position) < 0.05)
-                {
-                    while(Vector3.Distance(Allpoints[start].transform.position,RobotProp.transform.position) <0.001)
-                    {
-                        end++;
-                    }
-                    towrite = false;
-                }
+                Maxdist = dist;
+                sp = s;
             }
         }
-
+        return sp;
     }
 
-
-    private bool newfile = true;
-    private Vector3 oldpos = new Vector3(0, 0, 0);
-    public void recordtraj2()
+    //TODO
+    private void Use_Headgaze_toselectsafepoint()
     {
-        var newpos = RobotProp.transform.position;
-        var vel = (newpos - oldpos).magnitude;
-        oldpos = newpos;
-        var origin = newpos;
-       // if (towrite)
-        {
-            //write_result2(Time.time, RobotProp.transform.position, start, end, vel = 0.0f);
-           // end++;
-        }
-       // if ((vel) < 0.001f)
-        {
-            //towrite = false;
-            //end = 1000;
-           // write_result2(Time.time, RobotProp.transform.position, start, end, vel);
-            //Debug.Log("stopped");
-        }
-       // else
-        {
-            //towrite = true;
-            write_result2(Time.time, RobotProp.transform.position, start, end, vel);
-            write_result2(Time.time, PointsInCar[17].transform.position, 8, end, vel);
-        }
+        /* The function selects a safe point based on head gaze and points
+         * In put: list of safe points, desired point, previous point 
+         * Output: Safe point
+         * Procedure:
+         * check 2 safe points close to the interest point.
+         * check direction based on start and destination.
+         * Unknown: criteria for selecting the safe point.???
+         **/
     }
-    
 
-    private void write_result2(float tt, Vector3 pos, int start, int end, float vel)
+    //TODO
+    private void Introduce_time_delay(float t)
     {
-        //var pos=PosTopoint(point);
-        String path = start.ToString() +"-"+ end.ToString();
-        using (StreamWriter sw = File.AppendText(@"c:\temp\RobotTrajectory\traj"+path+".csv"))
-        {
-            sw.WriteLine(tt + ","+pos.x+","+pos.y+","+pos.z+","+vel);
-        }
+        /*This function introduces a delay in the selection of a desired point.
+         * Input: List of points, Hand, delta_t
+         * Output : best point
+         * procedure.
+         * detect point
+         * start timer
+         * while point is not changed
+         * if timer value > certain number of frames,
+         * detected point is valid
+         * increment after every frame.
+         * end while
+         *
+         *
+         * when  a point is changed,
+         * start timer, if time is greater = delta_t
+         * send data of the point.
+         */
+        SpawnedPoint nearestObj = PointsInCar.FindClosest(Hands[0].transform.position);
     }
-    
 }
+<<<<<<< HEAD
 
 =======
     private SpawnedPoint Associate_Safepointtopoint(SpawnedPoint pt)
@@ -1590,3 +1925,5 @@ public class KdFindClosest : MonoBehaviour
         SpawnedPoint nearestObj = PointsInCar.FindClosest(Hands[0].transform.position);
     }
 }
+=======
+>>>>>>> ASMEprep
