@@ -7,8 +7,13 @@ using VRArmIK;
 public class LoadData : MonoBehaviour
 {
     [Header("Data")]
+<<<<<<< HEAD
     //private string RightControllerPos = @"c:\temp\RightContPos.txt";
     private string RightControllerPos = @"c:\temp\HandPos.txt";
+=======
+    private string RightControllerPos = @"c:\temp\RightContPos.txt";
+    //private string RightControllerPos = @"c:\temp\HandPos.txt";
+>>>>>>> ASMEmodification
     private string handPos = @"c:\temp\HandPos.txt";
     private string RightControllerRot = @"c:\temp\RightContRot.txt";
     private string RightControllerVel = @"c:\temp\RightContVel.txt";
@@ -47,8 +52,14 @@ public class LoadData : MonoBehaviour
 
     // Update is called once per frame
     
+<<<<<<< HEAD
     /**
    private void FixedUpdate()
+=======
+    
+   /**
+    private void FixedUpdate()
+>>>>>>> ASMEmodification
     {
         if (!isDone)
         {
@@ -57,7 +68,12 @@ public class LoadData : MonoBehaviour
             isDone = true;
         }
     }
+<<<<<<< HEAD
     **/
+=======
+    
+   **/
+>>>>>>> ASMEmodification
 
     public void runload()
     {
@@ -133,7 +149,11 @@ public class LoadData : MonoBehaviour
    {
        var counter = 0;
        var size = handpos.Capacity-1;
+<<<<<<< HEAD
        Debug.Log("size is "+size);
+=======
+       //Debug.Log("size is "+size);
+>>>>>>> ASMEmodification
        while (counter < size)
        {
           // Debug.Log("counter is "+counter);
@@ -143,7 +163,11 @@ public class LoadData : MonoBehaviour
            Handpos = hand.position;
            counter++;
            //tt.position = enumerator.Current;
+<<<<<<< HEAD
            yield return new WaitForSecondsRealtime(0.03f);
+=======
+           yield return new WaitForSecondsRealtime(0.022f);
+>>>>>>> ASMEmodification
            
        }
        Debug.Log("Motion finished");

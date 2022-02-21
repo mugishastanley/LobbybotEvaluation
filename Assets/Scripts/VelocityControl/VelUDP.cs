@@ -77,7 +77,7 @@ public class VelUDP : MonoBehaviour
     void OnGUI()
     {
         //Location of closest object
-        Tosend.transform.position = FindObjectOfType<KdFindClosest>().getclosestobjectposition();
+        //Tosend.transform.position = FindObjectOfType<KdFindClosest>().getclosestobjectposition();
         //To be fixed later when mind is fresh
         //Tosend.transform.rotation = FindObjectOfType<KdFindClosest>().getclosestobjectrotation();
 

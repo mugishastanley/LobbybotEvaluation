@@ -21,6 +21,7 @@ namespace RosSharp.RosBridgeClient
     {
         public Transform PublishedTransform ;
         public string FrameId = "default";
+        public string Startpoint;
 
         private Messages.Geometry.PoseStamped message;
 
@@ -34,8 +35,12 @@ namespace RosSharp.RosBridgeClient
         {
             
             FrameId = FindObjectOfType<KdFindClosest>().Idtoros;
+            if (FrameId == null)
+            {
+                FrameId = Startpoint; 
+            }
             UpdateMessage();
-            Debug.Log("Frame id is "+FrameId);
+            //Debug.Log("Frame id is "+FrameId);
         }
 
         private void InitializeMessage()
