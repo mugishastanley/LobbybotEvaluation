@@ -194,7 +194,7 @@ public class KdUDP : MonoBehaviour
             print(err.ToString());
         }
     }
-
+    
     // endless test
     private void sendEndless(string testStr)
     {
@@ -218,7 +218,7 @@ public class KdUDP : MonoBehaviour
         /**
     this function returns a string representation of a matrix
     */
-        string strrep = p[0, 0].ToString("F8") + " " +
+        string strrep =  p[0, 0].ToString("F8") + " " +
                          p[0, 1].ToString("F8") + " " +
                          p[0, 2].ToString("F8") + " " +
                          p[0, 3].ToString("F8") + " " +
@@ -250,6 +250,7 @@ public class KdUDP : MonoBehaviour
             - 0.09345 - 0.03474    0.00776 0.94222
             - 0.01066    0.00650 - 0.09922 - 0.09420
             0.00000 0.00000 0.00000 1.0000**/
+        
         TrackedPointWRTVR[0, 0] = 0.03396f; TrackedPointWRTVR[0, 1] = -0.09355f; TrackedPointWRTVR[0, 2] = -0.00977f; TrackedPointWRTVR[0, 3] = 0.28243f; //- TableOffsetx;
         TrackedPointWRTVR[1, 0] = -0.09345f; TrackedPointWRTVR[1, 1] = -0.03474f; TrackedPointWRTVR[1, 2] = 0.00776f; TrackedPointWRTVR[1, 3] = 0.94222f; //- TableOffsety;
         TrackedPointWRTVR[2, 0] = -0.01066f; TrackedPointWRTVR[2, 1] = 0.00650f; TrackedPointWRTVR[2, 2] = -0.09922f; TrackedPointWRTVR[2, 3] = -0.09420f; //- TableOffsetz;

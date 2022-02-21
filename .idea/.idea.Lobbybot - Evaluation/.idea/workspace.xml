@@ -1,7 +1,190 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a7d6c149-18a7-4f8f-a564-d7fb5fd7b90b" name="Default Changelist" comment="" />
+    <list default="true" id="a7d6c149-18a7-4f8f-a564-d7fb5fd7b90b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Material/Cube_Mat.mat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Material/Cube_Mat.mat.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/SRanipal_GazeRay.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/SRanipal_GazeRay.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Materials.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Materials/DartBoardMaterial.mat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Materials/DartBoardMaterial.mat.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Materials/MirrorMaterial.mat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Materials/MirrorMaterial.mat.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Materials/MirrorRenderTexture.renderTexture" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Materials/MirrorRenderTexture.renderTexture.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Materials/NoticeBoardMaterial.mat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Materials/NoticeBoardMaterial.mat.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Fairy.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Fairy/Avatar_Fairy.fbx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Fairy/Avatar_Fairy.fbx.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Fairy/Materials.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Fairy/Materials/fairy_body_Albedo.mat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Fairy/Materials/fairy_body_Albedo.mat.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Fairy/fairy_body_Albedo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Fairy/fairy_body_Albedo.png.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Shieh.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Shieh/Avatar_Shieh.fbx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Shieh/Avatar_Shieh.fbx.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Shieh/Head_b_albedo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Shieh/Head_b_albedo.png.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Shieh/Head_b_ao.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Shieh/Head_b_ao.png.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Shieh/Head_b_metallic.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Shieh/Head_b_metallic.png.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Shieh/Head_b_normal.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Shieh/Head_b_normal.png.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Shieh/Materials.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Shieh/Materials/eyelash_mat.mat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Shieh/Materials/eyelash_mat.mat.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Shieh/Materials/head_mat.mat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version1/Avatar_Shieh/Materials/head_mat.mat.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Fairy.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Fairy/Avatar_Fairy_V2.fbx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Fairy/Avatar_Fairy_V2.fbx.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Fairy/Materials.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Fairy/Materials/fairy_body_Albedo.mat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Fairy/Materials/fairy_body_Albedo.mat.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Fairy/fairy_body_Albedo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Fairy/fairy_body_Albedo.png.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Shieh.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Shieh/Avatar_Shieh_V2.fbx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Shieh/Avatar_Shieh_V2.fbx.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Shieh/Head_b_albedo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Shieh/Head_b_albedo.png.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Shieh/Head_b_ao.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Shieh/Head_b_ao.png.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Shieh/Head_b_metallic.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Shieh/Head_b_metallic.png.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Shieh/Head_b_normal.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Shieh/Head_b_normal.png.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Shieh/Materials.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Shieh/Materials/eyelash_mat.mat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Shieh/Materials/eyelash_mat.mat.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Shieh/Materials/head_mat.mat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Models/version2/Avatar_Shieh/Materials/head_mat.mat.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Plugins.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Plugins/SRWorks_Log.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Plugins/SRWorks_Log.dll.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Plugins/SRanipal.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Plugins/SRanipal.dll.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Plugins/ViveSR_Client.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Plugins/ViveSR_Client.dll.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Plugins/libHTC_License.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Plugins/libHTC_License.dll.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Plugins/nanomsg.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Plugins/nanomsg.dll.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Prefabs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Prefabs/DartBoard.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Prefabs/DartBoard.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Prefabs/Gaze Ray Sample v2.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Prefabs/Gaze Ray Sample v2.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Prefabs/Gaze Ray Sample.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Prefabs/Gaze Ray Sample.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Prefabs/SRanipal Eye Framework.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Prefabs/SRanipal Eye Framework.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Prefabs/SRanipal Lip Framework.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Prefabs/SRanipal Lip Framework.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scenes.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scenes/Eye.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scenes/Eye/EyeSample.unity" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scenes/Eye/EyeSample.unity.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scenes/Eye/EyeSample_v2.unity" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scenes/Eye/EyeSample_v2.unity.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scenes/Lip.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scenes/Lip/LipSample.unity" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scenes/Lip/LipSample.unity.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scenes/Lip/LipSample_v2.unity" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scenes/Lip/LipSample_v2.unity.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/SRanipal_Eye.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/SRanipal_Eye.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/SRanipal_EyeData.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/SRanipal_EyeData.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/SRanipal_EyeDataType_v1.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/SRanipal_EyeDataType_v1.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/SRanipal_EyeDataType_v2.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/SRanipal_EyeDataType_v2.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/SRanipal_EyeShapeTableDrawer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/SRanipal_EyeShapeTableDrawer.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/SRanipal_EyeShapeTableDrawer_v2.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/SRanipal_EyeShapeTableDrawer_v2.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/SRanipal_Eye_API.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/SRanipal_Eye_API.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/SRanipal_Eye_Enums.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/SRanipal_Eye_Enums.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/SRanipal_Eye_Framework.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/SRanipal_Eye_Framework.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/SRanipal_Eye_v2.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/SRanipal_Eye_v2.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/Sample.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/Sample/DartBoard.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/Sample/DartBoard.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/Sample/SRanipal_AvatarEyeSample.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/Sample/SRanipal_AvatarEyeSample.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/Sample/SRanipal_AvatarEyeSample_v2.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/Sample/SRanipal_AvatarEyeSample_v2.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/Sample/SRanipal_EyeFocusSample.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/Sample/SRanipal_EyeFocusSample.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/Sample/SRanipal_EyeFocusSample_v2.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/Sample/SRanipal_EyeFocusSample_v2.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/Sample/SRanipal_EyeSettingSample.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/Sample/SRanipal_EyeSettingSample.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/Sample/SRanipal_GazeRaySample.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/Sample/SRanipal_GazeRaySample.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/Sample/SRanipal_GazeRaySample_v2.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/Sample/SRanipal_GazeRaySample_v2.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/Sample/SRanipal_MirrorCameraSample_Eye.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/Sample/SRanipal_MirrorCameraSample_Eye.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/Sample/SRanipal_MirrorCameraSample_Eye_v2.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Eye/Sample/SRanipal_MirrorCameraSample_Eye_v2.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/SRanipal_Lip.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/SRanipal_Lip.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/SRanipal_LipData_v1.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/SRanipal_LipData_v1.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/SRanipal_LipData_v2.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/SRanipal_LipData_v2.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/SRanipal_LipShapeTableDrawer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/SRanipal_LipShapeTableDrawer.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/SRanipal_LipShapeTableDrawer_v2.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/SRanipal_LipShapeTableDrawer_v2.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/SRanipal_Lip_API.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/SRanipal_Lip_API.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/SRanipal_Lip_Framework.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/SRanipal_Lip_Framework.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/SRanipal_Lip_v2.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/SRanipal_Lip_v2.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/Sample.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/Sample/SRanipal_AvatarLipSample.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/Sample/SRanipal_AvatarLipSample.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/Sample/SRanipal_AvatarLipSample_v2.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/Sample/SRanipal_AvatarLipSample_v2.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/Sample/SRanipal_MirrorCameraSample_Lip.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/Lip/Sample/SRanipal_MirrorCameraSample_Lip.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/SRWorks_Enums.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/SRWorks_Enums.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/SRanipal_API.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/SRanipal_API.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/SRanipal_Enums.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Scripts/SRanipal_Enums.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Shaders.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Shaders/DartBoardShader.shader" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Shaders/DartBoardShader.shader.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Shaders/Unlit-Alpha2Gray.shader" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/ViveSR/Shaders/Unlit-Alpha2Gray.shader.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Lobbybot - Evaluation/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Lobbybot - Evaluation/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/TestSurfaces.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/TestSurfaces.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/KDstuff/KdUDP.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/KDstuff/KdUDP.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/KdFindClosest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/KdFindClosest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/LineRenderSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/LineRenderSettings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unityProject.vrmanifest" beforeDir="false" afterPath="$PROJECT_DIR$/unityProject.vrmanifest" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,19 +199,20 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/KdFindClosest.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/EF151B6A-BB5D-474C-B2C1-CB8906A8B5A4/f1/3497e8f6/Socket.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/B6A0E661-5EE0-4EA7-AD53-5B38F9316104/3a/55198eb1/StreamWriter.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/17AD9609-AE06-4F2C-9315-931FF97ADCF1/5e/52726255/GeometryUtility.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/17AD9609-AE06-4F2C-9315-931FF97ADCF1/75/3471d654/Vector3.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/EF151B6A-BB5D-474C-B2C1-CB8906A8B5A4/36/23fef212/TcpClient.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/17AD9609-AE06-4F2C-9315-931FF97ADCF1/a1/720bf17c/MonoBehaviour.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/FAA55637-FCC1-4BBF-B146-E6835A4641D9/b9/6d41e5f4/RaycastHit.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/17AD9609-AE06-4F2C-9315-931FF97ADCF1/3f/501f27e8/GameObject.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/17AD9609-AE06-4F2C-9315-931FF97ADCF1/5e/52726255/GeometryUtility.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/29A6C194-5F57-4474-95FC-AD42118554C7/b6/048f057f/MatchCollection.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/EF151B6A-BB5D-474C-B2C1-CB8906A8B5A4/f1/3497e8f6/Socket.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/EF151B6A-BB5D-474C-B2C1-CB8906A8B5A4/2d/5edb0cb9/SocketAsyncResult.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/B6A0E661-5EE0-4EA7-AD53-5B38F9316104/3a/55198eb1/StreamWriter.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/17AD9609-AE06-4F2C-9315-931FF97ADCF1/ef/e067a7e2/Transform.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/17AD9609-AE06-4F2C-9315-931FF97ADCF1/3f/501f27e8/GameObject.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/KdFindClosest.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/B6A0E661-5EE0-4EA7-AD53-5B38F9316104/eb/bd564be7/Boolean.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/17AD9609-AE06-4F2C-9315-931FF97ADCF1/a1/720bf17c/MonoBehaviour.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/29A6C194-5F57-4474-95FC-AD42118554C7/b6/048f057f/MatchCollection.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/FAA55637-FCC1-4BBF-B146-E6835A4641D9/b9/6d41e5f4/RaycastHit.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/SRanipal_GazeRay.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
@@ -137,12 +321,15 @@
       <workItem from="1633687966208" duration="4897000" />
       <workItem from="1633698269427" duration="22000" />
       <workItem from="1633698426348" duration="349000" />
+      <workItem from="1645126999304" duration="4962000" />
+      <workItem from="1645440057924" duration="6648000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="true" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="EditMode" />
   <component name="Vcs.Log.Tabs.Properties">

@@ -58,6 +58,7 @@ public class KdFindClosest : MonoBehaviour
     public Vector3 Nearobpos { get; set; }
     public Vector3 Colorpose { get; set; }
     public string Idtoros { get; set; }
+    
 
     void Start()
     {
@@ -156,10 +157,10 @@ public class KdFindClosest : MonoBehaviour
         //withHead2();
         
         
-        KdWithoutHead1();
+        //KdWithoutHead1();
         //recordtraj2();
-        //WithHead_Handthreshold_Homepose();
-        //WithHead_Handthreshold_Homepose2();
+        WithHead_Handthreshold_Homepose();
+        WithHead_Handthreshold_Homepose2();
         Debug.Log("Id to ros is: "+Idtoros);
     }
 
@@ -463,7 +464,14 @@ public class KdFindClosest : MonoBehaviour
 
             var position = nearestObj.transform.position;
             Debug.DrawLine(hand.transform.position, position, Color.red);
-            Idtoros = nearestObj.Id;
+
+            int face = 0; 
+            if (nearestObj.Id == "15")
+            {
+                face=FindObjectOfType<LineRenderSettings>().Facenum+3;
+            }
+            var objno = Int16.Parse(nearestObj.Id)+ face;
+            Idtoros = objno.ToString();
             //write_result(Time.fixedTime, position);
             
             //Debug.Log("Found point at :"+ position.ToString("F5")+"Time"+Time.fixedTime);
@@ -476,12 +484,7 @@ public class KdFindClosest : MonoBehaviour
                 First = nearestObj;
         }
     }
-    
-    
-    
-    
-    
-    
+     
      private void KdWithoutHead1()
      {
          foreach (var hand in Hands)
@@ -833,6 +836,9 @@ public class KdFindClosest : MonoBehaviour
         return segmentStart + t * span;
     }
     
+    
+    
+    
     SpawnedPoint MovetoSafePoint()
     {
         //find closest point to ray from head cast,
@@ -845,7 +851,7 @@ public class KdFindClosest : MonoBehaviour
         {
             var closestPoint = ClosestPointOnLineSegment(
                 cam.transform.position,
-                cam.transform.TransformDirection(Vector3.forward) * 1000f,
+                cam.transform.TransformDirection(Vector3.forward) * 10f,
                 Safepoints[i].transform.position
             );
             
@@ -861,6 +867,8 @@ public class KdFindClosest : MonoBehaviour
        // Debug.DrawLine(cam.transform.position,Nearobpos,Color.yellow);
        return best;
     }
+    
+    
     
     //To DO
     //Send data by frame IDs and not vel UDP.

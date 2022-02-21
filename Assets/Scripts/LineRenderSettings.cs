@@ -3,9 +3,10 @@ using UnityEngine.UI;
 
 public class LineRenderSettings : MonoBehaviour
 {
-    public GameObject panel;
     private Image img;
+    public GameObject panel;
     public Button btn;
+    public int Facenum { get; set;}
 
     //Declare a Line Renderer to store the component attached to the Game object
     [SerializeField]
@@ -18,6 +19,8 @@ public class LineRenderSettings : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Tosend.transform.position = FindObjectOfType<KdFindClosest>().getclosestobjectposition();
+        
         img = panel.GetComponent<Image>();
         //get the Line renderer attached to the gameobject
 
@@ -26,7 +29,10 @@ public class LineRenderSettings : MonoBehaviour
         points = new Vector3[2];
 
         //set the start point of the Linerender to the position of the game object
-        points[0] = Vector3.zero;
+        //points[0] = Vector3.zero;
+        points[0] = this.transform.position;
+        
+        
 
         //set the end point 20 units awy from the GO on the z axis (poininting forward)
         points[1] = transform.position + new Vector3(0, 0, 20);
@@ -35,8 +41,6 @@ public class LineRenderSettings : MonoBehaviour
 
         rend.SetPositions(points);
         rend.enabled = true;
-
-        
         
     }
 
@@ -78,25 +82,23 @@ public class LineRenderSettings : MonoBehaviour
         {
             if (btn.name == "red_btn")
             {
+                Facenum = 1;
                 img.color = Color.red;
                 Debug.Log("Red");
             }
             else if (btn.name == "blue_btn")
             {
+                Facenum = 2;
                 img.color = Color.blue;
                 Debug.Log("Blue");
             }
             else if (btn.name == "green_btn")
             {
+                Facenum = 3;
                 img.color = Color.green;
                 Debug.Log("Green");
             }
-
-
         }
-
-
-
     }
 
     // Update is called once per frame
