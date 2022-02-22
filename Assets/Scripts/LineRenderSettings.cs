@@ -29,8 +29,8 @@ public class LineRenderSettings : MonoBehaviour
         points = new Vector3[2];
 
         //set the start point of the Linerender to the position of the game object
-        //points[0] = Vector3.zero;
-        points[0] = this.transform.position;
+        points[0] = Vector3.zero;
+        //points[0] = this.transform.position;
         
         
 
@@ -96,6 +96,12 @@ public class LineRenderSettings : MonoBehaviour
             {
                 Facenum = 3;
                 img.color = Color.green;
+                Debug.Log("Green");
+            }
+            else if (btn.name == "black_btn")
+            {
+                Facenum = 4;
+                img.color = Color.black;
                 Debug.Log("Green");
             }
         }

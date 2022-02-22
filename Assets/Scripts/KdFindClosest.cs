@@ -533,7 +533,16 @@ public class KdFindClosest : MonoBehaviour
             //Debug.Log("Object found at "+nearestObj.transform.position);
             Debug.DrawLine(hand.transform.position, nearestObj.transform.position, Color.red);
             write_result2(_handtime,  nearestObj.Id,1);
-            Idtoros = nearestObj.Id;
+            
+            int face = 0; 
+            if (nearestObj.Id == "15")
+            {
+                face=FindObjectOfType<LineRenderSettings>().Facenum+3;
+            }
+            var objno = Int16.Parse(nearestObj.Id)+ face;
+            Idtoros = objno.ToString();
+            
+            //Idtoros = nearestObj.Id;
             Nearobpos = nearestObj.transform.localPosition;
             Colorpose = nearestObj.transform.position;
             Nearobrot = nearestObj.transform.localRotation;
