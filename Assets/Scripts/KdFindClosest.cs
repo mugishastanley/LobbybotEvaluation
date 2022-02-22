@@ -33,6 +33,7 @@ public class KdFindClosest : MonoBehaviour
     private GameObject[] safepoints;
     [FormerlySerializedAs("_isnearestfound")] [SerializeField]
     //private GameObject _safepointparent;
+    private Vector3 _gazevector;
     private bool isnearestfound = false;
 
 
@@ -131,6 +132,7 @@ public class KdFindClosest : MonoBehaviour
         _headrotation= new List<Quaternion>();
         _time = new List<float>();
         _handtime = 0.0f;
+        _gazevector = new Vector3(0, 0, 0);
        
         
         readhandTextFileVector3(RightControllerPos,_handposition, _time);
@@ -1340,6 +1342,46 @@ public class KdFindClosest : MonoBehaviour
         //Debug.DrawLine(position,nearest.transform.position, Color.red);
         return nearest;
     }
+    
+    
+    private SpawnedPoint Use_Angles2(List<SpawnedPoint> pt, float lambda= Mathf.Infinity )
+    {
+        /*This function returns closest object based on the angle from camera based on eye gaze tracking
+         * Input : point list, head ray
+         * Output: point star
+         *steps.
+         * Draw ray from cam.
+         * calclualte distance l1 from point from cam,
+         * calcluate distance l2 from ray
+         * 
+         */
+        var position = cam.transform.position;
+        SpawnedPoint nearest = pt[0];
+        //var minAng = 0.0f;
+        var maxAng = Mathf.Infinity;
+        for (int i = 0; i < pt.Count; i++)
+        {
+            var tt= ClosestPointOnLineSegment(
+                position, position+_gazevector * 10f, pt[i].transform.position);
+            //Debug.DrawLine(position,position+_gazevector * 10, Color.green);
+            var l1 = Vector3.Distance(position, tt);
+            var l2 = Vector3.Distance(pt[i].transform.position, tt);
+            //var tanang = l2 / l1;
+            var ang = (float)(Math.Atan2(l2, l1)*180/3.14162);
+           
+            if ((ang < maxAng) && (ang < lambda))
+            {
+                maxAng = ang;
+                nearest = pt[i];
+                
+            }
+        }
+        Debug.DrawLine(position,nearest.transform.position, Color.red);
+        //Debug.DrawRay(position,nearest.transform.position, Color.red, duration:6);
+        //Debug.Log("eyegzae next  "+ nearest.Id +"lambda"+lambda + "maxangl"+maxAng);
+        return nearest;
+    }
+
     
     private SpawnedPoint Associate_Safepointtopoint(SpawnedPoint pt)
     {
