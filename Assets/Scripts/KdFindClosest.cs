@@ -264,8 +264,8 @@ public class KdFindClosest : MonoBehaviour
                 points[i].transform.rotation,calTracker.transform));
             point.GetComponent<SpawnedPoint>().Id = num.ToString();
             PointsInCar.Add((point).GetComponent<SpawnedPoint>());
-            Debug.Log("original Point  :"+i + points[i].transform.position.ToString("F4") + " localpos " +
-                      points[i].transform.localPosition.ToString("F4"));
+            //    Debug.Log("original Point  :"+i + points[i].transform.position.ToString("F4") + " localpos " +
+            //          points[i].transform.localPosition.ToString("F4"));
             //Debug.Log("Spawned Point at :"+i+point.transform.position.ToString("F4")+" localpos "+point.transform.localPosition.ToString("F4"));
             //Debug.Log("points " +i +"position"+ points[i].transform.position.ToString("F4"));
             //pointtoxyz.Add(points[i].transform.position, i+1);
