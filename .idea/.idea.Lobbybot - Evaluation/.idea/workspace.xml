@@ -2,13 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a7d6c149-18a7-4f8f-a564-d7fb5fd7b90b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Scenes/testui.unity" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scenes/testui.unity.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Lobbybot - Evaluation/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Lobbybot - Evaluation/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/TestSurfaces.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/TestSurfaces.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/KdFindClosest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/KdFindClosest.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/LineRenderSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/LineRenderSettings.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,6 +168,7 @@
       <workItem from="1638895927858" duration="2163000" />
       <workItem from="1645457885570" duration="117000" />
       <workItem from="1645510808570" duration="14505000" />
+      <workItem from="1645624170137" duration="7502000" />
     </task>
     <servers />
   </component>

@@ -114,7 +114,7 @@ public class KdFindClosest : MonoBehaviour
 
     private void Awake()
     {
-        init_from_sim();
+        //init_from_sim();
         Init();
     }
 
@@ -420,7 +420,7 @@ public class KdFindClosest : MonoBehaviour
             //write_result(_handtime,  Nearobpos);
             
             //StartCoroutine runDelay(Hand, _handposition, _headpostion, _headrotation,);
-            StartCoroutine(RunDelay(whitePrefab, _handposition, _headpostion, _headrotation,_time));
+            //StartCoroutine(RunDelay(whitePrefab, _handposition, _headpostion, _headrotation,_time));
             isDone = true;
             //return;
         }
@@ -459,6 +459,9 @@ public class KdFindClosest : MonoBehaviour
         //TestHandvel_distfromray2();
         //TestHandvel_distfromray3();
         //Strategy(5);
+        
+        //KdWithoutHead1();
+        WithHead_Handthreshold_Homepose6();
     }
     
     
@@ -535,15 +538,17 @@ public class KdFindClosest : MonoBehaviour
             //Debug.Log("Object found at "+nearestObj.transform.position);
             Debug.DrawLine(hand.transform.position, nearestObj.transform.position, Color.red);
             write_result2(_handtime,  nearestObj.Id,1);
-            
+            var nn = 10;
+            nearestObj.Id = nn.ToString();
             int face = 0; 
-            if (nearestObj.Id == "15")
+            if (nearestObj.Id == "10")
             {
-                face=FindObjectOfType<LineRenderSettings>().Facenum+3;
+                face=FindObjectOfType<LineRenderSettings>().Facenum;
             }
             var objno = Int16.Parse(nearestObj.Id)+ face;
             Idtoros = objno.ToString();
-            
+
+            Debug.Log("Face num " + Idtoros);
             //Idtoros = nearestObj.Id;
             Nearobpos = nearestObj.transform.localPosition;
             Colorpose = nearestObj.transform.position;
@@ -887,7 +892,7 @@ public class KdFindClosest : MonoBehaviour
                 pts2.Add(nearestObj);
             if(IsVisible(_second.GetComponent<Renderer>()))
                 pts2.Add(_second);
-            var point = Use_Angles(pts2,_lambda);
+            var point = Use_Angles2(pts2,_lambda);
             
             // var   point = best(nearestObj, First, Testraycast()); //used first and nearest obj because could not get the second from tree, 
             //nearestObj = best2(nearestObj, First, Testraycast());
@@ -1264,7 +1269,6 @@ public class KdFindClosest : MonoBehaviour
         }
     }
     
-    
     Vector3 ClosestPointOnLineSegment(Vector3 segmentStart, Vector3 segmentEnd, Vector3 point) {
         // Shift the problem to the origin to simplify the math.    
         var wander = point - segmentStart;
@@ -1355,6 +1359,8 @@ public class KdFindClosest : MonoBehaviour
          * calcluate distance l2 from ray
          * 
          */
+        
+        _gazevector = FindObjectOfType<SRanipal_GazeRay>().GazeDirection; 
         var position = cam.transform.position;
         SpawnedPoint nearest = pt[0];
         //var minAng = 0.0f;

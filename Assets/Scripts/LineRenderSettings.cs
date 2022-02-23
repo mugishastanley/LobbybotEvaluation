@@ -8,6 +8,7 @@ public class LineRenderSettings : MonoBehaviour
     public Button btn;
     public GameObject cube;
     public int Facenum { get; set; }
+    
 
 
     //Declare a Line Renderer to store the component attached to the Game object
@@ -52,12 +53,14 @@ public class LineRenderSettings : MonoBehaviour
         bool hitBtn = false;
         if (Physics.Raycast(ray, out hit, layerMask))
         {
-            points[1] = Vector3.zero + new Vector3(0, 0, hit.distance);
+            //points[1] = Vector3.zero + new Vector3(0, 0, hit.distance);
+            points[1] = Vector3.zero + new Vector3(0, 0, 40f);
             rend.startColor = Color.red;
             rend.endColor = Color.red;
             btn = hit.collider.gameObject.GetComponent<Button>();
             hitBtn = true;
-            // Debug.Log("Hit button "+btn.name);
+            Debug.Log("Hit button "+btn.name);
+            ColorChangeOnClick();
         }
         else
         {
@@ -89,30 +92,106 @@ public class LineRenderSettings : MonoBehaviour
         var cubeRenderer = cube.GetComponent<Renderer>();
         if(btn != null)
         {
-            if (btn.name == "red_btn")
+            switch (btn.name)
             {
-                //Facenum = 1;
-                img.color = Color.red;
-                cubeRenderer.material.SetColor("_Color", Color.red);
-                Debug.Log("Red");
-            }
-            else if (btn.name == "blue_btn")
-            {
-                //Facenum = 2;
-                img.color = Color.blue;
-                Debug.Log("Blue");
-                cubeRenderer.material.SetColor("_Color", Color.blue);
-            }
-            else if (btn.name == "green_btn")
-            {
-                //Facenum = 3;
-                img.color = Color.green;
-                Debug.Log("Green");
-                cubeRenderer.material.SetColor("_Color", Color.green);
+                case "red_btn":
+                    Facenum = 1;
+                    //img.color = Color.red;
+                    cubeRenderer.material.SetColor("_Color", Color.red);
+                    Debug.Log("Red");
+                    break;
+                case "green_btn":
+                    Facenum = 2;
+                    //img.color = Color.green;
+                    Debug.Log("Green");
+                    cubeRenderer.material.SetColor("_Color", Color.green);
+                    break;
+                case "blue_btn":
+                    Facenum = 3;
+                    //img.color = Color.blue;
+                    Debug.Log("Blue");
+                    cubeRenderer.material.SetColor("_Color", Color.blue);
+                    break;
+                case "black_btn":
+                    Facenum = 4;
+                    //img.color = Color.black;
+                    //Debug.Log("Black");
+                    cubeRenderer.material.SetColor("_Color", Color.black);
+                    break;
+                case "yellow_btn":
+                    Facenum = 5;
+                    //img.color = Color.yellow;
+                    //Debug.Log("Green");
+                    cubeRenderer.material.SetColor("_Color", Color.yellow);
+                    break;
             }
 
+            //Debug.Log("Btn name ="+btn.name);
+        }
+        else
+        {
+            Debug.Log("Btn is null");
         }
     }
+    
+    public void BlueFace()
+    {
+        //Opens Data stream  from UNity to robot
+        Facenum = 3;
+        var cubeRenderer = cube.GetComponent<Renderer>();
+            //GameObject.Find("Home").GetComponentInChildren<Text>().text = "Click to Start";
+            img.color = Color.blue;
+            Debug.Log("Blue");
+            cubeRenderer.material.SetColor("_Color", Color.blue);
 
-
+    }
+    
+    public void RedFace()
+    {
+        //Opens Data stream  from UNity to robot
+        //
+             Facenum = 1;
+           var cubeRenderer = cube.GetComponent<Renderer>();
+            //GameObject.Find("Home").GetComponentInChildren<Text>().text = "Click to Start";
+            img.color = Color.red;
+            Debug.Log("Blue");
+            cubeRenderer.material.SetColor("_Color", Color.red);
+    }
+    public void GreenFace()
+        {
+            //Opens Data stream  from UNity to robot
+            //
+                Facenum = 2;
+               var cubeRenderer = cube.GetComponent<Renderer>();
+                //GameObject.Find("Home").GetComponentInChildren<Text>().text = "Click to Start";
+                img.color = Color.green;
+                Debug.Log("green");
+                cubeRenderer.material.SetColor("_Color", Color.green);
+        }
+        
+        
+        public void BlackFace()
+        {
+            //Opens Data stream  from UNity to robot
+            //
+            Facenum = 4;
+            var cubeRenderer = cube.GetComponent<Renderer>();
+            //GameObject.Find("Home").GetComponentInChildren<Text>().text = "Click to Start";
+            img.color = Color.black;
+            Debug.Log("Blue");
+            cubeRenderer.material.SetColor("_Color", Color.black);
+        }
+        
+        public void YellowFace()
+        {
+            //Opens Data stream  from UNity to robot
+            //
+            Facenum = 5;
+            var cubeRenderer = cube.GetComponent<Renderer>();
+            //GameObject.Find("Home").GetComponentInChildren<Text>().text = "Click to Start";
+            img.color = Color.yellow;
+            Debug.Log("Blue");
+            cubeRenderer.material.SetColor("_Color", Color.yellow);
+        }
+        
 }
