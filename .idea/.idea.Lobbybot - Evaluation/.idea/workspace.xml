@@ -2,10 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a7d6c149-18a7-4f8f-a564-d7fb5fd7b90b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/HandEyeCalibration.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/SteamVR/Viveinput.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/SteamVR/Viveinput.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Lobbybot - Evaluation/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Lobbybot - Evaluation/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/TestSurfaces.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/TestSurfaces.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/KdFindClosest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/KdFindClosest.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/LineRenderSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/LineRenderSettings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/SteamVR_Input/ActionSetClasses/SteamVR_Input_ActionSet_default.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/SteamVR_Input/ActionSetClasses/SteamVR_Input_ActionSet_default.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/SteamVR_Input/SteamVR_Input_Actions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/SteamVR_Input/SteamVR_Input_Actions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/SteamVR/actions.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/SteamVR/actions.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/SteamVR/bindings_vive_controller.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/SteamVR/bindings_vive_controller.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +33,7 @@
     <setting file="file://$PROJECT_DIR$/../../../Repos/CatchIt/Assets/Scripts/Evaluation/SRanipal_GazeRay.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/EF151B6A-BB5D-474C-B2C1-CB8906A8B5A4/f1/3497e8f6/Socket.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../Repos/CatchIt/Assets/Scripts/TrackingdataLog.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/SteamVR/Viveinput.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/EF151B6A-BB5D-474C-B2C1-CB8906A8B5A4/2d/5edb0cb9/SocketAsyncResult.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/B6A0E661-5EE0-4EA7-AD53-5B38F9316104/3a/55198eb1/StreamWriter.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/17AD9609-AE06-4F2C-9315-931FF97ADCF1/ef/e067a7e2/Transform.cs" root0="SKIP_HIGHLIGHTING" />
@@ -168,7 +175,11 @@
       <workItem from="1638895927858" duration="2163000" />
       <workItem from="1645457885570" duration="117000" />
       <workItem from="1645510808570" duration="14505000" />
-      <workItem from="1645624170137" duration="7502000" />
+      <workItem from="1645624170137" duration="10421000" />
+      <workItem from="1645662547051" duration="245000" />
+      <workItem from="1646048867331" duration="1605000" />
+      <workItem from="1646152309959" duration="175000" />
+      <workItem from="1646310188133" duration="732000" />
     </task>
     <servers />
   </component>
