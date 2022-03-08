@@ -1,0 +1,17 @@
+{
+    "name": "CLARTE.Utils.Editor",
+    "references": [
+        "GUID:e77803536f0a50944907c03552c291a2"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

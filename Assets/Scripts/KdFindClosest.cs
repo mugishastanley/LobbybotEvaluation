@@ -43,16 +43,17 @@ public class KdFindClosest : MonoBehaviour
 
     //public GameObject Safepoint;
     private float _velinside = 0.25f;
-    private float _veloutside =0.6f;
+    private float _veloutside = 0.6f;
     private string _algoresults = @"c:\temp\Results.csv";
 
-    
+
     [SerializeField]
     private GameObject[] points;
     [SerializeField]
     private GameObject[] safepoints;
     [FormerlySerializedAs("_isnearestfound")] [SerializeField]
     //private GameObject _safepointparent;
+    private Vector3 _gazevector;
     private bool isnearestfound = false;
 
 
@@ -62,11 +63,11 @@ public class KdFindClosest : MonoBehaviour
     private float _d1, _d2, _d3, _d4;
     private float _timeThroughplane, _timeInside;
     public string Idtoros { get; set; }
-    
-    
-    private const float _threshold=0.2f;
+
+
+    private const float _threshold = 0.2f;
     private const float _tol = 0.3f;
-    private const float _lambda = 0.2f; 
+    private const float _lambda = 0.2f;
 
     Collider _objCollider;
     Plane[] _planes;
@@ -88,11 +89,11 @@ public class KdFindClosest : MonoBehaviour
 
     public Vector3 Nearobpos { get; private set; }
     public Quaternion Nearobrot { get; private set; }
-    public Vector3 Startpose  { get; private set; }
-    public Quaternion Startrot  { get; private set; }
+    public Vector3 Startpose { get; private set; }
+    public Quaternion Startrot { get; private set; }
 
-    
-    
+
+
     public Vector3 Colorpose { get; set; }
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -119,12 +120,15 @@ public class KdFindClosest : MonoBehaviour
     private string HeadRotation = @"c:\temp\HeadRot.txt";
     private string HeadRotationEuler = @"c:\temp\HeadRotEuler.txt";
     private string HeadPosition = @"c:\temp\HeadPos.txt";
+
     private int _linecounter;
-    
+
     private List<Vector3> _handposition;
     private List<Vector3> _headpostion;
     private List<Quaternion> _headrotation;
     private List<float> _time;
+
+
     // Start is called before the first frame update
 <<<<<<< HEAD
     //public TextAsset textFile;     // drop your file here in inspector
@@ -138,20 +142,20 @@ public class KdFindClosest : MonoBehaviour
     private bool isDone;
     private int _stop;
 
-    private SpawnedPoint  _first_2;
+    private SpawnedPoint _first_2;
     private SpawnedPoint _first_3;
-    private SpawnedPoint  _first_4;
-    private SpawnedPoint  _first_43;
+    private SpawnedPoint _first_4;
+    private SpawnedPoint _first_43;
     private SpawnedPoint _first_52;
-    private SpawnedPoint  _first_5;
-    private SpawnedPoint  _first_6;
+    private SpawnedPoint _first_5;
+    private SpawnedPoint _first_6;
 
     public Vector3 Handpos { get; set; }
 
 
     private void Awake()
     {
-        init_from_sim();
+        //init_from_sim();
         Init();
     }
 <<<<<<< HEAD
@@ -280,6 +284,7 @@ public class KdFindClosest : MonoBehaviour
 >>>>>>> ASMEprep
     }
 
+
     void init_from_sim()
     {
         isDone = true;
@@ -289,6 +294,7 @@ public class KdFindClosest : MonoBehaviour
         _headrotation= new List<Quaternion>();
         _time = new List<float>();
         _handtime = 0.0f;
+        _gazevector = new Vector3(0, 0, 0);
        
         
         readhandTextFileVector3(RightControllerPos,_handposition, _time);
@@ -427,6 +433,7 @@ public class KdFindClosest : MonoBehaviour
                 points[i].transform.rotation,calTracker.transform));
             point.GetComponent<SpawnedPoint>().Id = num.ToString();
             PointsInCar.Add((point).GetComponent<SpawnedPoint>());
+<<<<<<< HEAD
             //Debug.Log("original Point  :"+i + points[i].transform.position.ToString("F4") + " localpos " +
                      // points[i].transform.localPosition.ToString("F4"));
             //Debug.Log("Spawned Point at :"+i+point.transform.position.ToString("F4")+" localpos "+point.transform.localPosition.ToString("F4"));
@@ -450,6 +457,10 @@ public class KdFindClosest : MonoBehaviour
             PointsInCar.Add((point).GetComponent<SpawnedPoint>());
             Debug.Log("original Point  :"+i + points[i].transform.position.ToString("F4") + " localpos " +
                       points[i].transform.localPosition.ToString("F4"));
+=======
+            //    Debug.Log("original Point  :"+i + points[i].transform.position.ToString("F4") + " localpos " +
+            //          points[i].transform.localPosition.ToString("F4"));
+>>>>>>> ASMEmodification
             //Debug.Log("Spawned Point at :"+i+point.transform.position.ToString("F4")+" localpos "+point.transform.localPosition.ToString("F4"));
             //Debug.Log("points " +i +"position"+ points[i].transform.position.ToString("F4"));
             //pointtoxyz.Add(points[i].transform.position, i+1);
@@ -722,7 +733,11 @@ public class KdFindClosest : MonoBehaviour
             
             //StartCoroutine runDelay(Hand, _handposition, _headpostion, _headrotation,);
 <<<<<<< HEAD
+<<<<<<< HEAD
             StartCoroutine(RunDelay(whitePrefab, _handposition, _headpostion, _headrotation,_time));
+=======
+            //StartCoroutine(RunDelay(whitePrefab, _handposition, _headpostion, _headrotation,_time));
+>>>>>>> ASMEmodification
             isDone = true;
 =======
             ///StartCoroutine(RunDelay(Hand, _handposition, _headpostion, _headrotation,_time));
@@ -750,8 +765,8 @@ public class KdFindClosest : MonoBehaviour
             //WithHead_threshold42();
             //WithHead_Homepose5();
             //WithHead_Homepose52();
-            //WithHead_Handthreshold_Homepose6();
-            //WithHead_Handthreshold_Homepose62();
+            WithHead_Handthreshold_Homepose6();
+            WithHead_Handthreshold_Homepose62();
             //TestHandvel_distfromray2();
             //TestHandvel_distfromray3();
         }
@@ -766,9 +781,15 @@ public class KdFindClosest : MonoBehaviour
         //TestHandvel_distfromray3();
         //Strategy(5);
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> ASMEmodification
 =======
 >>>>>>> ASMEprep
+=======
+        
+        KdWithoutHead1();
+        //WithHead_Handthreshold_Homepose6();
+>>>>>>> ASMEmodification
     }
     
     
@@ -865,7 +886,23 @@ public class KdFindClosest : MonoBehaviour
             //Debug.Log("Object found at "+nearestObj.transform.position);
             Debug.DrawLine(hand.transform.position, nearestObj.transform.position, Color.red);
             write_result2(_handtime,  nearestObj.Id,1);
+            //var nn = 15;
+            //nearestObj.Id = 15.ToString();
+            //int face = 0; 
+            if (nearestObj.Id == "15")
+            {
+                //face=FindObjectOfType<LineRenderSettings>().Facenum;
+                nearestObj.Id = nearestObj.Id + FindObjectOfType<LineRenderSettings>().Facenum.ToString();
+            }
+            else
+            {
+                nearestObj.Id = nearestObj.Id;
+            }
+            
             Idtoros = nearestObj.Id;
+
+            Debug.Log("Face num " + Idtoros);
+            //Idtoros = nearestObj.Id;
             Nearobpos = nearestObj.transform.localPosition;
             Colorpose = nearestObj.transform.position;
             Nearobrot = nearestObj.transform.localRotation;
@@ -1250,7 +1287,7 @@ public class KdFindClosest : MonoBehaviour
                 pts2.Add(nearestObj);
             if(IsVisible(_second.GetComponent<Renderer>()))
                 pts2.Add(_second);
-            var point = Use_Angles(pts2,_lambda);
+            var point = Use_Angles2(pts2,_lambda);
             
             // var   point = best(nearestObj, First, Testraycast()); //used first and nearest obj because could not get the second from tree, 
             //nearestObj = best2(nearestObj, First, Testraycast());
@@ -1696,7 +1733,6 @@ public class KdFindClosest : MonoBehaviour
         }
     }
     
-    
     Vector3 ClosestPointOnLineSegment(Vector3 segmentStart, Vector3 segmentEnd, Vector3 point) {
         // Shift the problem to the origin to simplify the math.    
         var wander = point - segmentStart;
@@ -1796,6 +1832,7 @@ public class KdFindClosest : MonoBehaviour
     
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     int start = 0;
     int end = 0;
     bool towrite=true;
@@ -1865,6 +1902,50 @@ public class KdFindClosest : MonoBehaviour
 <<<<<<< HEAD
 
 =======
+=======
+    
+    private SpawnedPoint Use_Angles2(List<SpawnedPoint> pt, float lambda= Mathf.Infinity )
+    {
+        /*This function returns closest object based on the angle from camera based on eye gaze tracking
+         * Input : point list, head ray
+         * Output: point star
+         *steps.
+         * Draw ray from cam.
+         * calclualte distance l1 from point from cam,
+         * calcluate distance l2 from ray
+         * 
+         */
+        
+        //_gazevector = FindObjectOfType<SRanipal_GazeRay>().GazeDirection; 
+        var position = cam.transform.position;
+        SpawnedPoint nearest = pt[0];
+        //var minAng = 0.0f;
+        var maxAng = Mathf.Infinity;
+        for (int i = 0; i < pt.Count; i++)
+        {
+            var tt= ClosestPointOnLineSegment(
+                position, position+_gazevector * 10f, pt[i].transform.position);
+            //Debug.DrawLine(position,position+_gazevector * 10, Color.green);
+            var l1 = Vector3.Distance(position, tt);
+            var l2 = Vector3.Distance(pt[i].transform.position, tt);
+            //var tanang = l2 / l1;
+            var ang = (float)(Math.Atan2(l2, l1)*180/3.14162);
+           
+            if ((ang < maxAng) && (ang < lambda))
+            {
+                maxAng = ang;
+                nearest = pt[i];
+                
+            }
+        }
+        Debug.DrawLine(position,nearest.transform.position, Color.red);
+        //Debug.DrawRay(position,nearest.transform.position, Color.red, duration:6);
+        //Debug.Log("eyegzae next  "+ nearest.Id +"lambda"+lambda + "maxangl"+maxAng);
+        return nearest;
+    }
+
+    
+>>>>>>> ASMEmodification
     private SpawnedPoint Associate_Safepointtopoint(SpawnedPoint pt)
     {
         /* Associates visible home pose to point, does not take head gaze into account.

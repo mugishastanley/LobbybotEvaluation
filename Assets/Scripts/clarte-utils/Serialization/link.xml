@@ -1,0 +1,5 @@
+<linker>
+	<assembly fullname="*">
+		<type fullname="CLARTE.Serialization.*" preserve="all"/>
+	</assembly>
+</linker>
